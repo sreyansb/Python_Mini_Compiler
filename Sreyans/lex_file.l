@@ -7,6 +7,7 @@
     #define vinscope 100
 
     int yycol=1;
+    int def_mode=0;
 
     static int st_ptr=-1;//to keep track of the topmost element in the stack
     
@@ -73,16 +74,24 @@
       printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[st_ptr].top_ptr;++i)
         printf("%s\t\t|%d\t\t\t|%d|\n",scopetable[st_ptr][i].name,scopetable[st_ptr][i].dec_line,scopetable[st_ptr][i].last_line);
-    }    
+      printf("========================================\n");
+    }
+
+    void deletescope()
+    {
+      --st_ptr;
+    }
 %}
 letter [a-zA-Z]
-number [0-9]
+digit [0-9]
 space [ ]
 tab [\t]
-newline [\n]
-
 %%
+/* I used yyless(yyleng-1) because we need to use /n for the next line */
 
+"\n"["\t"|" "]*"\n" {printf("%d Empty Line\n",yylineno);yyless(yyleng-1);++yylineno;}
+"\n"["\t"]*"#"(.)* {printf("%d Single Line Comment",yylineno);++yylineno;}
+"\n"["\t"]* {}
 %%
 
 int yywrap(void)
