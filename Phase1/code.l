@@ -157,7 +157,7 @@ Multiline_comment \'\'\'[\n].+[\n]\'\'\'\n
 {whitespace} {} 
 "\n" {yycolumn=1; debug("NL"); return T_NL;}
 <<EOF>> {debug("EOF"); return T_EndOfFile;}
-%% 
+%%
   
 int main()
 {
