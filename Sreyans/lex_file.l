@@ -222,7 +222,7 @@ int main()
   init_scope();
   yyparse();
   for(int i=0;i<=peek();++i)
-    printTable(i);
+    printscope(i);
   printf("=============END=================\n");
   return 0;
 }
