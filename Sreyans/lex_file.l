@@ -74,19 +74,19 @@
       add_to_scope(varname,lineused);
     }
     
-    void printscope()
+    void printscope(int sta_ptr)
  {
-      printf("=========SCOPE_KILLING==================\n")
-      printf("SCOPE: %d Number of Tabs: %d\n",st_ptr,tabstack[st_ptr]);
+      printf("=======================================\n");
+      printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
       printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
-      for(int i=0;i<=scopetable[tabstack[st_ptr]].top_ptr;++i)
-        printf("%s\t\t|%d\t\t\t|%d|\n",scopetable[tabstack[st_ptr]][i].name,scopetable[tabstack[st_ptr]][i].dec_line,scopetable[tabstack[st_ptr]][i].last_line);
+      for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
+        printf("%s\t\t|%d\t\t\t|%d|\n",scopetable[tabstack[sta_ptr]][i].name,scopetable[tabstack[sta_ptr]][i].dec_line,scopetable[tabstack[sta_ptr]][i].last_line);
       printf("========================================\n");
     }
 
     void deletescope()
  {
-      printscope();
+      printscope(st_ptr);
       scopetable[tabstack[st_ptr]].top_ptr=-1;
       --st_ptr;
     }
@@ -157,56 +157,41 @@ tab [\t]
   }
 }
 
-";" {printf( "%s", yytext);return T_semi_colon;}
-"=" {printf( "%s", yytext);return T_eq;}
-"," {printf( "%s", yytext);return T_comma;}
-"+=" {printf( "%s", yytext);return T_plus_eq;}
-"-=" {printf( "%s", yytext);return T_minus_eq;}
-"*=" {printf( "%s", yytext);return T_star_eq;}
-"/=" {printf( "%s", yytext);return T_div_eq;}
-"%=" {printf( "%s", yytext);return T_mod_eq;}
-"|=" {printf( "%s", yytext);return T_or_eq;}
-"^=" {printf( "%s", yytext);return T_xor_eq;}
-"del" {printf( "%s", yytext);return T_del;}
-"pass" {printf( "%s", yytext);return T_pass;}
-"break" {printf( "%s", yytext);return T_break;}
-"continue" {printf( "%s", yytext);return T_continue;}
-"return" {printf( "%s", yytext);return T_return;}
-"print" {printf("%s",yytext);return T_print;}
-"import" {printf( "%s", yytext);return T_import;}
-"from" {printf( "%s", yytext);return T_from;}
-"*" {printf( "%s", yytext);return T_star;}
-"(" {printf( "%s", yytext);return T_Lparan;}
-")" {printf( "%s", yytext);return T_Rparan;}
-":" {printf( "%s", yytext);printf("Matched Colon\n"); return T_colon;}
-"for" {printf( "%s", yytext);return T_for;}
-"while" {printf( "%s", yytext);return T_while;}
-"in" {printf( "%s", yytext);return T_in;}
-"or" {printf( "%s", yytext);return T_or;}
-"and" {printf( "%s", yytext);printf("Matched and\n"); return T_and;}
-"not" {printf( "%s", yytext);return T_not;}
-"<" {printf( "%s", yytext);return T_lt;}
-">" {printf( "%s", yytext);return T_gt;}
-"==" {printf( "%s", yytext);return T_deq;}
-">=" {printf( "%s", yytext);return T_ge;}
-"<=" {printf( "%s", yytext);return T_le;}
-"!=" {printf( "%s", yytext);return T_noteq;}
-"|" {printf( "%s", yytext);return T_bitwiseor;}
-"&" {printf( "%s", yytext);return T_bitwiseand;}
-"^" {printf( "%s", yytext);return T_bitwisexor;}
-"<<" {printf( "%s", yytext);return T_leftshift;}
-">>" {printf( "%s", yytext);return T_rightshift;}
-"+" {printf( "%s", yytext);return T_plus;}
-"-" {printf( "%s", yytext);return T_minus;}
-"/" {printf( "%s", yytext);return T_divide;}
-"%" {printf( "%s", yytext);return T_mod;}
-"//" {printf( "%s", yytext);return T_double_divide;}
-"~" {printf( "%s", yytext);return T_tilde;}
-"**" {printf( "%s", yytext);return T_double_star;}
-"[" {printf( "%s", yytext);return T_squarebleft;}
-"]" {printf( "%s", yytext);return T_squarebright;}
-"..." {printf( "%s", yytext);return T_ellipsis;}
-"None" {printf( "%s", yytext);return T_none;}
+";" {printf( "%s", yytext);return T_SMC;}
+"=" {printf( "%s", yytext);return T_EQ;}
+"," {printf( "%s", yytext);return T_Comma;}
+"del" {printf( "%s", yytext);return T_Del;}
+"pass" {printf( "%s", yytext);return T_Pass;}
+"break" {printf( "%s", yytext);return T_Break;}
+"continue" {printf( "%s", yytext);return T_Continue;}
+"return" {printf( "%s", yytext);return T_Return;}
+"print" {printf("%s",yytext);return T_Print;}
+"import" {printf( "%s", yytext);return T_Import;}
+"from" {printf( "%s", yytext);return T_From;}
+"*" {printf( "%s", yytext);return T_Star;}
+"(" {printf( "%s", yytext);return T_LP;}
+")" {printf( "%s", yytext);return T_RP;}
+":" {printf( "%s", yytext);return T_Cln;}
+"for" {printf( "%s", yytext);return T_For;}
+"while" {printf( "%s", yytext);return T_While;}
+"in" {printf( "%s", yytext);return T_In;}
+"or" {printf( "%s", yytext);return T_Or;}
+"and" {printf( "%s", yytext);return T_And;}
+"not" {printf( "%s", yytext);return T_Not;}
+"<" {printf( "%s", yytext);return T_Lt;}
+">" {printf( "%s", yytext);return T_Gt;}
+"==" {printf( "%s", yytext);return T_Deq;}
+">=" {printf( "%s", yytext);return T_Ge;}
+"<=" {printf( "%s", yytext);return T_Le;}
+"!=" {printf( "%s", yytext);return T_Neq;}
+"+" {printf( "%s", yytext);return T_Plus;}
+"-" {printf( "%s", yytext);return T_Minus;}
+"/" {printf( "%s", yytext);return T_Divide;}
+"%" {printf( "%s", yytext);return T_Mod;}
+"//" {printf( "%s", yytext);return T_DDiv;}
+"**" {printf( "%s", yytext);return T_Power;}
+"[" {printf( "%s", yytext);return T_Ls;}
+"]" {printf( "%s", yytext);return T_Rs;}
 "True" {printf( "%s", yytext);return T_true;}
 "False" {printf( "%s", yytext);return T_false;}
 " "+ {printf( " ");}
@@ -214,12 +199,11 @@ tab [\t]
                     printf("Matched : %s\n", yytext);
                     char* variable_name = yytext;
                     find_element(yytext,yylineno);
-                    return T_name;
+                    return T_ID;
                     }
- [1-9]*{digit}+ {printf( "%s", yytext);return T_number;}
- [1-9]*{digit}+"."{digit}+ {printf( "%s", yytext);return T_float;}
- 
-\"(.)*\" {printf( "%s", yytext);return T_string;}
+[1-9]*{digit}+ {printf( "%s", yytext);return T_Number;}
+[1-9]*{digit}+"."{digit}+ {printf( "%s", yytext);return T_Float;} 
+\"(.)*\" {printf( "%s", yytext);return T_String;}
 
 %%
 
@@ -236,4 +220,9 @@ void yyerror(char *s)
 int main()
  {
   init_scope();
+  yyparse();
+  for(int i=0;i<=peek();++i)
+    printTable(i);
+  printf("=============END=================\n");
+  return 0;
 }
