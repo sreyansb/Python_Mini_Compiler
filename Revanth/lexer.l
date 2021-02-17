@@ -31,19 +31,24 @@
  		#ifdef DEBUG
  		if(startFlag)
  		{
- 			printf("********************************TOKENS*******************************\n1 ");
+ 			printf("********************************TOKENS*******************************\n");
+ 			printf("%d ",yylineno);
  			startFlag=0;
  		}
  		if(strcmp(X, "NL")==0)
  		{
  			printf("%s\n%d ", X, yylineno);
+ 			//printf("%d ", yylineno);
  		}
 		else
 		{
-			printf("%s ", X);	
+			printf("%s ", X);
 		}
  		#endif
+ 		
  	}
+ 	
+ 	
  	
  	
  	static void push_1(int i) 
@@ -77,9 +82,10 @@
 		return tab_count;
 	}	
  	int depth = 1; 
+ 	//static int yylineno = 1; 
  	
 %}
-%option yylineno
+	//%option yylineno
 whitespace [ ]
 start \'\'\' 
 
@@ -88,22 +94,37 @@ Multiline_comment \'\'\'[\n].+[\n]\'\'\'\n
 %%
 
 
-"\n"["\t"" "]*"\n"                  {debug("Empty Line");
-                                     yyless(yyleng-1);
-                                     //yylineno++;
+"\n"["\t"" "]*"\n"               	{
+										//debug("NL");
+										
+                                    	yyless(yyleng-1);
+                                    	yylineno++;
+                                    	debug("NL");
+                                    	debug("Empty Line");
                                     }
-"\n"["\t"]*"#"[^\n]*                {debug("This is a comment");
-                                     //yylineno++;
+                                    
+["\n"]?["\t"]*"#"[^\n]*             {
+										//debug("NL");
+										
+                                    	if(yytext[0] == '\n')
+                                    	{
+                                    		yylineno++;
+											debug("NL");
+											debug("Comment");
+										}
+										else
+											debug("Comment");
                                     }
+                                    
 "\n"["\t"]*                         {
                                         
                                         if(def_mode == 0)
                                         {
-                                            fprintf(yyout, "%s", yytext);
+                                            //fprintf(yyout, "%s", yytext);
 											yyless(0);
                                             def_mode = 1;
-                                            //printf("\n\nNew line\n\n");
                                             yycolumn=1;
+                                            yylineno++;
                                             debug("NL");
                                             return T_NL;
                                         }
@@ -113,7 +134,6 @@ Multiline_comment \'\'\'[\n].+[\n]\'\'\'\n
                                             if(yyleng-1 == peek(&indent)){
                                                 def_mode = 0;
                                                 //yylineno++;
-                                                //return ND;//
                                             }
                                             else
                                             {
@@ -156,11 +176,11 @@ Multiline_comment \'\'\'[\n].+[\n]\'\'\'\n
 
 
 
-"import" {debug("IMPT"); return T_Import;}
+"import" {debug("Import"); return T_Import;}
 "print"  {debug("Print"); return T_Print;}
 "len"	{debug("len"); return T_LEN;}
-"for"	{debug("for"); return T_For;}
-"in"	{debug("in"); return T_IN;}
+"for"	{debug("For"); return T_For;}
+"in"	{debug("IN"); return T_IN;}
 "pass" {debug("Pass"); return T_Pass;}
 "if" {debug("If"); return T_If;}
 "while" {debug("While"); return T_While;}
@@ -194,17 +214,17 @@ Multiline_comment \'\'\'[\n].+[\n]\'\'\'\n
 "]" {debug("CB"); return T_CB;}
 "," {debug("Comma"); return T_Comma;}
 "=" {debug("EQL"); return T_EQL;}
-"range" {debug("range"); return T_Range;}
+"range" {debug("Range"); return T_Range;}
 "list" {debug("List"); return T_List;}
 [0-9]+ {yylval.text = strdup(yytext); debug("Number"); return T_Number;}
 [_a-zA-Z][_a-zA-Z0-9]* {yylval.text = strdup(yytext); debug(yylval.text); return T_ID;}
 \"([^\"\n])*\" {yylval.text = strdup(yytext); debug("String"); return T_String;}
 \'([^\'\n])*\' {yylval.text = strdup(yytext); debug("String"); return T_String;}
-#(.*)\n ;
+
 {start}.*{start}\n ; 
 {Multiline_comment} ;
-{whitespace} {} 
-"\n" {yycolumn=1; debug("NL"); return T_NL;}
+{whitespace} ;
+
 <<EOF>> {debug("EOF"); return T_EndOfFile;}
 %%
   
@@ -243,6 +263,9 @@ int main()
 			}
 			
 		}
+		#(.*)\n ;
+		"\n" {yycolumn=1; debug("NL"); return T_NL;}
+		
 		*/
 	
 	
