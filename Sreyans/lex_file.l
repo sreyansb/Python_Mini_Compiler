@@ -6,7 +6,8 @@
     #define maxscope 100
     #define vinscope 100
 
-    int yycol=1;
+    extern YYSTYPE yylval;
+
     int def_mode=1;
 
     static int tabstack[maxscope];
@@ -30,11 +31,17 @@
     }scope
 
     static int peek()
- {
+    {
       return tabstack[st_ptr];
     }
 
-    //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
+    typedef struct symtabnode
+	  {
+		  char* name;
+		  int scope;
+    }symtabnode;
+
+      //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
     static scope scopetable[maxscope];
 
     //when we go into a new scope, we need to initialise the scope and also scopetable of that 
@@ -46,19 +53,20 @@
     }
 
     //we need to add a new variable to the current scope
-    static void add_to_scope(char* var_name,int linedeclared)
+    static int add_to_scope(char* var_name,int linedeclared)
  {
       //when in a particular scope, we can only add to that scope
       ++scopetable[tabstack[st_ptr]].top_ptr;
       strcpy(scopetable[tabstack[st_ptr]].scope_var[scopetable[tabstack[st_ptr]].top_ptr].name,var_name);
       scopetable[tabstack[st_ptr]].scope_var[scopetable[tabstack[st_ptr]].top_ptr].dec_line=linedeclared;
       scopetable[tabstack[st_ptr]].scope_var[scopetable[tabstack[st_ptr]].top_ptr].last_line=linedeclared;
+      return st_ptr;
     }
 
     //we need to first find if the element is declared before.
     //If used before, we update the last_line the variable was used.
     //If not used, initialise in current scope
-    static void find_element(char* varname,int lineused)
+    static int find_element(char* varname,int lineused)
  {
       for(int i=st_ptr;i>-1;--i)
  {
@@ -67,15 +75,15 @@
           if (strcmp(scopetable[tabstack[i]][j].name,varname)==0)
  {
             scopetable[tabstack[i]][j].last_line=lineused;
-            return;
+            return i;
           }
         }
       }
-      add_to_scope(varname,lineused);
+      return add_to_scope(varname,lineused);
     }
     
     void printscope(int sta_ptr)
- {
+    {
       printf("=======================================\n");
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
       printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
@@ -102,6 +110,7 @@
       return line_depth;
     }
 %}
+%option yylineno
 letter [a-zA-Z]
 digit [0-9]
 space [ ]
@@ -122,18 +131,19 @@ tab [\t]
   int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
-    flag=0;
     if (line_depth>ptr)
- {
+    {
       init_scope(line_depth);
       printf("Indented to %d tabs\n",line_depth);
       return T_IND;
     }
     else
- {
+    {
       if (ptr==-1)
- {yyerror("Wrong number of tabs\n");
-        return 0;}
+      {
+        yyerror("Wrong number of tabs\n");
+        return 0;
+      }
       printf("Deleting\n");
       deletescope();
       yyless(0);
@@ -157,54 +167,62 @@ tab [\t]
   }
 }
 
-";" {printf( "%s", yytext);return T_SMC;}
 "=" {printf( "%s", yytext);return T_EQ;}
 "," {printf( "%s", yytext);return T_Comma;}
 "del" {printf( "%s", yytext);return T_Del;}
 "pass" {printf( "%s", yytext);return T_Pass;}
 "break" {printf( "%s", yytext);return T_Break;}
 "continue" {printf( "%s", yytext);return T_Continue;}
-"return" {printf( "%s", yytext);return T_Return;}
 "print" {printf("%s",yytext);return T_Print;}
 "import" {printf( "%s", yytext);return T_Import;}
 "from" {printf( "%s", yytext);return T_From;}
-"*" {printf( "%s", yytext);return T_Star;}
+"range" {printf( "%s", yytext);return T_Range;}
+"in" {printf("%s",yytext);return T_In;}
 "(" {printf( "%s", yytext);return T_LP;}
 ")" {printf( "%s", yytext);return T_RP;}
 ":" {printf( "%s", yytext);return T_Cln;}
 "for" {printf( "%s", yytext);return T_For;}
 "while" {printf( "%s", yytext);return T_While;}
-"in" {printf( "%s", yytext);return T_In;}
 "or" {printf( "%s", yytext);return T_Or;}
 "and" {printf( "%s", yytext);return T_And;}
 "not" {printf( "%s", yytext);return T_Not;}
 "<" {printf( "%s", yytext);return T_Lt;}
+">=" {printf( "%s", yytext);return T_Gte;}
+"<=" {printf( "%s", yytext);return T_Lte;}
 ">" {printf( "%s", yytext);return T_Gt;}
 "==" {printf( "%s", yytext);return T_Deq;}
-">=" {printf( "%s", yytext);return T_Ge;}
-"<=" {printf( "%s", yytext);return T_Le;}
-"!=" {printf( "%s", yytext);return T_Neq;}
 "+" {printf( "%s", yytext);return T_Plus;}
 "-" {printf( "%s", yytext);return T_Minus;}
+"*" {printf( "%s", yytext);return T_Star;}
 "/" {printf( "%s", yytext);return T_Divide;}
 "%" {printf( "%s", yytext);return T_Mod;}
 "//" {printf( "%s", yytext);return T_DDiv;}
 "**" {printf( "%s", yytext);return T_Power;}
 "[" {printf( "%s", yytext);return T_Ls;}
 "]" {printf( "%s", yytext);return T_Rs;}
-"True" {printf( "%s", yytext);return T_true;}
-"False" {printf( "%s", yytext);return T_false;}
+"True" {printf( "%s", yytext);return T_True;}
+"False" {printf( "%s", yytext);return T_False;}
 " "+ {printf( " ");}
 ({letter}|_)({letter}|_|{digit})* {
                     printf("Matched : %s\n", yytext);
-                    char* variable_name = yytext;
-                    find_element(yytext,yylineno);
+                    yylval.data=(symtabnode*)malloc(sizeof(symtabnode));
+                    yylval.data->name=strdup(yytext);
+                    int scopei = find_element(yytext,yylineno);
+                    yylval.data->scope=scopei;
                     return T_ID;
                     }
-[1-9]*{digit}+ {printf( "%s", yytext);return T_Number;}
-[1-9]*{digit}+"."{digit}+ {printf( "%s", yytext);return T_Float;} 
-\"(.)*\" {printf( "%s", yytext);return T_String;}
-
+[1-9]*{digit}+ {
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data->scope=-1;printf( "%s", yytext);return T_Integer;}
+[1-9]*{digit}+"."{digit}+ {
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data->scope=-1;printf( "%s", yytext);return T_Real;} 
+\"([^\"\n])*\" {
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
+\'([^\'\n])*\' {
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 %%
 
 int yywrap(void)
@@ -213,9 +231,10 @@ int yywrap(void)
 }
 
 void yyerror(char *s)
- {
+{
   printf("Line no: %d %s\n",yylineno,s);
 }
+
 
 int main()
  {
@@ -224,5 +243,6 @@ int main()
   for(int i=0;i<=peek();++i)
     printscope(i);
   printf("=============END=================\n");
+  printTable();
   return 0;
 }

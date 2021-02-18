@@ -3,12 +3,207 @@
     #include<stdlib.h>
     #include <string.h>
 	#include <stdarg.h>
+	#define maxvar 10005
+	//because size of each scope(100) is 100 elements
 
-	extern int yylineno;
-	extern int depth;
-	extern int top();
-	extern int pop();
-	int currentScope = 1;
+	extern void init_scope();
+	extern void printscope(int);
+	
+	typedef struct symtabnode
+	{
+		char* name;
+		int scope;
+	}symtabnode;
+	
+	//will store all the elements and their scopes
+	symtabnode symtab[maxscopey];
+	int index=0;//first index to be filled in the symbol table
 
-    
+	void addtotable(char* name,int scope)
+	{
+		strcpy(symtab[index].name,name);
+		symtab[index].scope=scope;
+		++index;
+	}
+
+	static void searchele(char* name,int scope)
+	{
+		for(int i=0;i<index;++i)
+		{
+			if (strcmp(name,symtab[i].name)==0)
+				return;
+		}
+		addtotable(name,scope);
+	}
+
+	void printTable()
+	{
+		printf("Name\t|Scope\t\n");
+		for(int i=0;i<index;++i)
+			printf("%s\t|%d\t",symtab[i].name,symtab[i].scope);
+	}  
 %}
+%locations
+
+%start start_karo
+%union {symtabnode* data;};
+%token T_NL T_IND T_DED T_EOF T_EQ T_Comma T_Del T_Pass T_Break T_Continue T_In
+%token T_Print T_Import T_From T_Star T_LP T_RP T_Cln T_For T_While T_Or T_Range
+%token T_And T_Not T_Lt T_Gt T_Lte T_Gte T_Deq T_Plus T_Minus T_Divide T_Mod T_DDiv
+%token T_Power T_Ls T_Rs T_True T_False T_ID T_Integer T_Real T_String
+
+%right T_Power
+%right T_EQ
+%left T_Plus T_Minus
+%left T_Star T_Divide T_DDiv
+
+%%
+
+start_karo
+	: T_NL start_karo
+	| stmt start_karo
+	| T_EOF
+
+constant
+	: T_Integer
+	| T_Real
+	| T_String
+
+term
+	: T_ID {searchele($<data->name>1,$<data->scope>1);}
+	| constant
+
+math_term
+	: T_ID {searchele($<data->name>1,$<data->scope>1);}
+	| T_Real
+	| T_Integer
+
+stmt
+	: simple_stmt
+	| compound_stmt
+
+simple_stmt
+	: base_stmt T_NL
+
+base_stmt
+	: pass_stmt
+	| delete_stmt
+	| import_stmt
+	| cobr_stmt
+	| assign_stmt
+	| print_stmt
+	| printable_stmt
+
+printable_stmt
+	: arith_stmt
+	| bool_stmt
+
+pass_stmt
+	: T_Pass
+
+delete_stmt
+	: T_Del T_ID
+
+import_stmt
+	: T_Import T_ID {searchele($<data->name>2,$<data->scope>2);}
+	| import_from
+
+import_from
+	: T_From T_ID T_Import T_ID end_import_from
+
+end_import_from
+	: T_Comma T_ID end_import_from
+	| %empty
+
+cobr_stmt
+	: T_Break
+	| T_Continue
+
+assign_stmt
+	: T_ID T_EQ term {searchele($<data->name>1,$<data->scope>1);}
+	| T_ID T_EQ printable_stmt {searchele($<data->name>1,$<data->scope>1);}
+
+print_stmt
+	: T_Print T_LP term T_RP
+	| T_Print T_LP printable_stmt T_RP
+
+arith_stmt
+	: math_term
+	| math_term operator math_term end_term_stmt
+	| math_term operator arith_stmt end_term_stmt
+	| arith_stmt operator math_term
+	| arith_stmt operator arith_stmt
+	| T_LP arith_stmt T_RP
+
+operator
+	: T_Plus
+	| T_Minus
+	| T_Star
+	| T_Divide
+	| T_DDiv
+	| T_Power
+	| T_Mod
+
+end_term_stmt
+	: %empty
+	| T_NL
+
+bool_stmt
+	: bool_term T_Or bool_term
+	| bool_term T_And bool_term
+	| bool_term
+	| T_Not bool_stmt
+	| T_LP bool_stmt T_RP
+	| arith_stmt comp_op arith_stmt
+
+bool_term
+	: constant
+	| T_True
+	| T_False
+
+comp_op
+	: T_Lt
+	| T_Gt
+	| T_Deq
+	| T_Lte
+	| T_Gte
+
+compound_stmt
+	: for_stmt
+	| while_stmt
+
+for_stmt
+	: T_For T_ID T_IN range_stmt T_Cln block_code {searchele($<data->name>2,$<data->scope>2);}
+	| T_For T_ID T_IN list_stmt T_Cln block_code {searchele($<data->name>2,$<data->scope>2);}
+
+range_stmt
+	: T_Range T_LP T_Integer T_RP
+	| T_Range T_LP T_ID T_RP
+	| T_Range T_LP T_Integer T_Comma T_Integer T_RP
+	| T_Range T_LP T_ID T_Comma T_ID T_RP
+	| T_Range T_LP T_Integer T_Comma T_Integer T_Comma T_Integer T_RP
+	| T_Range T_LP T_ID T_Comma T_ID T_Comma T_ID T_RP
+
+list_stmt
+	: T_Ls T_Rs
+	| T_Ls args T_Rs
+
+args
+	: term items
+
+items
+	: T_Comma term items
+	| %empty
+
+while_stmt
+	: T_While bool_exp T_Cln block_code
+
+block_code
+	: base_stmt
+	| T_NL T_IND stmt repeater T_DED
+
+repeater
+	: %empty
+	| stmt repeater
+
+%%
