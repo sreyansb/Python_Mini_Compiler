@@ -25,10 +25,10 @@
     //top_ptr=points to the topmost element in each scope
     //basically scope stores all the variables defined in a scope
     typedef struct scope
- {
+    {
         sym_node scope_var[vinscope];
         int top_ptr;
-    }scope
+    }scope;
 
     static int peek()
     {
@@ -46,15 +46,15 @@
 
     //when we go into a new scope, we need to initialise the scope and also scopetable of that 
     static void init_scope(int no_of_tabs)
- {
+    {
       //we need to initialise a scope with scope number=st_ptr
-      tabstack[++st_ptr]=no_of_tabs
+      tabstack[++st_ptr]=no_of_tabs;
       scopetable[no_of_tabs].top_ptr=-1;
     }
 
     //we need to add a new variable to the current scope
     static int add_to_scope(char* var_name,int linedeclared)
- {
+    {
       //when in a particular scope, we can only add to that scope
       ++scopetable[tabstack[st_ptr]].top_ptr;
       strcpy(scopetable[tabstack[st_ptr]].scope_var[scopetable[tabstack[st_ptr]].top_ptr].name,var_name);
@@ -67,14 +67,14 @@
     //If used before, we update the last_line the variable was used.
     //If not used, initialise in current scope
     static int find_element(char* varname,int lineused)
- {
+    {
       for(int i=st_ptr;i>-1;--i)
- {
+      {
         for(int j=scopetable[tabstack[i]].top_ptr;j>-1;--j)
- {
-          if (strcmp(scopetable[tabstack[i]][j].name,varname)==0)
- {
-            scopetable[tabstack[i]][j].last_line=lineused;
+        {  
+          if (strcmp(scopetable[tabstack[i]].scope_var[j].name,varname)==0)
+          {
+            scopetable[tabstack[i]].scope_var[j].last_line=lineused;
             return i;
           }
         }
@@ -88,7 +88,7 @@
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
       printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
-        printf("%s\t\t|%d\t\t\t|%d|\n",scopetable[tabstack[sta_ptr]][i].name,scopetable[tabstack[sta_ptr]][i].dec_line,scopetable[tabstack[sta_ptr]][i].last_line);
+        printf("%s\t\t|%d\t\t\t|%d|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
       printf("========================================\n");
     }
 
@@ -141,7 +141,8 @@ tab [\t]
     {
       if (ptr==-1)
       {
-        yyerror("Wrong number of tabs\n");
+        printf("Wrong number of tabs\n");
+        exit(1);
         return 0;
       }
       printf("Deleting\n");
@@ -230,7 +231,7 @@ int yywrap(void)
     return 1;
 }
 
-void yyerror(char *s)
+void yyerror(char* s)
 {
   printf("Line no: %d %s\n",yylineno,s);
 }
@@ -238,11 +239,10 @@ void yyerror(char *s)
 
 int main()
  {
-  init_scope();
+  init_scope(0);
   yyparse();
   for(int i=0;i<=peek();++i)
     printscope(i);
   printf("=============END=================\n");
-  printTable();
   return 0;
 }

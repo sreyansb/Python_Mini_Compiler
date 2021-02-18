@@ -1,0 +1,808 @@
+Terminals unused in grammar
+
+   T_IND
+   T_DED
+   T_In
+   T_Cln
+   T_For
+   T_While
+   T_Or
+   T_Range
+   T_And
+   T_Not
+   T_Lt
+   T_Gt
+   T_Lte
+   T_Gte
+   T_Deq
+   T_Power
+   T_Ls
+   T_Rs
+   T_True
+   T_False
+
+
+State 49 conflicts: 2 reduce/reduce
+State 56 conflicts: 6 shift/reduce
+
+
+Grammar
+
+    0 $accept: start_karo $end
+
+    1 start_karo: T_NL start_karo
+    2           | stmt T_NL start_karo
+    3           | stmt T_NL
+    4           | T_EOF
+
+    5 term: math_term
+    6     | T_String
+
+    7 math_term: T_ID
+    8          | T_Real
+    9          | T_Integer
+
+   10 stmt: simple_stmt
+
+   11 simple_stmt: base_stmt
+
+   12 base_stmt: pass_stmt
+   13          | delete_stmt
+   14          | import_stmt
+   15          | cobr_stmt
+   16          | assign_stmt
+   17          | print_stmt
+   18          | printable_stmt
+
+   19 pass_stmt: T_Pass
+
+   20 delete_stmt: T_Del T_ID
+
+   21 import_stmt: T_Import T_ID
+   22            | import_from
+
+   23 import_from: T_From T_ID T_Import T_ID end_import_from
+
+   24 end_import_from: T_Comma T_ID end_import_from
+   25                | %empty
+
+   26 cobr_stmt: T_Break
+   27          | T_Continue
+
+   28 assign_stmt: T_ID T_EQ term
+   29            | T_ID T_EQ printable_stmt
+
+   30 print_stmt: T_Print T_LP term T_RP
+   31           | T_Print T_LP printable_stmt T_RP
+
+   32 printable_stmt: arith_stmt
+
+   33 arith_stmt: arith_stmt operator arith_stmt
+   34           | T_LP arith_stmt T_RP
+   35           | math_term
+   36           | T_Minus math_term
+
+   37 operator: T_Plus
+   38         | T_Minus
+   39         | T_Star
+   40         | T_Divide
+   41         | T_DDiv
+   42         | T_Mod
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+T_NL (258) 1 2 3
+T_IND (259)
+T_DED (260)
+T_EOF (261) 4
+T_EQ (262) 28 29
+T_Comma (263) 24
+T_Del (264) 20
+T_Pass (265) 19
+T_Break (266) 26
+T_Continue (267) 27
+T_In (268)
+T_Print (269) 30 31
+T_Import (270) 21 23
+T_From (271) 23
+T_Star (272) 39
+T_LP (273) 30 31 34
+T_RP (274) 30 31 34
+T_Cln (275)
+T_For (276)
+T_While (277)
+T_Or (278)
+T_Range (279)
+T_And (280)
+T_Not (281)
+T_Lt (282)
+T_Gt (283)
+T_Lte (284)
+T_Gte (285)
+T_Deq (286)
+T_Plus (287) 37
+T_Minus (288) 36 38
+T_Divide (289) 40
+T_Mod (290) 42
+T_DDiv (291) 41
+T_Power (292)
+T_Ls (293)
+T_Rs (294)
+T_True (295)
+T_False (296)
+T_ID (297) 7 20 21 23 24 28 29
+T_Integer (298) 9
+T_Real (299) 8
+T_String (300) 6
+
+
+Nonterminals, with rules where they appear
+
+$accept (46)
+    on left: 0
+start_karo (47)
+    on left: 1 2 3 4, on right: 0 1 2
+term (48)
+    on left: 5 6, on right: 28 30
+math_term (49)
+    on left: 7 8 9, on right: 5 35 36
+stmt (50)
+    on left: 10, on right: 2 3
+simple_stmt (51)
+    on left: 11, on right: 10
+base_stmt (52)
+    on left: 12 13 14 15 16 17 18, on right: 11
+pass_stmt (53)
+    on left: 19, on right: 12
+delete_stmt (54)
+    on left: 20, on right: 13
+import_stmt (55)
+    on left: 21 22, on right: 14
+import_from (56)
+    on left: 23, on right: 22
+end_import_from (57)
+    on left: 24 25, on right: 23 24
+cobr_stmt (58)
+    on left: 26 27, on right: 15
+assign_stmt (59)
+    on left: 28 29, on right: 16
+print_stmt (60)
+    on left: 30 31, on right: 17
+printable_stmt (61)
+    on left: 32, on right: 18 29 31
+arith_stmt (62)
+    on left: 33 34 35 36, on right: 32 33 34
+operator (63)
+    on left: 37 38 39 40 41 42, on right: 33
+
+
+State 0
+
+    0 $accept: . start_karo $end
+
+    T_NL        shift, and go to state 1
+    T_EOF       shift, and go to state 2
+    T_Del       shift, and go to state 3
+    T_Pass      shift, and go to state 4
+    T_Break     shift, and go to state 5
+    T_Continue  shift, and go to state 6
+    T_Print     shift, and go to state 7
+    T_Import    shift, and go to state 8
+    T_From      shift, and go to state 9
+    T_LP        shift, and go to state 10
+    T_Minus     shift, and go to state 11
+    T_ID        shift, and go to state 12
+    T_Integer   shift, and go to state 13
+    T_Real      shift, and go to state 14
+
+    start_karo      go to state 15
+    math_term       go to state 16
+    stmt            go to state 17
+    simple_stmt     go to state 18
+    base_stmt       go to state 19
+    pass_stmt       go to state 20
+    delete_stmt     go to state 21
+    import_stmt     go to state 22
+    import_from     go to state 23
+    cobr_stmt       go to state 24
+    assign_stmt     go to state 25
+    print_stmt      go to state 26
+    printable_stmt  go to state 27
+    arith_stmt      go to state 28
+
+
+State 1
+
+    1 start_karo: T_NL . start_karo
+
+    T_NL        shift, and go to state 1
+    T_EOF       shift, and go to state 2
+    T_Del       shift, and go to state 3
+    T_Pass      shift, and go to state 4
+    T_Break     shift, and go to state 5
+    T_Continue  shift, and go to state 6
+    T_Print     shift, and go to state 7
+    T_Import    shift, and go to state 8
+    T_From      shift, and go to state 9
+    T_LP        shift, and go to state 10
+    T_Minus     shift, and go to state 11
+    T_ID        shift, and go to state 12
+    T_Integer   shift, and go to state 13
+    T_Real      shift, and go to state 14
+
+    start_karo      go to state 29
+    math_term       go to state 16
+    stmt            go to state 17
+    simple_stmt     go to state 18
+    base_stmt       go to state 19
+    pass_stmt       go to state 20
+    delete_stmt     go to state 21
+    import_stmt     go to state 22
+    import_from     go to state 23
+    cobr_stmt       go to state 24
+    assign_stmt     go to state 25
+    print_stmt      go to state 26
+    printable_stmt  go to state 27
+    arith_stmt      go to state 28
+
+
+State 2
+
+    4 start_karo: T_EOF .
+
+    $default  reduce using rule 4 (start_karo)
+
+
+State 3
+
+   20 delete_stmt: T_Del . T_ID
+
+    T_ID  shift, and go to state 30
+
+
+State 4
+
+   19 pass_stmt: T_Pass .
+
+    $default  reduce using rule 19 (pass_stmt)
+
+
+State 5
+
+   26 cobr_stmt: T_Break .
+
+    $default  reduce using rule 26 (cobr_stmt)
+
+
+State 6
+
+   27 cobr_stmt: T_Continue .
+
+    $default  reduce using rule 27 (cobr_stmt)
+
+
+State 7
+
+   30 print_stmt: T_Print . T_LP term T_RP
+   31           | T_Print . T_LP printable_stmt T_RP
+
+    T_LP  shift, and go to state 31
+
+
+State 8
+
+   21 import_stmt: T_Import . T_ID
+
+    T_ID  shift, and go to state 32
+
+
+State 9
+
+   23 import_from: T_From . T_ID T_Import T_ID end_import_from
+
+    T_ID  shift, and go to state 33
+
+
+State 10
+
+   34 arith_stmt: T_LP . arith_stmt T_RP
+
+    T_LP       shift, and go to state 10
+    T_Minus    shift, and go to state 11
+    T_ID       shift, and go to state 34
+    T_Integer  shift, and go to state 13
+    T_Real     shift, and go to state 14
+
+    math_term   go to state 16
+    arith_stmt  go to state 35
+
+
+State 11
+
+   36 arith_stmt: T_Minus . math_term
+
+    T_ID       shift, and go to state 34
+    T_Integer  shift, and go to state 13
+    T_Real     shift, and go to state 14
+
+    math_term  go to state 36
+
+
+State 12
+
+    7 math_term: T_ID .
+   28 assign_stmt: T_ID . T_EQ term
+   29            | T_ID . T_EQ printable_stmt
+
+    T_EQ  shift, and go to state 37
+
+    $default  reduce using rule 7 (math_term)
+
+
+State 13
+
+    9 math_term: T_Integer .
+
+    $default  reduce using rule 9 (math_term)
+
+
+State 14
+
+    8 math_term: T_Real .
+
+    $default  reduce using rule 8 (math_term)
+
+
+State 15
+
+    0 $accept: start_karo . $end
+
+    $end  shift, and go to state 38
+
+
+State 16
+
+   35 arith_stmt: math_term .
+
+    $default  reduce using rule 35 (arith_stmt)
+
+
+State 17
+
+    2 start_karo: stmt . T_NL start_karo
+    3           | stmt . T_NL
+
+    T_NL  shift, and go to state 39
+
+
+State 18
+
+   10 stmt: simple_stmt .
+
+    $default  reduce using rule 10 (stmt)
+
+
+State 19
+
+   11 simple_stmt: base_stmt .
+
+    $default  reduce using rule 11 (simple_stmt)
+
+
+State 20
+
+   12 base_stmt: pass_stmt .
+
+    $default  reduce using rule 12 (base_stmt)
+
+
+State 21
+
+   13 base_stmt: delete_stmt .
+
+    $default  reduce using rule 13 (base_stmt)
+
+
+State 22
+
+   14 base_stmt: import_stmt .
+
+    $default  reduce using rule 14 (base_stmt)
+
+
+State 23
+
+   22 import_stmt: import_from .
+
+    $default  reduce using rule 22 (import_stmt)
+
+
+State 24
+
+   15 base_stmt: cobr_stmt .
+
+    $default  reduce using rule 15 (base_stmt)
+
+
+State 25
+
+   16 base_stmt: assign_stmt .
+
+    $default  reduce using rule 16 (base_stmt)
+
+
+State 26
+
+   17 base_stmt: print_stmt .
+
+    $default  reduce using rule 17 (base_stmt)
+
+
+State 27
+
+   18 base_stmt: printable_stmt .
+
+    $default  reduce using rule 18 (base_stmt)
+
+
+State 28
+
+   32 printable_stmt: arith_stmt .
+   33 arith_stmt: arith_stmt . operator arith_stmt
+
+    T_Star    shift, and go to state 40
+    T_Plus    shift, and go to state 41
+    T_Minus   shift, and go to state 42
+    T_Divide  shift, and go to state 43
+    T_Mod     shift, and go to state 44
+    T_DDiv    shift, and go to state 45
+
+    $default  reduce using rule 32 (printable_stmt)
+
+    operator  go to state 46
+
+
+State 29
+
+    1 start_karo: T_NL start_karo .
+
+    $default  reduce using rule 1 (start_karo)
+
+
+State 30
+
+   20 delete_stmt: T_Del T_ID .
+
+    $default  reduce using rule 20 (delete_stmt)
+
+
+State 31
+
+   30 print_stmt: T_Print T_LP . term T_RP
+   31           | T_Print T_LP . printable_stmt T_RP
+
+    T_LP       shift, and go to state 10
+    T_Minus    shift, and go to state 11
+    T_ID       shift, and go to state 34
+    T_Integer  shift, and go to state 13
+    T_Real     shift, and go to state 14
+    T_String   shift, and go to state 47
+
+    term            go to state 48
+    math_term       go to state 49
+    printable_stmt  go to state 50
+    arith_stmt      go to state 28
+
+
+State 32
+
+   21 import_stmt: T_Import T_ID .
+
+    $default  reduce using rule 21 (import_stmt)
+
+
+State 33
+
+   23 import_from: T_From T_ID . T_Import T_ID end_import_from
+
+    T_Import  shift, and go to state 51
+
+
+State 34
+
+    7 math_term: T_ID .
+
+    $default  reduce using rule 7 (math_term)
+
+
+State 35
+
+   33 arith_stmt: arith_stmt . operator arith_stmt
+   34           | T_LP arith_stmt . T_RP
+
+    T_Star    shift, and go to state 40
+    T_RP      shift, and go to state 52
+    T_Plus    shift, and go to state 41
+    T_Minus   shift, and go to state 42
+    T_Divide  shift, and go to state 43
+    T_Mod     shift, and go to state 44
+    T_DDiv    shift, and go to state 45
+
+    operator  go to state 46
+
+
+State 36
+
+   36 arith_stmt: T_Minus math_term .
+
+    $default  reduce using rule 36 (arith_stmt)
+
+
+State 37
+
+   28 assign_stmt: T_ID T_EQ . term
+   29            | T_ID T_EQ . printable_stmt
+
+    T_LP       shift, and go to state 10
+    T_Minus    shift, and go to state 11
+    T_ID       shift, and go to state 34
+    T_Integer  shift, and go to state 13
+    T_Real     shift, and go to state 14
+    T_String   shift, and go to state 47
+
+    term            go to state 53
+    math_term       go to state 49
+    printable_stmt  go to state 54
+    arith_stmt      go to state 28
+
+
+State 38
+
+    0 $accept: start_karo $end .
+
+    $default  accept
+
+
+State 39
+
+    2 start_karo: stmt T_NL . start_karo
+    3           | stmt T_NL .
+
+    T_NL        shift, and go to state 1
+    T_EOF       shift, and go to state 2
+    T_Del       shift, and go to state 3
+    T_Pass      shift, and go to state 4
+    T_Break     shift, and go to state 5
+    T_Continue  shift, and go to state 6
+    T_Print     shift, and go to state 7
+    T_Import    shift, and go to state 8
+    T_From      shift, and go to state 9
+    T_LP        shift, and go to state 10
+    T_Minus     shift, and go to state 11
+    T_ID        shift, and go to state 12
+    T_Integer   shift, and go to state 13
+    T_Real      shift, and go to state 14
+
+    $default  reduce using rule 3 (start_karo)
+
+    start_karo      go to state 55
+    math_term       go to state 16
+    stmt            go to state 17
+    simple_stmt     go to state 18
+    base_stmt       go to state 19
+    pass_stmt       go to state 20
+    delete_stmt     go to state 21
+    import_stmt     go to state 22
+    import_from     go to state 23
+    cobr_stmt       go to state 24
+    assign_stmt     go to state 25
+    print_stmt      go to state 26
+    printable_stmt  go to state 27
+    arith_stmt      go to state 28
+
+
+State 40
+
+   39 operator: T_Star .
+
+    $default  reduce using rule 39 (operator)
+
+
+State 41
+
+   37 operator: T_Plus .
+
+    $default  reduce using rule 37 (operator)
+
+
+State 42
+
+   38 operator: T_Minus .
+
+    $default  reduce using rule 38 (operator)
+
+
+State 43
+
+   40 operator: T_Divide .
+
+    $default  reduce using rule 40 (operator)
+
+
+State 44
+
+   42 operator: T_Mod .
+
+    $default  reduce using rule 42 (operator)
+
+
+State 45
+
+   41 operator: T_DDiv .
+
+    $default  reduce using rule 41 (operator)
+
+
+State 46
+
+   33 arith_stmt: arith_stmt operator . arith_stmt
+
+    T_LP       shift, and go to state 10
+    T_Minus    shift, and go to state 11
+    T_ID       shift, and go to state 34
+    T_Integer  shift, and go to state 13
+    T_Real     shift, and go to state 14
+
+    math_term   go to state 16
+    arith_stmt  go to state 56
+
+
+State 47
+
+    6 term: T_String .
+
+    $default  reduce using rule 6 (term)
+
+
+State 48
+
+   30 print_stmt: T_Print T_LP term . T_RP
+
+    T_RP  shift, and go to state 57
+
+
+State 49
+
+    5 term: math_term .
+   35 arith_stmt: math_term .
+
+    T_NL      reduce using rule 5 (term)
+    T_NL      [reduce using rule 35 (arith_stmt)]
+    T_RP      reduce using rule 5 (term)
+    T_RP      [reduce using rule 35 (arith_stmt)]
+    $default  reduce using rule 35 (arith_stmt)
+
+
+State 50
+
+   31 print_stmt: T_Print T_LP printable_stmt . T_RP
+
+    T_RP  shift, and go to state 58
+
+
+State 51
+
+   23 import_from: T_From T_ID T_Import . T_ID end_import_from
+
+    T_ID  shift, and go to state 59
+
+
+State 52
+
+   34 arith_stmt: T_LP arith_stmt T_RP .
+
+    $default  reduce using rule 34 (arith_stmt)
+
+
+State 53
+
+   28 assign_stmt: T_ID T_EQ term .
+
+    $default  reduce using rule 28 (assign_stmt)
+
+
+State 54
+
+   29 assign_stmt: T_ID T_EQ printable_stmt .
+
+    $default  reduce using rule 29 (assign_stmt)
+
+
+State 55
+
+    2 start_karo: stmt T_NL start_karo .
+
+    $default  reduce using rule 2 (start_karo)
+
+
+State 56
+
+   33 arith_stmt: arith_stmt . operator arith_stmt
+   33           | arith_stmt operator arith_stmt .
+
+    T_Star    shift, and go to state 40
+    T_Plus    shift, and go to state 41
+    T_Minus   shift, and go to state 42
+    T_Divide  shift, and go to state 43
+    T_Mod     shift, and go to state 44
+    T_DDiv    shift, and go to state 45
+
+    T_Star    [reduce using rule 33 (arith_stmt)]
+    T_Plus    [reduce using rule 33 (arith_stmt)]
+    T_Minus   [reduce using rule 33 (arith_stmt)]
+    T_Divide  [reduce using rule 33 (arith_stmt)]
+    T_Mod     [reduce using rule 33 (arith_stmt)]
+    T_DDiv    [reduce using rule 33 (arith_stmt)]
+    $default  reduce using rule 33 (arith_stmt)
+
+    operator  go to state 46
+
+
+State 57
+
+   30 print_stmt: T_Print T_LP term T_RP .
+
+    $default  reduce using rule 30 (print_stmt)
+
+
+State 58
+
+   31 print_stmt: T_Print T_LP printable_stmt T_RP .
+
+    $default  reduce using rule 31 (print_stmt)
+
+
+State 59
+
+   23 import_from: T_From T_ID T_Import T_ID . end_import_from
+
+    T_Comma  shift, and go to state 60
+
+    $default  reduce using rule 25 (end_import_from)
+
+    end_import_from  go to state 61
+
+
+State 60
+
+   24 end_import_from: T_Comma . T_ID end_import_from
+
+    T_ID  shift, and go to state 62
+
+
+State 61
+
+   23 import_from: T_From T_ID T_Import T_ID end_import_from .
+
+    $default  reduce using rule 23 (import_from)
+
+
+State 62
+
+   24 end_import_from: T_Comma T_ID . end_import_from
+
+    T_Comma  shift, and go to state 60
+
+    $default  reduce using rule 25 (end_import_from)
+
+    end_import_from  go to state 63
+
+
+State 63
+
+   24 end_import_from: T_Comma T_ID end_import_from .
+
+    $default  reduce using rule 24 (end_import_from)

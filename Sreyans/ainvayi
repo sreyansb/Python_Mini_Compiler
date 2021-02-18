@@ -54,15 +54,13 @@
 %right T_Power
 %right T_EQ
 %left T_Plus T_Minus
-%left T_Star T_Divide T_DDiv T_Mod
-%left T_LP T_RP
+%left T_Star T_Divide T_DDiv
 
 %%
 
 start_karo
 	: T_NL start_karo
-	| stmt T_NL start_karo
-	| stmt T_NL
+	| stmt start_karo
 	| T_EOF {printTable();exit(0);}
 
 term
@@ -76,9 +74,10 @@ math_term
 
 stmt
 	: simple_stmt
+	| compound_stmt
 
 simple_stmt
-	: base_stmt
+	: base_stmt T_NL
 
 base_stmt
 	: pass_stmt
@@ -120,12 +119,14 @@ print_stmt
 
 printable_stmt
 	: arith_stmt
+    | bool_stmt
 
 arith_stmt
-	: arith_stmt operator arith_stmt
+	: math_term
+	| math_term operator math_term end_term_stmt
+	| math_term operator arith_stmt end_term_stmt
+	| arith_stmt operator arith_stmt
 	| T_LP arith_stmt T_RP
-	| math_term
-	| T_Minus math_term
 
 operator
 	: T_Plus
@@ -133,8 +134,68 @@ operator
 	| T_Star
 	| T_Divide
 	| T_DDiv
+	| T_Power
 	| T_Mod
 
-	
+end_term_stmt
+	: %empty
+
+bool_stmt
+	: bool_term T_Or bool_term
+	| bool_term T_And bool_term
+	| bool_term
+	| T_Not bool_stmt
+	| T_LP bool_stmt T_RP
+	| arith_stmt comp_op arith_stmt
+
+bool_term
+	: term
+	| T_True
+	| T_False
+
+comp_op
+	: T_Lt
+	| T_Gt
+	| T_Deq
+	| T_Lte
+	| T_Gte
+
+compound_stmt
+	: for_stmt
+	| while_stmt
+
+for_stmt
+	: T_For T_ID T_In range_stmt T_Cln block_code {searchele($<data->name>2,$<data->scope>2);}
+	| T_For T_ID T_In list_stmt T_Cln block_code {searchele($<data->name>2,$<data->scope>2);}
+
+range_stmt
+	: T_Range T_LP T_Integer T_RP
+	| T_Range T_LP T_ID T_RP
+	| T_Range T_LP T_Integer T_Comma T_Integer T_RP
+	| T_Range T_LP T_ID T_Comma T_ID T_RP
+	| T_Range T_LP T_Integer T_Comma T_Integer T_Comma T_Integer T_RP
+	| T_Range T_LP T_ID T_Comma T_ID T_Comma T_ID T_RP
+
+list_stmt
+	: T_Ls T_Rs
+	| T_Ls args T_Rs
+
+args
+	: term items
+
+items
+	: T_Comma term items
+	| %empty
+
+while_stmt
+	: T_While bool_stmt T_Cln block_code
+
+block_code
+	: base_stmt
+	| T_NL T_IND stmt repeater T_DED
+
+repeater
+	: %empty
+	| stmt repeater
 %%
 
