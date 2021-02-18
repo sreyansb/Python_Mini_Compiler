@@ -84,13 +84,26 @@
  	int depth = 1; 
  	//static int yylineno = 1; 
  	
+ 	static int count_nl(const char *s)
+ 	{
+ 		int count = 0;
+ 		int len = strlen(s);
+ 		for(int i =0; i < len; ++i)
+		{
+			if(s[i] == '\n')
+			{
+				++count;
+			}
+		}
+		return count;
+ 	}
+ 	
+ 	
 %}
 	//%option yylineno
 whitespace [ ]
-start \'\'\' 
 
-
-Multiline_comment \'\'\'[\n].+[\n]\'\'\'\n
+Multiline_comment \'\'\'(.|\n)*\'\'\'\n
 %%
 
 
@@ -221,8 +234,8 @@ Multiline_comment \'\'\'[\n].+[\n]\'\'\'\n
 \"([^\"\n])*\" {yylval.text = strdup(yytext); debug("String"); return T_String;}
 \'([^\'\n])*\' {yylval.text = strdup(yytext); debug("String"); return T_String;}
 
-{start}.*{start}\n ; 
-{Multiline_comment} ;
+
+{Multiline_comment} {yyless(yyleng-1); yylineno += (count_nl(yytext));debug("Multiline Comment");  }
 {whitespace} ;
 
 <<EOF>> {debug("EOF"); return T_EndOfFile;}
@@ -263,9 +276,12 @@ int main()
 			}
 			
 		}
-		#(.*)\n ;
+		start \'\'\' 
+		#(.*)\n ; #(.*)\n {yyless(yyleng-1);printf("comment");}
 		"\n" {yycolumn=1; debug("NL"); return T_NL;}
 		
+		
+		{start}.*{start}\n 	{yyless(yyleng-1); debug("caaaaamment");} 
 		*/
 	
 	

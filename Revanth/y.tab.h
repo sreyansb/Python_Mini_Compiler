@@ -151,7 +151,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 326 "try.y"
+#line 338 "parser.y"
  char *text; int depth; struct AST *node; 
 
 #line 158 "y.tab.h"

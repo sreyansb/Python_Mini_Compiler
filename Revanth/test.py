@@ -2,6 +2,7 @@
 import hello
 x=3
 y=2
+lis = [10,20,30,"haha"]
 for i in range(10,20):
 	print("ha")
 	for j in range(10,20):
@@ -16,13 +17,13 @@ for i in range(10,20):
 			print("lol")
 
 if(x<5):
-	print("hi")
+	print("huhu")
 	while True:
 		print("truee")
 	for n in range(3,10):
 		print("heha")
 		for d in range(3,10):
-			print("heha")
+			print(d)
 else:
 	print("elsee")
 
@@ -32,5 +33,4 @@ while True:
 	while False:
 		print("heehhee")
 		for l in range(3,10):
-			print("heha")
-			
+			print(l)
