@@ -378,6 +378,8 @@ term : T_ID {modifyRecordID("Identifier", $<text>1, @1.first_line, currentScope)
      | constant 
      | list_index ;
 
+
+
 StartParse : T_NL StartParse 
 			| finalStatements {resetDepth(); updateCScope(1);} StartParse 
 			| T_EndOfFile;
@@ -387,17 +389,18 @@ basic_stmt : pass_stmt
 			| import_stmt 
 			| assign_stmt 
 			| arith_exp 
+			| T_MN arith_exp //
 			| bool_exp 
 			| print_stmt 
-			| return_stmt ;
-			//| func_call ; 
+			| return_stmt 
+			| func_call ; 
 
 arith_exp :  term 
 			| arith_exp  T_PL  arith_exp 
 			| arith_exp  T_MN  arith_exp
 			| arith_exp  T_ML  arith_exp
  			| arith_exp  T_DV  arith_exp 
- 			| T_MN term
+ 			//| T_MN term
  			| T_OP arith_exp T_CP;
 
 		    
@@ -427,18 +430,24 @@ import_stmt : T_Import T_ID {insertRecord("PackageName", $<text>2, @2.first_line
 
 pass_stmt   : T_Pass ;
 break_stmt  : T_Break ;
-return_stmt : T_Return | T_Return T_ID {char return_val[100]; strcpy(return_val, "return "); strcat(return_val, $<text>2);}; 
+return_stmt : T_Return 
+			| T_Return term {char return_val[100]; strcpy(return_val, "return "); strcat(return_val, $<text>2);};
 
-assign_stmt :  T_ID T_EQL func_call {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
-			 | T_ID T_EQL bool_exp {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
+
+
+assign_stmt : T_ID T_EQL func_call {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
+			 |T_ID T_EQL bool_exp {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
 			 | T_ID T_EQL arith_exp {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
 			 | T_ID T_EQL list_stmt {insertRecord("ListTypeID", $<text>1, @1.first_line, currentScope);};
+	      
+
+
 	      
 print_stmt : T_Print T_OP term T_CP ;
 
 finalStatements : simple_stmt//basic_stmt
-				| cmpd_stmt ;
-				//| func_def ;
+				| cmpd_stmt 
+				| func_def ;
 
 simple_stmt
 	: basic_stmt next_simple_stmt ;
@@ -449,8 +458,8 @@ next_simple_stmt
 
 end_simple_stmt
 	: T_NL
-	| T_SCln T_NL
-	| ;
+	| T_SCln T_NL ;
+	//| ;
 
 cmpd_stmt : if_stmt 
 			| while_stmt 
@@ -493,7 +502,7 @@ endfor
 		 checkList($<text>1, @1.first_line, currentScope);
 		 };
 
-	| list_stmt T_Cln suite optional_else
+	| list_stmt T_Cln suite optional_else;
 
 
 
@@ -555,22 +564,22 @@ end_suite : DD {updateCScope($<depth>1);} finalStatements
 
 
 	
-/*
+
 args : T_ID {insertRecord("Identifier", $<text>1, @1.first_line, currentScope); addToList($<text>1, 1);} args_list 
 		| {clearArgsList();};
 
 args_list : T_Comma T_ID {insertRecord("Identifier", $<text>2, @2.first_line, currentScope); addToList($<text>2, 0);} args_list 
 			| {addToList("",0); clearArgsList();};
 
-func_def : T_Def T_ID {insertRecord("Func_Name", $<text>2, @2.first_line, currentScope);} T_OP args T_CP T_Cln start_suite {clearArgsList();} ;
-
-
-*/
+func_def : T_Def T_ID {insertRecord("Func_Name", $<text>2, @2.first_line, currentScope);} T_OP args T_CP T_Cln suite {clearArgsList();} ;
 
 
 
-list_stmt: T_OB T_CB 
-		 | T_OB call_args T_CB {
+
+
+
+list_stmt: //T_OB T_CB | //conflict coz call_args can only become empty
+		   T_OB call_args T_CB {
 		 		char* str = (char *)malloc(102*sizeof(char));
 			 	strcpy(str,"[");
 			 	strcat(str, argsList);
@@ -583,20 +592,21 @@ list_stmt: T_OB T_CB
 
 
 
+
+
 call_list : T_Comma term /*{addToList($2->lexeme, 0);}*/ call_list 
 			| ;
 
 call_args : T_ID {modifyRecordID("Identifier", $<text>1, @1.first_line, currentScope); addToList($<text>1, 1);} call_list
 					| T_Number {addToList($<text>1, 1);} call_list {clearArgsList();}
-					| T_String {addToList($<text>1, 1);} call_list {clearArgsList();}
-					| ;
+					| T_String {addToList($<text>1, 1);} call_list {clearArgsList();};
+					| ; 
 
 
 
 func_call : T_ID {modifyRecordID("Func_Name", $<text>1, @1.first_line, currentScope);} T_OP call_args T_CP ;
 
 
- 
  
 %%
 

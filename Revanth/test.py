@@ -34,3 +34,9 @@ while True:
 		print("heehhee")
 		for l in range(3,10):
 			print(l)
+
+for c in lis:
+	print(c)
+	
+def foo():
+	return 13124.0001

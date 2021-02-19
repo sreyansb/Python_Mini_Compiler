@@ -98,12 +98,13 @@
 		return count;
  	}
  	
- 	
+ 		//%option yylineno //
 %}
-	//%option yylineno
-whitespace [ ]
 
+whitespace [ ]
+digit [0-9]
 Multiline_comment \'\'\'(.|\n)*\'\'\'\n
+
 %%
 
 
@@ -229,7 +230,10 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
 "=" {debug("EQL"); return T_EQL;}
 "range" {debug("Range"); return T_Range;}
 "list" {debug("List"); return T_List;}
-[0-9]+ {yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+
+[-]?[1-9]+{digit}*	{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+[-]?{digit}*"."{digit}+	{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+
 [_a-zA-Z][_a-zA-Z0-9]* {yylval.text = strdup(yytext); debug(yylval.text); return T_ID;}
 \"([^\"\n])*\" {yylval.text = strdup(yytext); debug("String"); return T_String;}
 \'([^\'\n])*\' {yylval.text = strdup(yytext); debug("String"); return T_String;}
@@ -280,6 +284,7 @@ int main()
 		#(.*)\n ; #(.*)\n {yyless(yyleng-1);printf("comment");}
 		"\n" {yycolumn=1; debug("NL"); return T_NL;}
 		
+		[-]?[0-9]+ {yylval.text = strdup(yytext); debug("Number"); return T_Number;}
 		
 		{start}.*{start}\n 	{yyless(yyleng-1); debug("caaaaamment");} 
 		*/
