@@ -4,8 +4,9 @@
 	#include <string.h>
 	#include <stdarg.h>
 
-
-
+	void yyerror(const char *msg);
+	int yylex();
+	
 	//--------------------------------BASIC VARIABLE DECLARATIONS----------------------------------------
 	extern int yylineno;
 	extern int depth;
@@ -336,7 +337,7 @@
 %locations
 
 %union { char *text; int depth; struct AST *node; };
-//%type <node> StartParse StartDebugger args suite finalStatements arith_exp bool_exp term constant basic_stmt cmpd_stmt func_def list_index import_stmt pass_stmt break_stmt print_stmt if_stmt else_stmt while_stmt return_stmt assign_stmt bool_term bool_factor for_stmt func_call call_args list_stmt
+//%type <node> StartParse StartDebugger args suite finalStatements arith_exp bool_exp term constant basic_stmt cmpd_stmt func_def list_index import_stmt pass_stmt break_stmt print_stmt if_stmt /*else_stmt*/ while_stmt return_stmt assign_stmt bool_term bool_factor for_stmt func_call call_args list_stmt
 
 
 %token T_EndOfFile T_Cln T_SCln T_NL T_IN T_NEQ T_EQ T_GT T_LT T_EGT T_ELT T_Or T_And ID ND DD T_String Trip_Quote T_Import T_MN T_PL T_DV T_ML T_OP T_CP T_OB T_CB T_Def T_Comma T_Range T_List
@@ -441,8 +442,6 @@ assign_stmt : T_ID T_EQL func_call {insertRecord("Identifier", $<text>1, @1.firs
 			 | T_ID T_EQL list_stmt {insertRecord("ListTypeID", $<text>1, @1.first_line, currentScope);};
 	      
 
-
-	      
 print_stmt : T_Print T_OP term T_CP ;
 
 finalStatements : simple_stmt//basic_stmt
@@ -469,25 +468,30 @@ cmpd_stmt : if_stmt
 if_stmt : T_If bool_exp T_Cln suite elif_stmt optional_else ;
 
 elif_stmt
-	: {}
-	| T_Elif bool_exp T_Cln suite elif_stmt;
+	: T_Elif bool_exp T_Cln suite elif_stmt
+	| ;
 
 
 optional_else
-	: {}
-	| T_Else T_Cln suite ;
+	: T_Else T_Cln suite
+	| ; 
 
 
 for_stmt
-/*	: T_For T_ID {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_IN range_stmt T_Cln suite optional_else {
+	: T_For T_ID T_IN range_stmt {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else 
+			{
 				char rangeNodeText[20] ="";
 				strcat(rangeNodeText, $<text>2);
 				strcat(rangeNodeText, " in range");
-				clearArgsList(); }
-	| T_For T_ID {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_IN T_ID T_Cln suite optional_else {//printf("\n\nBEFOREEE\n");printf("AFTERRR"); 
-		 //printSTable();
-		 checkList($<text>4, @4.first_line, currentScope);};
-*/
+				clearArgsList(); 
+			}
+	| T_For T_ID T_IN T_ID {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else 
+			{ //printSTable();
+				checkList($<text>4, @4.first_line, currentScope);
+			}
+	| T_For T_ID T_IN list_stmt {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else;
+
+/*
 	: T_For T_ID {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_IN endfor ;
 	
 endfor
@@ -503,7 +507,7 @@ endfor
 		 };
 
 	| list_stmt T_Cln suite optional_else;
-
+*/
 
 
 
@@ -516,7 +520,6 @@ endfor
 		 //printSTable();
 		 checkList($<text>4, @4.first_line, currentScope);}; */
 
-/*while_stmt : T_While bool_exp T_Cln start_suite ; */
 
 
 
