@@ -128,7 +128,10 @@
 # define YYERROR_VERBOSE 0
 #endif
 
-
+/* In a future release of Bison, this section will be replaced
+   by #include "y.tab.h".  */
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -240,7 +243,7 @@ union YYSTYPE
 #line 51 "parser_file.y" /* yacc.c:355  */
 struct symtabnode* data;
 
-#line 244 "y.tab.c" /* yacc.c:355  */
+#line 247 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -267,11 +270,11 @@ extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
 int yyparse (void);
 
-
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 275 "y.tab.c" /* yacc.c:358  */
+#line 278 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1554,42 +1557,42 @@ yyreduce:
     {
         case 4:
 #line 67 "parser_file.y" /* yacc.c:1646  */
-    {printTable();exit(0);}
-#line 1559 "y.tab.c" /* yacc.c:1646  */
+    {printf("\nAccepted Code:Valid\n\n");printTable();exit(0);}
+#line 1562 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 73 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[0].data->name),(yyvsp[0].data->scope));}
-#line 1565 "y.tab.c" /* yacc.c:1646  */
+#line 1568 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
 #line 100 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[0].data->name),(yyvsp[0].data->scope));}
-#line 1571 "y.tab.c" /* yacc.c:1646  */
+#line 1574 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
 #line 115 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[-2].data->name),(yyvsp[-2].data->scope));}
-#line 1577 "y.tab.c" /* yacc.c:1646  */
+#line 1580 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
 #line 161 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[-4].data->name),(yyvsp[-4].data->scope));}
-#line 1583 "y.tab.c" /* yacc.c:1646  */
+#line 1586 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
 #line 162 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[-4].data->name),(yyvsp[-4].data->scope));}
-#line 1589 "y.tab.c" /* yacc.c:1646  */
+#line 1592 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1593 "y.tab.c" /* yacc.c:1646  */
+#line 1596 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

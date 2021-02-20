@@ -64,7 +64,7 @@
 start_karo
 	: T_NL start_karo
 	| stmt start_karo
-	| T_EOF {printTable();exit(0);}
+	| T_EOF {printf("\nAccepted Code:Valid\n\n");printTable();exit(0);}
 
 term
 	: T_String

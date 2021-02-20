@@ -116,19 +116,22 @@
     static int countnl(char* line)
     {
       int count=0;
-      while(line)
-        *(line++)=='\n'?++count:count;
+      while(*line)
+        {
+          //printf("%c,",*line);
+          if (*line=='\n')
+          ++count;
+        line++;
+        }
       return count;      
     }
 %}
 letter [a-zA-Z]
 digit [0-9]
-space [ ]
-tab [\t]
 %%
 "\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
-["\n"]*["\t"]*"#"(.)* {printf("\n Single Line Comment ");++yylineno;}
-"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("\n MultiLineComment");yyless(yyleng-1);yylineno+=countnl(yytext)-2;}
+["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");++yylineno;}
+["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 ["\n"]+["\t"]* {
   if (def_mode)
  {
@@ -155,7 +158,7 @@ tab [\t]
         exit(1);
         return 0;
       }
-      printf("Deleting\n");
+      printf("\nDeleting\n");
       deletescope();
       yyless(0);
       return T_DED;
