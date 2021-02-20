@@ -25,17 +25,18 @@
 		++indexy;
 	}
 
-	static void searchele(char* name,int scope)
+	static int searchele(char* name,int scope)
 	{
 		for(int i=0;i<indexy;++i)
 		{
 			if (strcmp(name,symtab[i].name)==0)
 				{
 					symtab[i].scope=scope;
-					return;
+					return 1;
 				}
 		}
 		addtotable(name,scope);
+		return 0;
 	}
 
 	void printTable()
@@ -174,12 +175,18 @@ list_stmt
 	| T_Ls args T_Rs
 
 args
-	: term items
-	| math_term items
+	: T_String items
+	| T_Real items
+	| T_Integer items
+	| T_ID {if (searchele($<data->name>1,$<data->scope>1)==0)
+	printf("\nERROR: %s Not Defined\n",yytext);return 0;}
 
 items
-	: T_Comma term items
-	| T_Comma math_term items
+	: T_Comma T_String items
+	| T_Comma T_Real items
+	| T_Comma T_Integer items
+	| T_Comma T_ID items {if (searchele($<data->name>2,$<data->scope>2)==0)
+	printf("\nERROR: %s Not Defined\n",yytext);return 0;}
 	| %empty
 
 while_stmt

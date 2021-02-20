@@ -966,7 +966,7 @@ case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
 #line 134 "lex_file.l"
-{printf("\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+{printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
