@@ -87,28 +87,6 @@
 	
 	int *arrayScope = NULL;
 
-	/*
-	//quad stuff
-	#define MAXQUADS 1000
-	typedef struct quad
-	{
-		char *R;
-		char *A1;
-		char *A2;
-		char *Op;
-		int I;
-	} quad;
-	
-	quad* all_quads = NULL;	
-	char* tString =NULL, *lString = NULL;
-	void printQuads();
-
-	int ICG_opt(); //optimization code
-	int ICG_opt2(); //common sub expr eval
-	void createCSV(); //Write final ICG to a CSV for assembly code generation
-	*/
-
-
 	//-------------------------------------STRUCTURE DEFINITIONS----------------------------------------------
 	
 	typedef struct record
@@ -189,9 +167,7 @@
 		argsList = (char *)malloc(100);
 		strcpy(argsList, "");
 		symbolTables = (STable*)calloc(100, sizeof(STable));
-		//all_quads = (quad*)calloc(MAXQUADS, sizeof(quad));
-		//tString = (char*)calloc(10, sizeof(char));
-		//lString = (char*)calloc(10, sizeof(char));
+
 		arrayScope = (int*)calloc(10, sizeof(int));
 		initNewTable(1);
 	}
@@ -210,24 +186,17 @@
 	}
 		
 	void modifyRecordID(const char *type, const char *name, int lineNo, int scope)
-	{
-		//printf("\n In modifyRecordID");
+	{		
+		//int check_error = 0; //made check_error global
 		
-		//Imp change made - made check_error global
-		//int check_error = 0;
-		int i = 0;
-		
-		//Important change made
-		//int index = scopeBasedTableSearch(scope);
+		//int index = scopeBasedTableSearch(scope);//change to power scope
 		int FScope = power(scope, arrayScope[scope]);
 		int index = scopeBasedTableSearch(FScope);
-		
-		
 		
 		//printf("No Of Elems : %d\n", symbolTables[index].noOfElems);
 		if(index==0) //WHEN is index actuallly =0? when you reach the outer-most scope 
 		{
-			for(i = 0;i < symbolTables[index].noOfElems; i++)
+			for(int i = 0;i < symbolTables[index].noOfElems; i++)
 			{	
 				if(strcmp(symbolTables[index].Elements[i].type, type)==0 && (strcmp(symbolTables[index].Elements[i].name, name)==0))
 				{
@@ -246,7 +215,7 @@
 			//exit(1);
 		}
 		
-		for(i = 0;i < symbolTables[index].noOfElems; i++)
+		for(int i = 0;i < symbolTables[index].noOfElems; i++)
 		{
 			//printf("\t%d Name: %s\n", i, symbolTables[index].Elements[i].name);
 			if(strcmp(symbolTables[index].Elements[i].type, type)==0 && (strcmp(symbolTables[index].Elements[i].name, name)==0))
@@ -267,7 +236,6 @@
 		//printf("rIndex : %d, Name : %s\n", recordIndex, name);
 		if(recordIndex==-1) //record doesnt exist in the scope
 		{
-			
 			symbolTables[index].Elements[symbolTables[index].noOfElems].type = (char*)calloc(30, sizeof(char));
 			symbolTables[index].Elements[symbolTables[index].noOfElems].name = (char*)calloc(20, sizeof(char));
 		
@@ -276,7 +244,6 @@
 			symbolTables[index].Elements[symbolTables[index].noOfElems].decLineNo = lineNo;
 			symbolTables[index].Elements[symbolTables[index].noOfElems].lastUseLine = lineNo;
 			symbolTables[index].noOfElems++;
-
 		}
 		else
 		{
@@ -287,11 +254,9 @@
 	void checkList(const char *name, int lineNo, int scope)
 	{
 		int index = scopeBasedTableSearch(scope);
-		int i;
 		if(index==0)
 		{
-			
-			for(i=0; i<symbolTables[index].noOfElems; i++)
+			for(int i=0; i<symbolTables[index].noOfElems; i++)
 			{
 				
 				if(strcmp(symbolTables[index].Elements[i].type, "ListTypeID")==0 && (strcmp(symbolTables[index].Elements[i].name, name)==0))
@@ -307,9 +272,7 @@
 					yyerror("Invalid Python Syntax");
 					return;
 					//exit(1);
-
 				}
-
 			}
 			printf("\nIdentifier '%s' at line %d Not Declared as an Indexable Type or has not been declared as a list\n", name, yylineno);
 			insertRecord("ListTypeID", name, lineNo, currentScope);
@@ -318,7 +281,7 @@
 			//exit(1);
 		}
 		
-		for(i=0; i<symbolTables[index].noOfElems; i++)
+		for(int i=0; i<symbolTables[index].noOfElems; i++)
 		{
 			if(strcmp(symbolTables[index].Elements[i].type, "ListTypeID")==0 && (strcmp(symbolTables[index].Elements[i].name, name)==0))
 			{
@@ -333,12 +296,9 @@
 				yyerror("Invalid Python Syntax");
 				return;
 				//exit(1);
-
 			}
 		}
-		
 		return checkList(name, lineNo, symbolTables[symbolTables[index].Parent].scope);
-
 	}
 
 	void addToList(char *newVal, int flag)
@@ -353,7 +313,7 @@
 			strcat(argsList, newVal);
 		}
 	    //printf("\n\t%s\n", newVal);
-	  }
+	}
 	  
 	void clearArgsList()
 	{
@@ -377,20 +337,13 @@
 	
 	void freeAll()
 	{
-		//ICG_opt(); 
-		//printf("\nAfter dead code elimination");
+		printf("\n");
 
-		//printQuads();
 		printf("\n");
-		//printf("\nAfter common sub expression elimination");
-		//ICG_opt2(); //CSE elimination
-		//printQuads();
-		printf("\n");
-		//createCSV();
-		int i = 0, j = 0;
-		for(i=0; i<=sIndex; i++)
+
+		for(int i=0; i<=sIndex; i++)
 		{
-			for(j=0; j<symbolTables[i].noOfElems; j++)
+			for(int j=0; j<symbolTables[i].noOfElems; j++)
 			{
 				free(symbolTables[i].Elements[j].name);
 				free(symbolTables[i].Elements[j].type);	
@@ -400,8 +353,7 @@
 		free(symbolTables);
 	}
 
-
-#line 405 "y.tab.c"
+#line 357 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -551,10 +503,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 339 "parser.y"
+#line 290 "parser.y"
  char *text; int depth; struct AST *node; 
 
-#line 558 "y.tab.c"
+#line 510 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -951,17 +903,17 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   359,   359,   359,   370,   371,   375,   378,   379,   380,
-     384,   385,   385,   386,   388,   389,   390,   391,   392,   393,
-     394,   395,   396,   397,   399,   400,   401,   402,   403,   405,
-     411,   412,   413,   414,   415,   416,   417,   418,   419,   420,
-     422,   423,   424,   425,   427,   428,   430,   432,   433,   434,
-     435,   439,   440,   441,   442,   447,   449,   450,   451,   454,
-     457,   458,   461,   462,   465,   466,   467,   470,   473,   474,
-     478,   479,   483,   483,   490,   490,   494,   494,   530,   532,
-     533,   534,   547,   548,   548,   551,   552,   573,   573,   574,
-     576,   576,   577,   579,   579,   587,   602,   603,   605,   605,
-     606,   606,   607,   607,   608,   612,   612
+       0,   306,   306,   306,   317,   318,   320,   323,   324,   325,
+     327,   328,   328,   329,   331,   332,   333,   334,   335,   336,
+     337,   338,   339,   340,   342,   343,   344,   345,   346,   348,
+     351,   352,   353,   354,   355,   356,   357,   358,   359,   360,
+     362,   363,   364,   365,   367,   368,   370,   372,   373,   374,
+     375,   377,   378,   379,   380,   382,   384,   385,   386,   389,
+     392,   393,   396,   397,   400,   401,   402,   405,   408,   409,
+     413,   414,   417,   417,   424,   424,   428,   428,   432,   434,
+     435,   436,   439,   440,   440,   443,   444,   446,   446,   447,
+     449,   449,   450,   452,   452,   456,   467,   468,   470,   470,
+     471,   471,   472,   472,   473,   475,   475
 };
 #endif
 
@@ -1996,13 +1948,13 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 359 "parser.y"
+#line 306 "parser.y"
                 {init();}
-#line 2002 "y.tab.c"
+#line 1954 "y.tab.c"
     break;
 
   case 3:
-#line 360 "parser.y"
+#line 307 "parser.y"
                                             {
 								if(check_error == 0)
 									printf("\nValid Python Syntax\n" ); 
@@ -2012,198 +1964,198 @@ yyreduce:
 								printSTable();// freeAll();  
 								exit(0);
 							}
-#line 2016 "y.tab.c"
+#line 1968 "y.tab.c"
     break;
 
   case 4:
-#line 370 "parser.y"
+#line 317 "parser.y"
                     {insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2022 "y.tab.c"
+#line 1974 "y.tab.c"
     break;
 
   case 5:
-#line 371 "parser.y"
+#line 318 "parser.y"
                             {insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2028 "y.tab.c"
+#line 1980 "y.tab.c"
     break;
 
   case 6:
-#line 375 "parser.y"
+#line 320 "parser.y"
                                      {checkList((yyvsp[-3].text), (yylsp[-3]).first_line, currentScope);}
-#line 2034 "y.tab.c"
+#line 1986 "y.tab.c"
     break;
 
   case 7:
-#line 378 "parser.y"
+#line 323 "parser.y"
             {modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2040 "y.tab.c"
+#line 1992 "y.tab.c"
     break;
 
   case 11:
-#line 385 "parser.y"
-                                          {resetDepth(); updateCScope(1);}
-#line 2046 "y.tab.c"
+#line 328 "parser.y"
+                                          {/*resetDepth();*/ updateCScope(1);}
+#line 1998 "y.tab.c"
     break;
 
   case 38:
-#line 419 "parser.y"
+#line 359 "parser.y"
                                {checkList((yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2052 "y.tab.c"
+#line 2004 "y.tab.c"
     break;
 
   case 42:
-#line 424 "parser.y"
+#line 364 "parser.y"
                    {insertRecord("Constant", "True", (yylsp[0]).first_line, currentScope);}
-#line 2058 "y.tab.c"
+#line 2010 "y.tab.c"
     break;
 
   case 43:
-#line 425 "parser.y"
+#line 365 "parser.y"
                     {insertRecord("Constant", "False", (yylsp[0]).first_line, currentScope);}
-#line 2064 "y.tab.c"
+#line 2016 "y.tab.c"
     break;
 
   case 46:
-#line 430 "parser.y"
+#line 370 "parser.y"
                             {insertRecord("PackageName", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2070 "y.tab.c"
+#line 2022 "y.tab.c"
     break;
 
   case 50:
-#line 435 "parser.y"
+#line 375 "parser.y"
                                         {char return_val[100]; strcpy(return_val, "return "); strcat(return_val, (yyvsp[0].text));}
-#line 2076 "y.tab.c"
+#line 2028 "y.tab.c"
     break;
 
   case 51:
-#line 439 "parser.y"
+#line 377 "parser.y"
                                    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2082 "y.tab.c"
+#line 2034 "y.tab.c"
     break;
 
   case 52:
-#line 440 "parser.y"
+#line 378 "parser.y"
                                               {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2088 "y.tab.c"
+#line 2040 "y.tab.c"
     break;
 
   case 53:
-#line 441 "parser.y"
+#line 379 "parser.y"
                                                 {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2094 "y.tab.c"
+#line 2046 "y.tab.c"
     break;
 
   case 54:
-#line 442 "parser.y"
+#line 380 "parser.y"
                                                 {insertRecord("ListTypeID", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2100 "y.tab.c"
+#line 2052 "y.tab.c"
     break;
 
   case 72:
-#line 483 "parser.y"
+#line 417 "parser.y"
                                      {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2106 "y.tab.c"
+#line 2058 "y.tab.c"
     break;
 
   case 73:
-#line 484 "parser.y"
+#line 418 "parser.y"
                         {
 				char rangeNodeText[20] ="";
 				strcat(rangeNodeText, (yyvsp[-6].text));
 				strcat(rangeNodeText, " in range");
 				clearArgsList(); 
 			}
-#line 2117 "y.tab.c"
+#line 2069 "y.tab.c"
     break;
 
   case 74:
-#line 490 "parser.y"
+#line 424 "parser.y"
                                {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2123 "y.tab.c"
+#line 2075 "y.tab.c"
     break;
 
   case 75:
-#line 491 "parser.y"
+#line 425 "parser.y"
                         { //printSTable();
 				checkList((yyvsp[-4].text), (yylsp[-4]).first_line, currentScope);
 			}
-#line 2131 "y.tab.c"
+#line 2083 "y.tab.c"
     break;
 
   case 76:
-#line 494 "parser.y"
+#line 428 "parser.y"
                                     {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2137 "y.tab.c"
+#line 2089 "y.tab.c"
     break;
 
   case 79:
-#line 532 "parser.y"
+#line 434 "parser.y"
                                        {addToList("0", 1); addToList((yyvsp[-1].text), 0);}
-#line 2143 "y.tab.c"
+#line 2095 "y.tab.c"
     break;
 
   case 80:
-#line 533 "parser.y"
+#line 435 "parser.y"
                                                                       {addToList((yyvsp[-3].text), 1); addToList((yyvsp[-1].text), 0);}
-#line 2149 "y.tab.c"
+#line 2101 "y.tab.c"
     break;
 
   case 81:
-#line 534 "parser.y"
+#line 436 "parser.y"
                                                                                        {addToList((yyvsp[-5].text), 1); addToList((yyvsp[-3].text), 0); addToList((yyvsp[-1].text),0);}
-#line 2155 "y.tab.c"
+#line 2107 "y.tab.c"
     break;
 
   case 83:
-#line 548 "parser.y"
+#line 440 "parser.y"
                   {initNewTable((yyvsp[0].depth)); updateCScope((yyvsp[0].depth));}
-#line 2161 "y.tab.c"
+#line 2113 "y.tab.c"
     break;
 
   case 84:
-#line 548 "parser.y"
+#line 440 "parser.y"
                                                                                                      {updateCScope(currentScope-1); }
-#line 2167 "y.tab.c"
+#line 2119 "y.tab.c"
     break;
 
   case 87:
-#line 573 "parser.y"
+#line 446 "parser.y"
             {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 1);}
-#line 2173 "y.tab.c"
+#line 2125 "y.tab.c"
     break;
 
   case 89:
-#line 574 "parser.y"
+#line 447 "parser.y"
                   {clearArgsList();}
-#line 2179 "y.tab.c"
+#line 2131 "y.tab.c"
     break;
 
   case 90:
-#line 576 "parser.y"
+#line 449 "parser.y"
                          {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 0);}
-#line 2185 "y.tab.c"
+#line 2137 "y.tab.c"
     break;
 
   case 92:
-#line 577 "parser.y"
+#line 450 "parser.y"
                           {addToList("",0); clearArgsList();}
-#line 2191 "y.tab.c"
+#line 2143 "y.tab.c"
     break;
 
   case 93:
-#line 579 "parser.y"
+#line 452 "parser.y"
                       {insertRecord("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2197 "y.tab.c"
+#line 2149 "y.tab.c"
     break;
 
   case 94:
-#line 579 "parser.y"
+#line 452 "parser.y"
                                                                                                                      {clearArgsList();}
-#line 2203 "y.tab.c"
+#line 2155 "y.tab.c"
     break;
 
   case 95:
-#line 587 "parser.y"
+#line 456 "parser.y"
                                        {
 		 		char* str = (char *)malloc(102*sizeof(char));
 			 	strcpy(str,"[");
@@ -2214,47 +2166,47 @@ yyreduce:
 			 	clearArgsList(); 
 			 	free(str);
 			 }
-#line 2218 "y.tab.c"
+#line 2170 "y.tab.c"
     break;
 
   case 98:
-#line 605 "parser.y"
+#line 470 "parser.y"
                  {modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 1);}
-#line 2224 "y.tab.c"
+#line 2176 "y.tab.c"
     break;
 
   case 100:
-#line 606 "parser.y"
+#line 471 "parser.y"
                                                    {addToList((yyvsp[0].text), 1);}
-#line 2230 "y.tab.c"
+#line 2182 "y.tab.c"
     break;
 
   case 101:
-#line 606 "parser.y"
+#line 471 "parser.y"
                                                                                        {clearArgsList();}
-#line 2236 "y.tab.c"
+#line 2188 "y.tab.c"
     break;
 
   case 102:
-#line 607 "parser.y"
+#line 472 "parser.y"
                                                    {addToList((yyvsp[0].text), 1);}
-#line 2242 "y.tab.c"
+#line 2194 "y.tab.c"
     break;
 
   case 103:
-#line 607 "parser.y"
+#line 472 "parser.y"
                                                                                        {clearArgsList();}
-#line 2248 "y.tab.c"
+#line 2200 "y.tab.c"
     break;
 
   case 105:
-#line 612 "parser.y"
+#line 475 "parser.y"
                  {modifyRecordID("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2254 "y.tab.c"
+#line 2206 "y.tab.c"
     break;
 
 
-#line 2258 "y.tab.c"
+#line 2210 "y.tab.c"
 
       default: break;
     }
@@ -2492,7 +2444,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 616 "parser.y"
+#line 477 "parser.y"
 
 
 void yyerror(const char *msg)
@@ -2501,4 +2453,3 @@ void yyerror(const char *msg)
 	printf("**************************************************************************\n");
 	printf("**************************************************************************\n");
 }
-
