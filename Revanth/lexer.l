@@ -7,18 +7,14 @@
 	#define stack_size 100
 	#define DEBUG 1
 	
-	
 	int yycolumn = 1;
 	int startFlag = 1;
-
-
+	
 	STACK indent;
-	int pointer=0;
-	int counter=0;
+	//int pointer=0;
+	//int counter=0;
 	int def_mode=0;
-
-
-
+	int depth = 1;
 
 	#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno; 		\
     yylloc.first_column = yycolumn; yylloc.last_column = yycolumn + yyleng - 1; 	\
@@ -47,9 +43,6 @@
  		#endif
  		
  	}
- 	
- 	
- 	
  	
  	static void push_1(int i) 
  	{
@@ -80,9 +73,7 @@
 			}	
 		}
 		return tab_count;
-	}	
- 	int depth = 1; 
- 	//static int yylineno = 1; 
+	}	 
  	
  	static int count_nl(const char *s)
  	{
@@ -97,19 +88,16 @@
 		}
 		return count;
  	}
- 	
- 	
-%}
-	//%option yylineno
-whitespace [ ]
 
+%}
+
+whitespace [ ]
+digit [0-9]
 Multiline_comment \'\'\'(.|\n)*\'\'\'\n
+
 %%
 
-
-"\n"["\t"" "]*"\n"               	{
-										//debug("NL");
-										
+"\n"["\t"" "]*"\n"               	{		
                                     	yyless(yyleng-1);
                                     	yylineno++;
                                     	debug("NL");
@@ -117,8 +105,6 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
                                     }
                                     
 ["\n"]?["\t"]*"#"[^\n]*             {
-										//debug("NL");
-										
                                     	if(yytext[0] == '\n')
                                     	{
                                     		yylineno++;
@@ -130,7 +116,6 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
                                     }
                                     
 "\n"["\t"]*                         {
-                                        
                                         if(def_mode == 0)
                                         {
                                             //fprintf(yyout, "%s", yytext);
@@ -143,7 +128,6 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
                                         }
                                         else
                                         {
-                                        	
                                             if(yyleng-1 == peek(&indent)){
                                                 def_mode = 0;
                                                 //yylineno++;
@@ -164,12 +148,11 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
                                                 }
                                                 if(peek(&indent) > yyleng-1)
                                                 {
-                                        			
                                                 	depth = indent_depth_1(yytext+1);
-                                        			yylval.depth = depth;
-                                        			while (depth < top_1()) pop_1();
+                                        			yylval.depth = yyleng-1;//depth;
+                                        			//while(depth < top_1()) 
+                                        				pop_1();
 
-                                        			
                                                     int removed_scope = pop(&indent);
                                                     //while (yyleng-1 < peek(&indent))pop(&indent);
                                                     //printTable(removed_scope);
@@ -179,15 +162,8 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
                                                     return DD;
                                                 }
                                             }
-
                                         }
                                     }
-                                    
-
-
-
-
-
 
 "import" {debug("Import"); return T_Import;}
 "print"  {debug("Print"); return T_Print;}
@@ -206,9 +182,7 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
 "def" {debug("Def"); return T_Def;}
 "return" {debug("Return"); return T_Return;}
 ":" {debug("Cln"); return T_Cln;}
-
-";" {debug("Cln"); return T_SCln;}
-
+";" {debug("SCln"); return T_SCln;}
 ">" {debug("GT"); return T_GT;}
 "<" {debug("LT"); return T_LT;}
 ">=" {debug("EGT"); return T_EGT;}
@@ -229,11 +203,13 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
 "=" {debug("EQL"); return T_EQL;}
 "range" {debug("Range"); return T_Range;}
 "list" {debug("List"); return T_List;}
-[0-9]+ {yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+
+[-]?[1-9]+{digit}*	{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+[-]?{digit}*"."{digit}+	{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+
 [_a-zA-Z][_a-zA-Z0-9]* {yylval.text = strdup(yytext); debug(yylval.text); return T_ID;}
 \"([^\"\n])*\" {yylval.text = strdup(yytext); debug("String"); return T_String;}
 \'([^\'\n])*\' {yylval.text = strdup(yytext); debug("String"); return T_String;}
-
 
 {Multiline_comment} {yyless(yyleng-1); yylineno += (count_nl(yytext));debug("Multiline Comment");  }
 {whitespace} ;
@@ -248,41 +224,4 @@ int main()
 	yyparse();
 	yylex();
 	return 0;
-	
-	/*
-	[\t]*		{
-			depth = indent_depth(yytext);
-			//printf("Depth : %d ",  depth);
-			if(depth < top())
-			{
-				while (depth < top()) pop();
-				yylval.depth = depth;
-				debug("DD");
-				return DD;
-			}
-			
-			if(depth == top())
-			{
-				debug("ND");
-				yylval.depth = depth;
-				return ND;				
-			}
-			if(depth > top())
-			{
-				push(depth);
-				debug("ID");
-				yylval.depth = depth;
-				return ID;
-			}
-			
-		}
-		start \'\'\' 
-		#(.*)\n ; #(.*)\n {yyless(yyleng-1);printf("comment");}
-		"\n" {yycolumn=1; debug("NL"); return T_NL;}
-		
-		
-		{start}.*{start}\n 	{yyless(yyleng-1); debug("caaaaamment");} 
-		*/
-	
-	
 }
