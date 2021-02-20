@@ -30,7 +30,10 @@
 		for(int i=0;i<indexy;++i)
 		{
 			if (strcmp(name,symtab[i].name)==0)
-				return;
+				{
+					symtab[i].scope=scope;
+					return;
+				}
 		}
 		addtotable(name,scope);
 	}
@@ -39,7 +42,7 @@
 	{
 		printf("Name\t|Scope\t\n");
 		for(int i=0;i<indexy;++i)
-			printf("%s\t|%d\t",symtab[i].name,symtab[i].scope);
+			printf("%s\t|%d\t\n",symtab[i].name,symtab[i].scope);
 	}  
 %}
 %locations
@@ -60,7 +63,7 @@
 
 start_karo
 	: T_NL start_karo
-	| stmt T_NL start_karo
+	| stmt start_karo
 	| T_EOF {printTable();exit(0);}
 
 term

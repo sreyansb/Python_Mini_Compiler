@@ -140,7 +140,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 48 "parser_file.y" /* yacc.c:1909  */
+#line 51 "parser_file.y" /* yacc.c:1909  */
 struct symtabnode* data;
 
 #line 147 "y.tab.h" /* yacc.c:1909  */

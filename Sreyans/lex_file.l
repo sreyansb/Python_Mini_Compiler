@@ -102,6 +102,8 @@
     static int finddepth(char* line)
     {
       int line_depth=0;
+      while(*line=='\n')
+        line++;
       while(line)
       {
         if (*line=='\t')++line_depth;
@@ -117,9 +119,9 @@ digit [0-9]
 space [ ]
 tab [\t]
 %%
-"\n"["\t"|" "]*"\n" {printf("%d Empty Line\n",yylineno);yyless(yyleng-1);}
-["\n"]*["\t"]*"#"(.)* {printf("%d Single Line Comment",yylineno);}
-"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("%d MultiLineComment",yylineno);yyless(yyleng-1);}
+"\n"["\t"|" "]*"\n" {printf("Empty Line\n");yyless(yyleng-1);++yylineno;}
+["\n"]*["\t"]*"#"(.)* {printf("\n Single Line Comment ");++yylineno;}
+"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("MultiLineComment ");yyless(yyleng-1);++yylineno;}
 ["\n"]+["\t"]* {
   if (def_mode)
  {
@@ -153,7 +155,9 @@ tab [\t]
     }
   }
   def_mode=1;
+  printf("%d)",yylineno);
   ++yylineno;
+  
 }
 <<EOF>> {
   if (peek()!=0)
@@ -164,8 +168,10 @@ tab [\t]
   else
  {
     printf("EOF-all at scope 0 tab 0\n");
-    yyterminate();
+    printscope(0);
     return T_EOF;
+    yyterminate();
+    
   }
 }
 
@@ -242,8 +248,5 @@ int main()
  {
   init_scope(0);
   yyparse();
-  for(int i=0;i<=peek();++i)
-    printscope(i);
-  printf("====================================END====================================\n");
   return 0;
 }
