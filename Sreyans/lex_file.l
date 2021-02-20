@@ -37,7 +37,7 @@
 
     typedef struct symtabnode
 	  {
-		  char* name;
+		  char name[100];
 		  int scope;
     }symtabnode;
 
@@ -84,41 +84,42 @@
     
     void printscope(int sta_ptr)
     {
-      printf("=======================================\n");
+      printf("=======================================\n\n");
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
       printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
-        printf("%s\t\t|%d\t\t\t|%d|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
-      printf("========================================\n");
+        printf("%s\t\t|%d\t\t|%d\t|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
+      printf("\n========================================\n");
     }
 
     void deletescope()
- {
+    {
       printscope(st_ptr);
       scopetable[tabstack[st_ptr]].top_ptr=-1;
       --st_ptr;
     }
 
     static int finddepth(char* line)
- {
+    {
       int line_depth=0;
       while(line)
- {
-        *line=='t'?++line_depth:line_depth;
+      {
+        if (*line=='\t')++line_depth;
+        else
+        {break;}
         ++line;
       }
       return line_depth;
     }
 %}
-%option yylineno
 letter [a-zA-Z]
 digit [0-9]
 space [ ]
 tab [\t]
 %%
-"\n"["\t"|" "]*"\n" {printf("%d Empty Line\n",yylineno);yyless(yyleng-1);++yylineno;}
-"\n"["\t"]*"#"(.)* {printf("%d Single Line Comment",yylineno);++yylineno;}
-"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("%d MultiLineComment",yylineno);++yylineno;yyless(yyleng-1);}
+"\n"["\t"|" "]*"\n" {printf("%d Empty Line\n",yylineno);yyless(yyleng-1);}
+["\n"]*["\t"]*"#"(.)* {printf("%d Single Line Comment",yylineno);}
+"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("%d MultiLineComment",yylineno);yyless(yyleng-1);}
 ["\n"]+["\t"]* {
   if (def_mode)
  {
@@ -168,61 +169,61 @@ tab [\t]
   }
 }
 
-"=" {printf( "%s", yytext);return T_EQ;}
-"," {printf( "%s", yytext);return T_Comma;}
-"del" {printf( "%s", yytext);return T_Del;}
-"pass" {printf( "%s", yytext);return T_Pass;}
-"break" {printf( "%s", yytext);return T_Break;}
-"continue" {printf( "%s", yytext);return T_Continue;}
-"print" {printf("%s",yytext);return T_Print;}
-"import" {printf( "%s", yytext);return T_Import;}
-"from" {printf( "%s", yytext);return T_From;}
-"range" {printf( "%s", yytext);return T_Range;}
-"in" {printf("%s",yytext);return T_In;}
-"(" {printf( "%s", yytext);return T_LP;}
-")" {printf( "%s", yytext);return T_RP;}
-":" {printf( "%s", yytext);return T_Cln;}
-"for" {printf( "%s", yytext);return T_For;}
-"while" {printf( "%s", yytext);return T_While;}
-"or" {printf( "%s", yytext);return T_Or;}
-"and" {printf( "%s", yytext);return T_And;}
-"not" {printf( "%s", yytext);return T_Not;}
-"<" {printf( "%s", yytext);return T_Lt;}
-">=" {printf( "%s", yytext);return T_Gte;}
-"<=" {printf( "%s", yytext);return T_Lte;}
-">" {printf( "%s", yytext);return T_Gt;}
-"==" {printf( "%s", yytext);return T_Deq;}
-"+" {printf( "%s", yytext);return T_Plus;}
-"-" {printf( "%s", yytext);return T_Minus;}
-"*" {printf( "%s", yytext);return T_Star;}
-"/" {printf( "%s", yytext);return T_Divide;}
-"%" {printf( "%s", yytext);return T_Mod;}
-"//" {printf( "%s", yytext);return T_DDiv;}
-"**" {printf( "%s", yytext);return T_Power;}
-"[" {printf( "%s", yytext);return T_Ls;}
-"]" {printf( "%s", yytext);return T_Rs;}
-"True" {printf( "%s", yytext);return T_True;}
-"False" {printf( "%s", yytext);return T_False;}
-" "+ {printf( " ");}
+"=" {printf( "%s ", yytext);return T_EQ;}
+"," {printf( "%s ", yytext);return T_Comma;}
+"del" {printf( "%s ", yytext);return T_Del;}
+"pass" {printf( "%s ", yytext);return T_Pass;}
+"break" {printf( "%s ", yytext);return T_Break;}
+"continue" {printf( "%s ", yytext);return T_Continue;}
+"print" {printf("%s ",yytext);return T_Print;}
+"import" {printf( "%s ", yytext);return T_Import;}
+"from" {printf( "%s ", yytext);return T_From;}
+"range" {printf( "%s ", yytext);return T_Range;}
+"in" {printf("%s ",yytext);return T_In;}
+"(" {printf( "%s ", yytext);return T_LP;}
+")" {printf( "%s ", yytext);return T_RP;}
+":" {printf( "%s ", yytext);return T_Cln;}
+"for" {printf( "%s ", yytext);return T_For;}
+"while" {printf( "%s ", yytext);return T_While;}
+"or" {printf( "%s ", yytext);return T_Or;}
+"and" {printf( "%s ", yytext);return T_And;}
+"not" {printf( "%s ", yytext);return T_Not;}
+"<" {printf( "%s ", yytext);return T_Lt;}
+">=" {printf( "%s ", yytext);return T_Gte;}
+"<=" {printf( "%s ", yytext);return T_Lte;}
+">" {printf( "%s ", yytext);return T_Gt;}
+"==" {printf( "%s ", yytext);return T_Deq;}
+"+" {printf( "%s ", yytext);return T_Plus;}
+"-" {printf( "%s ", yytext);return T_Minus;}
+"*" {printf( "%s ", yytext);return T_Star;}
+"/" {printf( "%s ", yytext);return T_Divide;}
+"%" {printf( "%s ", yytext);return T_Mod;}
+"//" {printf( "%s ", yytext);return T_DDiv;}
+"**" {printf( "%s ", yytext);return T_Power;}
+"[" {printf( "%s ", yytext);return T_Ls;}
+"]" {printf( "%s ", yytext);return T_Rs;}
+"True" {printf( "%s ", yytext);return T_True;}
+"False" {printf( "%s ", yytext);return T_False;}
+" "+ {;}
 ({letter}|_)({letter}|_|{digit})* {
-                    printf("Matched : %s\n", yytext);
+                    printf("Matched : %s ", yytext);
                     yylval.data=(symtabnode*)malloc(sizeof(symtabnode));
-                    yylval.data->name=strdup(yytext);
+                    strcpy(yylval.data->name,yytext);
                     int scopei = find_element(yytext,yylineno);
                     yylval.data->scope=scopei;
                     return T_ID;
                     }
 [1-9]*{digit}+ {
-  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Integer;}
 [1-9]*{digit}+"."{digit}+ {
-  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Real;} 
 \"([^\"\n])*\" {
-  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 \'([^\'\n])*\' {
-  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));yylval.data->name=strdup(yytext);
+  yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 %%
 
@@ -233,7 +234,7 @@ int yywrap(void)
 
 void yyerror(char* s)
 {
-  printf("Line no: %d %s\n",yylineno,s);
+  printf("\nLine no: %d %s %s\n",yylineno,s,yytext);
 }
 
 
@@ -243,6 +244,6 @@ int main()
   yyparse();
   for(int i=0;i<=peek();++i)
     printscope(i);
-  printf("=============END=================\n");
+  printf("====================================END====================================\n");
   return 0;
 }
