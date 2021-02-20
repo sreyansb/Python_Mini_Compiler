@@ -120,6 +120,7 @@ print_stmt
 printable_stmt
 	: arith_stmt
 	| bool_stmt
+	| list_stmt
 
 arith_stmt
 	: arith_stmt T_Plus arith_stmt
@@ -169,8 +170,8 @@ range_stmt
 	| T_Range T_LP T_ID T_Comma T_ID T_Comma T_ID T_RP
 
 list_stmt
-	: T_Ls {printf("\nmatched\n");} T_Rs
-	| T_Ls {printf("\nmatched\n");} args T_Rs
+	: T_Ls T_Rs
+	| T_Ls args T_Rs
 
 args
 	: term items

@@ -113,21 +113,28 @@
       }
       return line_depth;
     }
+    static int countnl(char* line)
+    {
+      int count=0;
+      while(line)
+        *(line++)=='\n'?++count:count;
+      return count;      
+    }
 %}
 letter [a-zA-Z]
 digit [0-9]
 space [ ]
 tab [\t]
 %%
-"\n"["\t"|" "]*"\n" {printf("Empty Line\n");yyless(yyleng-1);++yylineno;}
+"\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
 ["\n"]*["\t"]*"#"(.)* {printf("\n Single Line Comment ");++yylineno;}
-"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("MultiLineComment ");yyless(yyleng-1);++yylineno;}
+"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("\n MultiLineComment");yyless(yyleng-1);yylineno+=countnl(yytext)-2;}
 ["\n"]+["\t"]* {
   if (def_mode)
  {
     yyless(0);
     def_mode=0;
-    printf("NL\n");
+    printf("NL\n%d)",yylineno);
     return T_NL;
   }
   int line_depth=finddepth(yytext);
@@ -154,8 +161,8 @@ tab [\t]
       return T_DED;
     }
   }
+  printf("\n");
   def_mode=1;
-  printf("%d)",yylineno);
   ++yylineno;
   
 }
@@ -247,6 +254,7 @@ void yyerror(char* s)
 int main()
  {
   init_scope(0);
+  printf("1)");
   yyparse();
   return 0;
 }
