@@ -84,7 +84,7 @@
     
     void printscope(int sta_ptr)
     {
-      printf("=======================================\n\n");
+      printf("\n=======================================\n\n");
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
       printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
@@ -141,6 +141,7 @@ digit [0-9]
     return T_NL;
   }
   int line_depth=finddepth(yytext);
+  //printf("%d\n",line_depth);
   int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
@@ -166,8 +167,7 @@ digit [0-9]
   }
   printf("\n");
   def_mode=1;
-  ++yylineno;
-  
+  ++yylineno; 
 }
 <<EOF>> {
   if (peek()!=0)
@@ -196,8 +196,8 @@ digit [0-9]
 "from" {printf( "%s ", yytext);return T_From;}
 "range" {printf( "%s ", yytext);return T_Range;}
 "in" {printf("%s ",yytext);return T_In;}
-"(" {printf( "%s ", yytext);return T_LP;}
-")" {printf( "%s ", yytext);return T_RP;}
+"(" {printf( "%s", yytext);return T_LP;}
+")" {printf( "%s", yytext);return T_RP;}
 ":" {printf( "%s ", yytext);return T_Cln;}
 "for" {printf( "%s ", yytext);return T_For;}
 "while" {printf( "%s ", yytext);return T_While;}

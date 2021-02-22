@@ -50,7 +50,7 @@
 
 %start start_karo
 %union {struct symtabnode* data;};
-%token T_NL T_IND T_DED T_EOF T_EQ T_Comma T_Del T_Pass T_Break T_Continue T_In
+%token T_NL T_IND T_DED T_SAI T_EOF T_EQ T_Comma T_Del T_Pass T_Break T_Continue T_In
 %token T_Print T_Import T_From T_Star T_LP T_RP T_Cln T_For T_While T_Or T_Range
 %token T_And T_Not T_Lt T_Gt T_Lte T_Gte T_Deq T_Plus T_Minus T_Divide T_Mod T_DDiv
 %token T_Power T_Ls T_Rs T_True T_False T_ID T_Integer T_Real T_String
@@ -197,7 +197,7 @@ block_code
 	| T_NL T_IND stmt repeater T_DED
 
 repeater
-	: %empty
-	| stmt repeater
+	: stmt repeater
+	| %empty
 %%
 
