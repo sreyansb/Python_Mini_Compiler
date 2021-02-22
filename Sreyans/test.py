@@ -12,7 +12,7 @@ dnasjdbkasfjnakwjehqwn
 '''
 for i in [10,20]:
 	print("po")
-	print("ha")
+	#print("ha")
 	for j in range(10,20):
 		print("he")
 	#print("po")

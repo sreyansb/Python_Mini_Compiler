@@ -125,19 +125,35 @@
         }
       return count;      
     }
+    static int countbegnl(char* line)
+    {
+      int count=0;
+      while(*line)
+        {
+          //printf("%c,",*line);
+          if (*line=='\n')
+          ++count;
+          else
+            break;
+          line++;
+        }
+      return count;
+    }
 %}
 letter [a-zA-Z]
 digit [0-9]
 %%
 "\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
-["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");++yylineno;}
+["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");yylineno+=countbegnl(yytext)-1;++yylineno;}
 ["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+["\n"]["]{3}(.|\n)*["]{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 ["\n"]+["\t"]* {
   if (def_mode)
  {
     yyless(0);
     def_mode=0;
     printf("NL\n%d)",yylineno);
+    yylineno+=countbegnl(yytext);
     return T_NL;
   }
   int line_depth=finddepth(yytext);
@@ -153,7 +169,7 @@ digit [0-9]
     }
     else
     {
-      if (ptr==-1)
+      if (ptr==-1)//will never happen
       {
         printf("Wrong number of tabs\n");
         exit(1);
@@ -167,6 +183,7 @@ digit [0-9]
   }
   printf("\n");
   def_mode=1;
+  
   ++yylineno; 
 }
 <<EOF>> {
