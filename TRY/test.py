@@ -11,11 +11,11 @@ sbdsjdakdasdnsakjn
 dnasjdbkasfjnakwjehqwn
 '''
 for i in [10,20]:
-	print("po")
-	#print("ha")
-	for j in range(10,20):
-		print("he")
-	#print("po")
+		print("po")
+		print("ha")
+		for j in range(10,20):
+			print("he")
+		print("po")
 for j in range(5):
 	print("hoohoo")
 	while False:
