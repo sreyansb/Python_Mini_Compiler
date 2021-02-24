@@ -693,9 +693,9 @@ char *yytext;
     {
       printf("\n=======================================\n\n");
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
-      printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
+      printf("Name\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
-        printf("%s\t\t|%d\t\t|%d\t|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
+        printf("%s\t|%d\t\t|%d\t|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
       printf("\n========================================\n");
     }
 
@@ -1296,46 +1296,49 @@ YY_RULE_SETUP
 {
                     printf("Matched : %s ", yytext);
                     yylval.data=(symtabnode*)malloc(sizeof(symtabnode));
-                    strcpy(yylval.data->name,yytext);
-                    int scopei = find_element(yytext,yylineno);
+                    if (strlen(yytext)>31)
+                      printf("Length of identifiers cant be greater than 31\n");
+                    strncpy(yylval.data->name,yytext,31);
+                    yylval.data->name[31]='\0';
+                    int scopei = find_element(yylval.data->name,yylineno);
                     yylval.data->scope=scopei;
                     return T_ID;
                     }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 251 "lex_file.l"
+#line 254 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Integer;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 254 "lex_file.l"
+#line 257 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Real;} 
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 257 "lex_file.l"
+#line 260 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 260 "lex_file.l"
+#line 263 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 263 "lex_file.l"
+#line 266 "lex_file.l"
 ECHO;
 	YY_BREAK
-#line 1339 "lex.yy.c"
+#line 1342 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2338,7 +2341,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 263 "lex_file.l"
+#line 266 "lex_file.l"
 
 
 int yywrap(void)

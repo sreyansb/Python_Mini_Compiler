@@ -87,9 +87,9 @@
     {
       printf("\n=======================================\n\n");
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
-      printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
+      printf("Name\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
-        printf("%s\t\t|%d\t\t|%d\t|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
+        printf("%s\t|%d\t\t|%d\t|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
       printf("\n========================================\n");
     }
 
@@ -243,8 +243,11 @@ digit [0-9]
 ({letter}|_)({letter}|_|{digit})* {
                     printf("Matched : %s ", yytext);
                     yylval.data=(symtabnode*)malloc(sizeof(symtabnode));
-                    strcpy(yylval.data->name,yytext);
-                    int scopei = find_element(yytext,yylineno);
+                    if (strlen(yytext)>31)
+                      printf("Length of identifiers cant be greater than 31\n");
+                    strncpy(yylval.data->name,yytext,31);
+                    yylval.data->name[31]='\0';
+                    int scopei = find_element(yylval.data->name,yylineno);
                     yylval.data->scope=scopei;
                     return T_ID;
                     }

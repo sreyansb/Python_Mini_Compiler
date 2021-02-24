@@ -139,8 +139,8 @@ arith_stmt
 	//| T_Minus arith_stmt %prec UMINUS
 
 bool_stmt
-	: bool_term T_Or bool_term
-	| bool_term T_And bool_term
+	: bool_term T_And bool_term
+	| bool_term T_Or bool_term
 	| bool_term
 	| T_Not bool_stmt
 	| T_LP bool_stmt T_RP
