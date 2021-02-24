@@ -84,7 +84,7 @@
     
     void printscope(int sta_ptr)
     {
-      printf("=======================================\n\n");
+      printf("\n=======================================\n\n");
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
       printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
@@ -102,6 +102,8 @@
     static int finddepth(char* line)
     {
       int line_depth=0;
+      while(*line=='\n')
+        line++;
       while(line)
       {
         if (*line=='\t')++line_depth;
@@ -111,24 +113,51 @@
       }
       return line_depth;
     }
+    static int countnl(char* line)
+    {
+      int count=0;
+      while(*line)
+        {
+          //printf("%c,",*line);
+          if (*line=='\n')
+          ++count;
+        line++;
+        }
+      return count;      
+    }
+    static int countbegnl(char* line)
+    {
+      int count=0;
+      while(*line)
+        {
+          //printf("%c,",*line);
+          if (*line=='\n')
+          ++count;
+          else
+            break;
+          line++;
+        }
+      return count;
+    }
 %}
 letter [a-zA-Z]
 digit [0-9]
-space [ ]
-tab [\t]
 %%
-"\n"["\t"|" "]*"\n" {printf("%d Empty Line\n",yylineno);yyless(yyleng-1);}
-["\n"]*["\t"]*"#"(.)* {printf("%d Single Line Comment",yylineno);}
-"\n"\'\'\'[.|\n]*\'\'\'"\n" {printf("%d MultiLineComment",yylineno);yyless(yyleng-1);}
+"\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
+["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");yylineno+=countbegnl(yytext)-1;++yylineno;}
+["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+["\n"]["]{3}(.|\n)*["]{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 ["\n"]+["\t"]* {
   if (def_mode)
  {
     yyless(0);
     def_mode=0;
-    printf("NL\n");
+    printf("NL\n%d)",yylineno);
+    yylineno+=countbegnl(yytext);
     return T_NL;
   }
   int line_depth=finddepth(yytext);
+  //printf("%d\n",line_depth);
   int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
@@ -140,20 +169,22 @@ tab [\t]
     }
     else
     {
-      if (ptr==-1)
+      if (ptr==-1)//will never happen
       {
         printf("Wrong number of tabs\n");
         exit(1);
         return 0;
       }
-      printf("Deleting\n");
+      printf("\nDeleting\n");
       deletescope();
       yyless(0);
       return T_DED;
     }
   }
+  printf("\n");
   def_mode=1;
-  ++yylineno;
+  
+  ++yylineno; 
 }
 <<EOF>> {
   if (peek()!=0)
@@ -164,8 +195,10 @@ tab [\t]
   else
  {
     printf("EOF-all at scope 0 tab 0\n");
-    yyterminate();
+    printscope(0);
     return T_EOF;
+    yyterminate();
+    
   }
 }
 
@@ -180,8 +213,8 @@ tab [\t]
 "from" {printf( "%s ", yytext);return T_From;}
 "range" {printf( "%s ", yytext);return T_Range;}
 "in" {printf("%s ",yytext);return T_In;}
-"(" {printf( "%s ", yytext);return T_LP;}
-")" {printf( "%s ", yytext);return T_RP;}
+"(" {printf( "%s", yytext);return T_LP;}
+")" {printf( "%s", yytext);return T_RP;}
 ":" {printf( "%s ", yytext);return T_Cln;}
 "for" {printf( "%s ", yytext);return T_For;}
 "while" {printf( "%s ", yytext);return T_While;}
@@ -241,9 +274,7 @@ void yyerror(char* s)
 int main()
  {
   init_scope(0);
+  printf("1)");
   yyparse();
-  for(int i=0;i<=peek();++i)
-    printscope(i);
-  printf("====================================END====================================\n");
   return 0;
 }
