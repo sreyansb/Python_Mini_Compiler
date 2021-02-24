@@ -11,8 +11,6 @@
 	int startFlag = 1;
 	
 	STACK indent;
-	//int pointer=0;
-	//int counter=0;
 	int def_mode=0;
 	int depth = 1;
 
@@ -43,37 +41,6 @@
  		#endif
  		
  	}
- 	
- 	static void push_1(int i) 
- 	{
-   		if (++sp<stack_size) stack[sp]= i;
-   		else {printf ("error: stack overflow\n"); exit(1);}
- 	}
- 	
- 	int pop_1() 
- 	{
-   		if (sp>-1) return stack[sp--];
-   		else {printf ("error: stack underflow\n"); exit(1);}
- 	}
- 	
- 	int top_1()
- 	{
- 		if(sp>-1) return stack[sp];
- 		else return -1;
- 	}
- 	
- 	static int indent_depth_1(const char *K)
-	{
-		int len = strlen(K), i, tab_count=1;
-		for(i=0; i< len ; i++)
-		{
-			if(K[i]=='\t')
-			{
-				tab_count++;
-			}	
-		}
-		return tab_count;
-	}	 
  	
  	static int count_nl(const char *s)
  	{
@@ -136,11 +103,7 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
                                             {
                                                 if(peek(&indent) < yyleng-1)
                                                 {
-
-                                                	depth = indent_depth_1(yytext+1);
-                                        			yylval.depth = depth;
-                                        			push_1(depth);
-                                        			
+                                        			yylval.depth = yyleng;
                                                     push(&indent, yyleng-1);
                                                     yyless(0);
                                                     debug("Indent");
@@ -148,15 +111,8 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
                                                 }
                                                 if(peek(&indent) > yyleng-1)
                                                 {
-                                                	depth = indent_depth_1(yytext+1);
-                                        			yylval.depth = yyleng-1;//depth;
-                                        			//while(depth < top_1()) 
-                                        				pop_1();
-
+                                        			yylval.depth = yyleng;
                                                     int removed_scope = pop(&indent);
-                                                    //while (yyleng-1 < peek(&indent))pop(&indent);
-                                                    //printTable(removed_scope);
-                                                    //clearScope(removed_scope);
                                                     debug("Dedent");
                                                     yyless(0);
                                                     return DD;

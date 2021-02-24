@@ -148,7 +148,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
+<<<<<<< HEAD
 #line 290 "parser.y" /* yacc.c:1909  */
+=======
+#line 276 "parser.y"
+>>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
  char *text; int depth; struct AST *node; 
 
 #line 155 "y.tab.h" /* yacc.c:1909  */

@@ -10,9 +10,8 @@
 	//--------------------------------BASIC VARIABLE DECLARATIONS----------------------------------------
 	extern int yylineno;
 	extern int depth;
-	extern int top_1();
-	extern int pop_1();
-	int currentScope = 1;//int previousScope = 1;
+
+	int currentScope = 1;
 	
 	int check_error = 0;
 	
@@ -62,12 +61,7 @@
 		currentScope = scope;
 	}
 	
-	void resetDepth()
-	{
-		while(top_1()!=-1) 
-			pop_1();
-		depth = 1;
-	}
+
 	
 	int scopeBasedTableSearch(int scope)
 	{
@@ -118,14 +112,10 @@
 		
 	void modifyRecordID(const char *type, const char *name, int lineNo, int scope)
 	{		
-		//int check_error = 0; //made check_error global
-		
-		//int index = scopeBasedTableSearch(scope);//change to power scope
 		int FScope = power(scope, arrayScope[scope]);
 		int index = scopeBasedTableSearch(FScope);
 		
-		//printf("No Of Elems : %d\n", symbolTables[index].noOfElems);
-		if(index==0) //WHEN is index actuallly =0? when you reach the outer-most scope 
+		if(index==0)
 		{
 			for(int i = 0;i < symbolTables[index].noOfElems; i++)
 			{	
@@ -148,14 +138,12 @@
 		
 		for(int i = 0;i < symbolTables[index].noOfElems; i++)
 		{
-			//printf("\t%d Name: %s\n", i, symbolTables[index].Elements[i].name);
 			if(strcmp(symbolTables[index].Elements[i].type, type)==0 && (strcmp(symbolTables[index].Elements[i].name, name)==0))
 			{
 				symbolTables[index].Elements[i].lastUseLine = lineNo;
 				return;
 			}	
 		}
-		//printf("Parent : %d\n", symbolTables[index].Parent);
 		return modifyRecordID(type, name, lineNo, symbolTables[symbolTables[index].Parent].scope);
 	}
 	
@@ -164,7 +152,7 @@
 		int FScope = power(scope, arrayScope[scope]);
 		int index = scopeBasedTableSearch(FScope);
 		int recordIndex = searchRecordInScope(type, name, index);
-		//printf("rIndex : %d, Name : %s\n", recordIndex, name);
+
 		if(recordIndex==-1) //record doesnt exist in the scope
 		{
 			symbolTables[index].Elements[symbolTables[index].noOfElems].type = (char*)calloc(30, sizeof(char));
@@ -285,8 +273,6 @@
 	}
 %}
 
-%locations
-
 %union { char *text; int depth; struct AST *node; };
 //%type <node> StartParse StartDebugger args suite finalStatements arith_exp bool_exp term constant basic_stmt cmpd_stmt func_def list_index import_stmt pass_stmt break_stmt print_stmt if_stmt /*else_stmt*/ while_stmt return_stmt assign_stmt bool_term bool_factor for_stmt func_call call_args list_stmt
 
@@ -306,9 +292,9 @@
 StartDebugger : {init();} 	
 				StartParse  {
 								if(check_error == 0)
-									printf("\nValid Python Syntax\n" ); 
+									printf("\nValid Python Syntax\n"); 
 								else
-									printf("\nInvalid Python Syntax\n" ); 
+									printf("\nInvalid Python Syntax\n"); 
 								printf("**************************************************************************\n");
 								printSTable();// freeAll();  
 								exit(0);
@@ -372,7 +358,7 @@ import_stmt : T_Import T_ID {insertRecord("PackageName", $<text>2, @2.first_line
 pass_stmt   : T_Pass ;
 break_stmt  : T_Break ;
 return_stmt : T_Return 
-			| T_Return term {char return_val[100]; strcpy(return_val, "return "); strcat(return_val, $<text>2);};
+			| T_Return term ;//
 
 assign_stmt : T_ID T_EQL func_call {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
 			 |T_ID T_EQL bool_exp {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
@@ -414,34 +400,28 @@ optional_else
 	| ; 
 
 for_stmt
-	: T_For T_ID T_IN range_stmt {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else 
-			{
-				char rangeNodeText[20] ="";
-				strcat(rangeNodeText, $<text>2);
-				strcat(rangeNodeText, " in range");
-				clearArgsList(); 
-			}
+	: T_For T_ID T_IN range_stmt {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else //
 	| T_For T_ID T_IN T_ID {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else 
-			{ //printSTable();
-				checkList($<text>4, @4.first_line, currentScope);
-			}
+		{
+			checkList($<text>4, @4.first_line, currentScope);
+		}
 	| T_For T_ID T_IN list_stmt {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else;
 
 
 while_stmt
 	: T_While bool_exp T_Cln suite optional_else ;
 
-range_stmt: T_Range T_OP T_Number T_CP {addToList("0", 1); addToList($<text>3, 0);}
-			| T_Range T_OP T_Number T_Comma T_Number T_CP {addToList($<text>3, 1); addToList($<text>5, 0);}
-			| T_Range T_OP T_Number T_Comma T_Number T_Comma T_Number T_CP {addToList($<text>3, 1); addToList($<text>5, 0); addToList($<text>7,0);};
-			
+range_stmt: T_Range T_OP T_Number T_CP //
+			| T_Range T_OP T_Number T_Comma T_Number T_CP //
+			| T_Range T_OP T_Number T_Comma T_Number T_Comma T_Number T_CP ;//
+
 suite
 	: simple_stmt
-	| T_NL ID {initNewTable($<depth>2); updateCScope($<depth>2);} finalStatements repeat_stmt DD {updateCScope(currentScope-1); } ;//{resetDepth(); updateCScope(1);/*updateCScope($<depth>5);*/};
+	| T_NL ID {initNewTable($<depth>2); updateCScope($<depth>2);} finalStatements repeat_stmt DD {updateCScope(currentScope-1); } ;//
 
 repeat_stmt
 	: finalStatements repeat_stmt
-	| /*{resetDepth(); updateCScope(1);}*/;	
+	| ;//	
 	
 args : T_ID {insertRecord("Identifier", $<text>1, @1.first_line, currentScope); addToList($<text>1, 1);} args_list 
 		| {clearArgsList();};
@@ -452,19 +432,18 @@ args_list : T_Comma T_ID {insertRecord("Identifier", $<text>2, @2.first_line, cu
 func_def : T_Def T_ID {insertRecord("Func_Name", $<text>2, @2.first_line, currentScope);} T_OP args T_CP T_Cln suite {clearArgsList();} ;
 
 
-list_stmt: //T_OB T_CB | //conflict coz call_args can only become empty
-		   T_OB call_args T_CB {
-		 		char* str = (char *)malloc(102*sizeof(char));
+list_stmt: T_OB call_args T_CB {
+		 		/*char* str = (char *)malloc(102*sizeof(char));
 			 	strcpy(str,"[");
 			 	strcat(str, argsList);
 			 	char close[2];
 			 	strcpy(close,"]");
 			 	strcat(str, close);
 			 	clearArgsList(); 
-			 	free(str);
+			 	free(str);*/
 			 };
 
-call_list : T_Comma term /*{addToList($2->lexeme, 0);}*/ call_list 
+call_list : T_Comma term call_list 
 			| ;
 
 call_args : T_ID {modifyRecordID("Identifier", $<text>1, @1.first_line, currentScope); addToList($<text>1, 1);} call_list

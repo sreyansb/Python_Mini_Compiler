@@ -75,9 +75,8 @@
 	//--------------------------------BASIC VARIABLE DECLARATIONS----------------------------------------
 	extern int yylineno;
 	extern int depth;
-	extern int top_1();
-	extern int pop_1();
-	int currentScope = 1;//int previousScope = 1;
+
+	int currentScope = 1;
 	
 	int check_error = 0;
 	
@@ -127,12 +126,7 @@
 		currentScope = scope;
 	}
 	
-	void resetDepth()
-	{
-		while(top_1()!=-1) 
-			pop_1();
-		depth = 1;
-	}
+
 	
 	int scopeBasedTableSearch(int scope)
 	{
@@ -183,14 +177,10 @@
 		
 	void modifyRecordID(const char *type, const char *name, int lineNo, int scope)
 	{		
-		//int check_error = 0; //made check_error global
-		
-		//int index = scopeBasedTableSearch(scope);//change to power scope
 		int FScope = power(scope, arrayScope[scope]);
 		int index = scopeBasedTableSearch(FScope);
 		
-		//printf("No Of Elems : %d\n", symbolTables[index].noOfElems);
-		if(index==0) //WHEN is index actuallly =0? when you reach the outer-most scope 
+		if(index==0)
 		{
 			for(int i = 0;i < symbolTables[index].noOfElems; i++)
 			{	
@@ -213,14 +203,12 @@
 		
 		for(int i = 0;i < symbolTables[index].noOfElems; i++)
 		{
-			//printf("\t%d Name: %s\n", i, symbolTables[index].Elements[i].name);
 			if(strcmp(symbolTables[index].Elements[i].type, type)==0 && (strcmp(symbolTables[index].Elements[i].name, name)==0))
 			{
 				symbolTables[index].Elements[i].lastUseLine = lineNo;
 				return;
 			}	
 		}
-		//printf("Parent : %d\n", symbolTables[index].Parent);
 		return modifyRecordID(type, name, lineNo, symbolTables[symbolTables[index].Parent].scope);
 	}
 	
@@ -229,7 +217,7 @@
 		int FScope = power(scope, arrayScope[scope]);
 		int index = scopeBasedTableSearch(FScope);
 		int recordIndex = searchRecordInScope(type, name, index);
-		//printf("rIndex : %d, Name : %s\n", recordIndex, name);
+
 		if(recordIndex==-1) //record doesnt exist in the scope
 		{
 			symbolTables[index].Elements[symbolTables[index].noOfElems].type = (char*)calloc(30, sizeof(char));
@@ -825,17 +813,17 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   306,   306,   306,   317,   318,   320,   323,   324,   325,
-     327,   328,   328,   329,   331,   332,   333,   334,   335,   336,
-     337,   338,   339,   340,   342,   343,   344,   345,   346,   348,
-     351,   352,   353,   354,   355,   356,   357,   358,   359,   360,
-     362,   363,   364,   365,   367,   368,   370,   372,   373,   374,
-     375,   377,   378,   379,   380,   382,   384,   385,   386,   389,
-     392,   393,   396,   397,   400,   401,   402,   405,   408,   409,
-     413,   414,   417,   417,   424,   424,   428,   428,   432,   434,
-     435,   436,   439,   440,   440,   443,   444,   446,   446,   447,
-     449,   449,   450,   452,   452,   456,   467,   468,   470,   470,
-     471,   471,   472,   472,   473,   475,   475
+       0,   292,   292,   292,   303,   304,   306,   309,   310,   311,
+     313,   314,   314,   315,   317,   318,   319,   320,   321,   322,
+     323,   324,   325,   326,   328,   329,   330,   331,   332,   334,
+     337,   338,   339,   340,   341,   342,   343,   344,   345,   346,
+     348,   349,   350,   351,   353,   354,   356,   358,   359,   360,
+     361,   363,   364,   365,   366,   368,   370,   371,   372,   375,
+     378,   379,   382,   383,   386,   387,   388,   391,   394,   395,
+     399,   400,   403,   403,   404,   404,   408,   408,   412,   414,
+     415,   416,   419,   420,   420,   423,   424,   426,   426,   427,
+     429,   429,   430,   432,   432,   435,   446,   447,   449,   449,
+     450,   450,   451,   451,   452,   454,   454
 };
 #endif
 
