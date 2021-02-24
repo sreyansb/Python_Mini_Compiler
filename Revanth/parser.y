@@ -12,11 +12,9 @@
 	extern int depth;
 
 	int currentScope = 1;
-	
 	int check_error = 0;
-	
 	int *arrayScope = NULL;
-
+	
 	//-------------------------------------STRUCTURE DEFINITIONS----------------------------------------------
 	
 	typedef struct record
@@ -243,13 +241,17 @@
 	{
 		int i = 0, j = 0;
 		
-		printf("\n\n*************************SYMBOL TABLES**************************");
+		printf("\n\n*************************SYMBOL TABLE**************************");
 		printf("\nScope\tName\tType\t\tLine Decl\tLast Used Line\n");
 		for(i=0; i<=sIndex; i++)
 		{
 			for(j=0; j<symbolTables[i].noOfElems; j++)
 			{
-				printf("(%d, %d)\t%s\t%s\t%d\t\t%d\n", symbolTables[symbolTables[i].Parent].scope, symbolTables[i].scope/*-1*/, symbolTables[i].Elements[j].name, symbolTables[i].Elements[j].type, symbolTables[i].Elements[j].decLineNo,  symbolTables[i].Elements[j].lastUseLine);
+				//printf("(%d, %d)\t%s\t%s\t%d\t\t%d\n", symbolTables[symbolTables[i].Parent].scope, symbolTables[i].scope/*-1*/, symbolTables[i].Elements[j].name, symbolTables[i].Elements[j].type, symbolTables[i].Elements[j].decLineNo,  symbolTables[i].Elements[j].lastUseLine);
+				if (symbolTables[symbolTables[i].Parent].scope ==  symbolTables[i].scope)
+					printf("%d\t%s\t%s\t%d\t\t%d\n", symbolTables[symbolTables[i].Parent].scope/*-1*/, symbolTables[i].Elements[j].name, symbolTables[i].Elements[j].type, symbolTables[i].Elements[j].decLineNo,  symbolTables[i].Elements[j].lastUseLine);
+				else
+					printf("%d\t%s\t%s\t%d\t\t%d\n", symbolTables[symbolTables[i].Parent].scope+1/*-1*/, symbolTables[i].Elements[j].name, symbolTables[i].Elements[j].type, symbolTables[i].Elements[j].decLineNo,  symbolTables[i].Elements[j].lastUseLine);
 			}
 		}
 	}
@@ -274,7 +276,6 @@
 %}
 
 %union { char *text; int depth; struct AST *node; };
-//%type <node> StartParse StartDebugger args suite finalStatements arith_exp bool_exp term constant basic_stmt cmpd_stmt func_def list_index import_stmt pass_stmt break_stmt print_stmt if_stmt /*else_stmt*/ while_stmt return_stmt assign_stmt bool_term bool_factor for_stmt func_call call_args list_stmt
 
 %token T_EndOfFile T_Cln T_SCln T_NL T_IN T_NEQ T_EQ T_GT T_LT T_EGT T_ELT T_Or T_And ID ND DD T_String Trip_Quote T_Import T_MN T_PL T_DV T_ML T_OP T_CP T_OB T_CB T_Def T_Comma T_Range T_List
 
@@ -358,7 +359,8 @@ import_stmt : T_Import T_ID {insertRecord("PackageName", $<text>2, @2.first_line
 pass_stmt   : T_Pass ;
 break_stmt  : T_Break ;
 return_stmt : T_Return 
-			| T_Return term ;//
+			| T_Return arith_exp
+			| T_Return bool_exp ;//
 
 assign_stmt : T_ID T_EQL func_call {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
 			 |T_ID T_EQL bool_exp {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);}
@@ -383,17 +385,17 @@ end_simple_stmt
 	| T_SCln T_NL ;
 	//| ;
 
-cmpd_stmt : if_stmt 
-			| while_stmt 
+cmpd_stmt : //if_stmt 
+			while_stmt 
 			| for_stmt ;
 
-
+/*
 if_stmt : T_If bool_exp T_Cln suite elif_stmt optional_else ;
 
 elif_stmt
 	: T_Elif bool_exp T_Cln suite elif_stmt
 	| ;
-
+*/
 
 optional_else
 	: T_Else T_Cln suite
@@ -432,16 +434,7 @@ args_list : T_Comma T_ID {insertRecord("Identifier", $<text>2, @2.first_line, cu
 func_def : T_Def T_ID {insertRecord("Func_Name", $<text>2, @2.first_line, currentScope);} T_OP args T_CP T_Cln suite {clearArgsList();} ;
 
 
-list_stmt: T_OB call_args T_CB {
-		 		/*char* str = (char *)malloc(102*sizeof(char));
-			 	strcpy(str,"[");
-			 	strcat(str, argsList);
-			 	char close[2];
-			 	strcpy(close,"]");
-			 	strcat(str, close);
-			 	clearArgsList(); 
-			 	free(str);*/
-			 };
+list_stmt: T_OB call_args T_CB ;//
 
 call_list : T_Comma term call_list 
 			| ;
