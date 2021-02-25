@@ -275,7 +275,7 @@
 	}
 %}
 
-%union { char *text; int depth; struct AST *node; };
+%union { char text[100]; int depth; };
 
 %token T_EndOfFile T_Cln T_SCln T_NL T_IN T_NEQ T_EQ T_GT T_LT T_EGT T_ELT T_Or T_And ID ND DD T_String Trip_Quote T_Import T_MN T_PL T_DV T_ML T_OP T_CP T_OB T_CB T_Def T_Comma T_Range T_List
 

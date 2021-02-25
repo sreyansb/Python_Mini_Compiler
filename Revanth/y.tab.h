@@ -152,7 +152,7 @@ extern int yydebug;
 union YYSTYPE
 {
 #line 278 "parser.y"
- char *text; int depth; struct AST *node; 
+ char text[100]; int depth; 
 
 #line 158 "y.tab.h"
 
