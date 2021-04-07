@@ -591,8 +591,8 @@ char *yytext;
 		return count;
  	}
 
-#line 628 "lex.yy.c"
-#line 629 "lex.yy.c"
+#line 595 "lex.yy.c"
+#line 596 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -940,425 +940,237 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 168 "lexer.l"
-=======
 #line 124 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Import"); return T_Import;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 169 "lexer.l"
-=======
 #line 125 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Print"); return T_Print;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 170 "lexer.l"
-=======
 #line 126 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("len"); return T_LEN;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 171 "lexer.l"
-=======
 #line 127 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("For"); return T_For;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 172 "lexer.l"
-=======
 #line 128 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("IN"); return T_IN;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 173 "lexer.l"
-=======
 #line 129 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Pass"); return T_Pass;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 174 "lexer.l"
-=======
 #line 130 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("If"); return T_If;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 175 "lexer.l"
-=======
 #line 131 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("While"); return T_While;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 176 "lexer.l"
-=======
 #line 132 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Break"); return T_Break;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 177 "lexer.l"
-=======
 #line 133 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("And"); return T_And;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 178 "lexer.l"
-=======
 #line 134 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Or"); return T_Or;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 179 "lexer.l"
-=======
 #line 135 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Not"); return T_Not;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 180 "lexer.l"
-=======
 #line 136 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Elif"); return T_Elif;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 181 "lexer.l"
-=======
 #line 137 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Else"); return T_Else;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 182 "lexer.l"
-=======
 #line 138 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Def"); return T_Def;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 183 "lexer.l"
-=======
 #line 139 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Return"); return T_Return;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 184 "lexer.l"
-=======
 #line 140 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Cln"); return T_Cln;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 185 "lexer.l"
-=======
 #line 141 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("SCln"); return T_SCln;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 186 "lexer.l"
-=======
 #line 142 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("GT"); return T_GT;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 187 "lexer.l"
-=======
 #line 143 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("LT"); return T_LT;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 188 "lexer.l"
-=======
 #line 144 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("EGT"); return T_EGT;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 189 "lexer.l"
-=======
 #line 145 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("ELT"); return T_ELT;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 190 "lexer.l"
-=======
 #line 146 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("EQ"); return T_EQ;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 191 "lexer.l"
-=======
 #line 147 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("NEQ"); return T_NEQ;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 192 "lexer.l"
-=======
 #line 148 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("True"); return T_True;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 193 "lexer.l"
-=======
 #line 149 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("False"); return T_False;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 194 "lexer.l"
-=======
 #line 150 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("PL"); return T_PL;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 195 "lexer.l"
-=======
 #line 151 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("MN"); return T_MN;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 196 "lexer.l"
-=======
 #line 152 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("ML"); return T_ML;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 197 "lexer.l"
-=======
 #line 153 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("DV"); return T_DV;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 198 "lexer.l"
-=======
 #line 154 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 { debug("OP"); return T_OP;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 199 "lexer.l"
-=======
 #line 155 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("CP"); return T_CP;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 200 "lexer.l"
-=======
 #line 156 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("OB"); return T_OB;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 201 "lexer.l"
-=======
 #line 157 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("CB"); return T_CB;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 202 "lexer.l"
-=======
 #line 158 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Comma"); return T_Comma;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 203 "lexer.l"
-=======
 #line 159 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("EQL"); return T_EQL;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 204 "lexer.l"
-=======
 #line 160 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("Range"); return T_Range;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 205 "lexer.l"
-=======
 #line 161 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("List"); return T_List;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 207 "lexer.l"
-=======
 #line 163 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
-{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+{strcpy(yylval.text, yytext); debug("Number"); return T_Number;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 208 "lexer.l"
-=======
 #line 164 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
-{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+{strcpy(yylval.text, yytext); debug("Number"); return T_Number;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 210 "lexer.l"
-=======
 #line 166 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
-{yylval.text = strdup(yytext); debug(yylval.text); return T_ID;}
+{strncpy(yylval.text, yytext, 31); debug(yylval.text); return T_ID;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 211 "lexer.l"
-=======
 #line 167 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
-{yylval.text = strdup(yytext); debug("String"); return T_String;}
+{strcpy(yylval.text, yytext); debug("String"); return T_String;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 212 "lexer.l"
-=======
 #line 168 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
-{yylval.text = strdup(yytext); debug("String"); return T_String;}
+{strcpy(yylval.text, yytext); debug("String"); return T_String;}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 214 "lexer.l"
-=======
 #line 170 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {yyless(yyleng-1); yylineno += (count_nl(yytext));debug("Multiline Comment");  }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 215 "lexer.l"
-;
-	YY_BREAK
-case YY_STATE_EOF(INITIAL):
-#line 217 "lexer.l"
-=======
 #line 171 "lexer.l"
 ;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 #line 173 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 {debug("EOF"); return T_EndOfFile;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-<<<<<<< HEAD
-#line 218 "lexer.l"
-=======
 #line 174 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 ECHO;
 	YY_BREAK
 #line 1177 "lex.yy.c"
@@ -2364,11 +2176,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-<<<<<<< HEAD
-#line 218 "lexer.l"
-=======
 #line 174 "lexer.l"
->>>>>>> 766b2e3a4dbe174845539cfc2f650dac2a9e7f26
 
   
 int main()

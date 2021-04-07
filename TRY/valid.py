@@ -1,3 +1,4 @@
+import numpy
 f = 0
 import wakawaka
 

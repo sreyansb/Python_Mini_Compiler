@@ -1049,14 +1049,14 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 160 "lex_file.l"
-{printf("\n\nMulti Line Comment");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+#line 150 "lex_file.l"
+{printf("\nMulti Line Comment ");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 161 "lex_file.l"
-{printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+#line 151 "lex_file.l"
+{printf("\nMulti Line Comment ");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
@@ -1080,7 +1080,7 @@ YY_RULE_SETUP
     if (line_depth>ptr)
     {
       init_scope(line_depth);
-      printf("Indented to %d tabs\n",line_depth);
+      printf("\nIndented to %d tabs ",line_depth);
       //yyless(0);
       def_mode=1;++yylineno;
       return T_IND;
@@ -2366,9 +2366,10 @@ void yyerror(char* s)
 
 
 int main()
- {
-   yylineno=1;
+{
+  yylineno=1;
   init_scope(0);
   yyparse();
   return 0;
 }
+

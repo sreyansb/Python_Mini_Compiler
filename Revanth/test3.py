@@ -1,29 +1,25 @@
 #this is a comment
-import numpy
+import hello
 x=3
 y=2
 lis = [10,20,30,"hello1"]#another comment
 for i in range(10,20):
-	print("ha")
+	print(i)
 	for j in range(10,20):
 		print(j)
-	if(x<5):
-		print("x<5")
-		if(x<3):
-			print("in if x<3")
-		if(x<4):
-			print("in if x<4")
+		print("for")
 		while False:
-			print("false")
+			print("oop")
+	print("end")
 '''
-multiline
+multiline comment
 '''
-if(x<5):
-	print( x<5")
+while(x<5):
+	print(x)
 	while True:
-		print("hi")
+		print("true")
 	for n in range(3,10):
-		print("in for")
+		print(n)
 		for d in range(3,10):
 			print(d)
 else:
@@ -31,8 +27,15 @@ else:
 
 
 while True:
-	print("hey")
+	print("True")
 	while False:
-		print("false")
+		print("False")
 		for l in range(3,10):
 			print(l)
+
+for c in lis:
+	print(c)
+	
+def foo():
+	print("hello world")
+	return False
