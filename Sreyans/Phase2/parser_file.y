@@ -6,12 +6,15 @@
 	
 	#define maxscopey 10000
 	extern char* yytext;
+	int k=1;
+	FILE* fptr = fopen("icg.txt","w");
 	//because size of each scope(100) is 100 elements
 	
 	typedef struct symtabnode
 	{
 		char name[100];//has the value of constants
 		int scope;
+		int value;
 	}symtabnode;
 	
 	//will store all the elements and their scopes
@@ -45,6 +48,13 @@
 		for(int i=0;i<indexy;++i)
 			printf("%s\t|%d\t\n",symtab[i].name,symtab[i].scope);
 	}  
+
+	void generate(char* name)
+	{
+		//snprintf(s,n,format,args_to_format) is a function which writes into s, n number of characters(should give space for NULL), the format.
+		snprintf(name,5,"t%d",k++);//I have given name atmost 999 temporaries(1 to 999)-t+(1-999) 4 characters+NULL;
+	}
+
 %}
 %locations
 
@@ -71,34 +81,34 @@ term
 	: T_String
 
 math_term
-	: T_ID {searchele($<data->name>1,$<data->scope>1);}
-	| T_Real
-	| T_Integer
+	: T_ID {searchele($<data->name>1,$<data->scope>1);strcpy($<data->name>$,$<data->name>1);}
+	| T_Real {strcpy($<data->name>$,$<data->name>1);}
+	| T_Integer {strcpy($<data->name>$,$<data->name>1);}
 
 stmt
-	: simple_stmt
-	| compound_stmt
+	: simple_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| compound_stmt {strcpy($<data->name>$,$<data->name>1);}
 
 simple_stmt
-	: base_stmt
+	: base_stmt {strcpy($<data->name>$,$<data->name>1);}
 
 base_stmt
-	: pass_stmt
-	| delete_stmt
-	| import_stmt
-	| cobr_stmt
-	| assign_stmt
-	| print_stmt
-	| printable_stmt
+	: pass_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| delete_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| import_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| cobr_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| assign_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| print_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| printable_stmt {strcpy($<data->name>$,$<data->name>1);}
 
 pass_stmt
-	: T_Pass
+	: T_Pass {strcpy($<data->name>$,"PASS\0");fprintf(fptr,"PASS\n");}
 
 delete_stmt
 	: T_Del T_ID
 
 import_stmt
-	: T_Import T_ID {searchele($<data->name>2,$<data->scope>2);}
+	: T_Import T_ID {searchele($<data->name>2,$<data->scope>2);{strcpy($<data->name>$,"IMPORT\0");fprintf(fptr,"IMPORT %s\n",$<data->name>1);}}
 	| import_from
 
 import_from
@@ -109,19 +119,19 @@ end_import_from
 	| %empty
 
 cobr_stmt
-	: T_Break
-	| T_Continue
+	: T_Break {strcpy($<data->name>$,"BREAK\0");fprintf(fptr,"BREAK\n");}
+	| T_Continue {strcpy($<data->name>$,"BREAK\0");fprintf(fptr,"BREAK\n");}
 
 assign_stmt
-	: T_ID T_EQ printable_stmt {searchele($<data->name>1,$<data->scope>1);}
+	: T_ID T_EQ printable_stmt {searchele($<data->name>1,$<data->scope>1);strcpy($<data->name>$,$<data->name>1);fprintf(fptr,"%s = %s",$<data->name>1,$<data->name>3);}
 
 print_stmt
 	: T_Print T_LP printable_stmt T_RP
 
 printable_stmt
-	: arith_stmt
-	| bool_stmt
-	| list_stmt
+	: arith_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| bool_stmt {strcpy($<data->name>$,$<data->name>1);}
+	| list_stmt {strcpy($<data->name>$,$<data->name>1);}
 
 arith_stmt
 	: arith_stmt T_Plus arith_stmt

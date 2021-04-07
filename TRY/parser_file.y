@@ -102,7 +102,7 @@ delete_stmt
 	: T_Del T_ID
 
 import_stmt
-	: T_Import T_ID {searchele($<data->name>2,$<data->scope>2);strcpy(symtab[indexy-1].type,"Package");}
+	: T_Import T_ID {searchele($<data->name>2,0);strcpy(symtab[indexy-1].type,"Package");}
 	| import_from
 
 import_from

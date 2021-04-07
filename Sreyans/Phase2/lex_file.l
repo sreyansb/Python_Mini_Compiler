@@ -9,7 +9,6 @@
     extern YYSTYPE yylval;
 
     int def_mode=1;
-    int eof=1;
 
     static int tabstack[maxscope];
     static int st_ptr=-1;//to keep track of the topmost element in the stack
@@ -31,21 +30,19 @@
         int top_ptr;
     }scope;
 
-    //returns the topmost scope's number of tabs
     static int peek()
     {
       return tabstack[st_ptr];
     }
 
-    //defines the struct for storing the variables and 
     typedef struct symtabnode
 	  {
-		  char name[100];
+		  char name[100];//has the value
 		  int scope;
-      char type[100];
+      int value;
     }symtabnode;
 
-    //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
+      //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
     static scope scopetable[maxscope];
 
     //when we go into a new scope, we need to initialise the scope and also scopetable of that 
@@ -86,27 +83,23 @@
       return add_to_scope(varname,lineused);
     }
     
-    //printing the individual scopes
     void printscope(int sta_ptr)
     {
       printf("\n=======================================\n\n");
       printf("SCOPE: %d Number of Tabs: %d\n",sta_ptr,tabstack[sta_ptr]);
-      printf("Name\t|LineDeclared\t|LastLineUsed|\n");
+      printf("Name\t\t|LineDeclared\t|LastLineUsed|\n");
       for(int i=0;i<=scopetable[tabstack[sta_ptr]].top_ptr;++i)
-        printf("%s\t|%d\t\t|%d\t|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
+        printf("%s\t\t|%d\t\t|%d\t|\n",scopetable[tabstack[sta_ptr]].scope_var[i].name,scopetable[tabstack[sta_ptr]].scope_var[i].dec_line,scopetable[tabstack[sta_ptr]].scope_var[i].last_line);
       printf("\n========================================\n");
     }
 
-    //deleting the scope
     void deletescope()
     {
-      //printscope(st_ptr);
+      printscope(st_ptr);
       scopetable[tabstack[st_ptr]].top_ptr=-1;
       --st_ptr;
-      printf("ST_PTR %d top_most %d\n",st_ptr,tabstack[st_ptr]);
     }
 
-    //finding the number of tabs if line is indented
     static int finddepth(char* line)
     {
       int line_depth=0;
@@ -121,8 +114,6 @@
       }
       return line_depth;
     }
-
-    //count the number of \n in multiline comments
     static int countnl(char* line)
     {
       int count=0;
@@ -135,8 +126,6 @@
         }
       return count;      
     }
-
-    //count the number of \n at the beginning of the line
     static int countbegnl(char* line)
     {
       int count=0;
@@ -156,30 +145,27 @@ letter [a-zA-Z]
 digit [0-9]
 %%
 "\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
-["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");yylineno+=countnl(yytext)-1;++yylineno;}
-["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\nMulti Line Comment");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");yylineno+=countbegnl(yytext)-1;++yylineno;}
+["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 ["\n"]["]{3}(.|\n)*["]{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 ["\n"]+["\t"]* {
-  //printf("YYTEXT %s",yytext);
   if (def_mode)
  {
     yyless(0);
     def_mode=0;
     printf("NL\n%d)",yylineno);
-    yylineno++;
+    yylineno+=countbegnl(yytext);
     return T_NL;
   }
   int line_depth=finddepth(yytext);
-  //printf("LD %d\n",line_depth);
+  //printf("%d\n",line_depth);
   int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
     if (line_depth>ptr)
     {
       init_scope(line_depth);
-      printf("Indented to %d tabs\n",line_depth);
-      //yyless(0);
-      def_mode=1;++yylineno;
+      //printf("Indented to %d tabs\n",line_depth);
       return T_IND;
     }
     else
@@ -190,28 +176,31 @@ digit [0-9]
         exit(1);
         return 0;
       }
-      printf("\nDeleting\n");
-      deletescope();
+      //printf("\nDeleting\n");
+      //deletescope();
       yyless(0);
-      //printf("\nheren\n");
       return T_DED;
     }
   }
   printf("\n");
   def_mode=1;
-  //++yylineno; 
+  
+  ++yylineno; 
 }
 <<EOF>> {
-  //printf("HERE\n");
-  while (peek()!=0)
+  if (peek()!=0)
  {
     deletescope();
     printf("Dedenting\n");
-    //return T_DED;
-  }
-  printf("EOF-all at scope 0 tab 0\n");
+    return T_DED;}
+  else
+ {
+    printf("EOF-all at scope 0 tab 0\n");
     printscope(0);
     return T_EOF;
+    yyterminate();
+    
+  }
 }
 
 "=" {printf( "%s ", yytext);return T_EQ;}
@@ -253,11 +242,8 @@ digit [0-9]
 ({letter}|_)({letter}|_|{digit})* {
                     printf("Matched : %s ", yytext);
                     yylval.data=(symtabnode*)malloc(sizeof(symtabnode));
-                    if (strlen(yytext)>31)
-                      printf("Length of identifiers cant be greater than 31\n");
-                    strncpy(yylval.data->name,yytext,31);
-                    yylval.data->name[31]='\0';
-                    int scopei = find_element(yylval.data->name,yylineno);
+                    strcpy(yylval.data->name,yytext);
+                    int scopei = find_element(yytext,yylineno);
                     yylval.data->scope=scopei;
                     return T_ID;
                     }
@@ -288,8 +274,8 @@ void yyerror(char* s)
 
 int main()
  {
-   yylineno=1;
   init_scope(0);
+  printf("1)");
   yyparse();
   return 0;
 }

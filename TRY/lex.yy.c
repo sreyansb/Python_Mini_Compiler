@@ -637,18 +637,21 @@ char *yytext;
         int top_ptr;
     }scope;
 
+    //returns the topmost scope's number of tabs
     static int peek()
     {
       return tabstack[st_ptr];
     }
 
+    //defines the struct for storing the variables and 
     typedef struct symtabnode
 	  {
 		  char name[100];
 		  int scope;
+      char type[100];
     }symtabnode;
 
-      //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
+    //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
     static scope scopetable[maxscope];
 
     //when we go into a new scope, we need to initialise the scope and also scopetable of that 
@@ -689,6 +692,7 @@ char *yytext;
       return add_to_scope(varname,lineused);
     }
     
+    //printing the individual scopes
     void printscope(int sta_ptr)
     {
       printf("\n=======================================\n\n");
@@ -699,14 +703,16 @@ char *yytext;
       printf("\n========================================\n");
     }
 
+    //deleting the scope
     void deletescope()
     {
-      printscope(st_ptr);
+      //printscope(st_ptr);
       scopetable[tabstack[st_ptr]].top_ptr=-1;
       --st_ptr;
-      //printf("ST_PTR %d top_most %d\n",st_ptr,tabstack[st_ptr]);
+      printf("ST_PTR %d top_most %d\n",st_ptr,tabstack[st_ptr]);
     }
 
+    //finding the number of tabs if line is indented
     static int finddepth(char* line)
     {
       int line_depth=0;
@@ -721,6 +727,8 @@ char *yytext;
       }
       return line_depth;
     }
+
+    //count the number of \n in multiline comments
     static int countnl(char* line)
     {
       int count=0;
@@ -733,6 +741,8 @@ char *yytext;
         }
       return count;      
     }
+
+    //count the number of \n at the beginning of the line
     static int countbegnl(char* line)
     {
       int count=0;
@@ -747,8 +757,8 @@ char *yytext;
         }
       return count;
     }
-#line 751 "lex.yy.c"
-#line 752 "lex.yy.c"
+#line 761 "lex.yy.c"
+#line 762 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -965,9 +975,9 @@ YY_DECL
 		}
 
 	{
-#line 147 "lex_file.l"
+#line 157 "lex_file.l"
 
-#line 971 "lex.yy.c"
+#line 981 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1027,31 +1037,31 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 148 "lex_file.l"
+#line 158 "lex_file.l"
 {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 149 "lex_file.l"
+#line 159 "lex_file.l"
 {printf("\nSingle Line Comment ");yylineno+=countnl(yytext)-1;++yylineno;}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 150 "lex_file.l"
+#line 160 "lex_file.l"
 {printf("\n\nMulti Line Comment");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 151 "lex_file.l"
+#line 161 "lex_file.l"
 {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 152 "lex_file.l"
+#line 162 "lex_file.l"
 {
   //printf("YYTEXT %s",yytext);
   if (def_mode)
@@ -1072,7 +1082,7 @@ YY_RULE_SETUP
       init_scope(line_depth);
       printf("Indented to %d tabs\n",line_depth);
       //yyless(0);
-      def_mode=1;
+      def_mode=1;++yylineno;
       return T_IND;
     }
     else
@@ -1096,7 +1106,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 194 "lex_file.l"
+#line 204 "lex_file.l"
 {
   //printf("HERE\n");
   while (peek()!=0)
@@ -1112,187 +1122,187 @@ case YY_STATE_EOF(INITIAL):
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 207 "lex_file.l"
+#line 217 "lex_file.l"
 {printf( "%s ", yytext);return T_EQ;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 208 "lex_file.l"
+#line 218 "lex_file.l"
 {printf( "%s ", yytext);return T_Comma;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 209 "lex_file.l"
+#line 219 "lex_file.l"
 {printf( "%s ", yytext);return T_Del;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 210 "lex_file.l"
+#line 220 "lex_file.l"
 {printf( "%s ", yytext);return T_Pass;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 211 "lex_file.l"
+#line 221 "lex_file.l"
 {printf( "%s ", yytext);return T_Break;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 212 "lex_file.l"
+#line 222 "lex_file.l"
 {printf( "%s ", yytext);return T_Continue;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 213 "lex_file.l"
+#line 223 "lex_file.l"
 {printf("%s ",yytext);return T_Print;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 214 "lex_file.l"
+#line 224 "lex_file.l"
 {printf( "%s ", yytext);return T_Import;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 215 "lex_file.l"
+#line 225 "lex_file.l"
 {printf( "%s ", yytext);return T_From;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 216 "lex_file.l"
+#line 226 "lex_file.l"
 {printf( "%s ", yytext);return T_Range;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 217 "lex_file.l"
+#line 227 "lex_file.l"
 {printf("%s ",yytext);return T_In;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 218 "lex_file.l"
+#line 228 "lex_file.l"
 {printf( "%s", yytext);return T_LP;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 219 "lex_file.l"
+#line 229 "lex_file.l"
 {printf( "%s", yytext);return T_RP;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 220 "lex_file.l"
+#line 230 "lex_file.l"
 {printf( "%s ", yytext);return T_Cln;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 221 "lex_file.l"
+#line 231 "lex_file.l"
 {printf( "%s ", yytext);return T_For;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 222 "lex_file.l"
+#line 232 "lex_file.l"
 {printf( "%s ", yytext);return T_While;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 223 "lex_file.l"
+#line 233 "lex_file.l"
 {printf( "%s ", yytext);return T_Or;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 224 "lex_file.l"
+#line 234 "lex_file.l"
 {printf( "%s ", yytext);return T_And;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 225 "lex_file.l"
+#line 235 "lex_file.l"
 {printf( "%s ", yytext);return T_Not;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 226 "lex_file.l"
+#line 236 "lex_file.l"
 {printf( "%s ", yytext);return T_Lt;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 227 "lex_file.l"
+#line 237 "lex_file.l"
 {printf( "%s ", yytext);return T_Gte;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 228 "lex_file.l"
+#line 238 "lex_file.l"
 {printf( "%s ", yytext);return T_Lte;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 229 "lex_file.l"
+#line 239 "lex_file.l"
 {printf( "%s ", yytext);return T_Gt;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 230 "lex_file.l"
+#line 240 "lex_file.l"
 {printf( "%s ", yytext);return T_Deq;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 231 "lex_file.l"
+#line 241 "lex_file.l"
 {printf( "%s ", yytext);return T_Plus;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 232 "lex_file.l"
+#line 242 "lex_file.l"
 {printf( "%s ", yytext);return T_Minus;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 233 "lex_file.l"
+#line 243 "lex_file.l"
 {printf( "%s ", yytext);return T_Star;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 234 "lex_file.l"
+#line 244 "lex_file.l"
 {printf( "%s ", yytext);return T_Divide;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 235 "lex_file.l"
+#line 245 "lex_file.l"
 {printf( "%s ", yytext);return T_Mod;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 236 "lex_file.l"
+#line 246 "lex_file.l"
 {printf( "%s ", yytext);return T_DDiv;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 237 "lex_file.l"
+#line 247 "lex_file.l"
 {printf( "%s ", yytext);return T_Power;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 238 "lex_file.l"
+#line 248 "lex_file.l"
 {printf( "%s ", yytext);return T_Ls;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 239 "lex_file.l"
+#line 249 "lex_file.l"
 {printf( "%s ", yytext);return T_Rs;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 240 "lex_file.l"
+#line 250 "lex_file.l"
 {printf( "%s ", yytext);return T_True;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 241 "lex_file.l"
+#line 251 "lex_file.l"
 {printf( "%s ", yytext);return T_False;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 242 "lex_file.l"
+#line 252 "lex_file.l"
 {;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 243 "lex_file.l"
+#line 253 "lex_file.l"
 {
                     printf("Matched : %s ", yytext);
                     yylval.data=(symtabnode*)malloc(sizeof(symtabnode));
@@ -1307,38 +1317,38 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 254 "lex_file.l"
+#line 264 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Integer;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 257 "lex_file.l"
+#line 267 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Real;} 
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 260 "lex_file.l"
+#line 270 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 263 "lex_file.l"
+#line 273 "lex_file.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 266 "lex_file.l"
+#line 276 "lex_file.l"
 ECHO;
 	YY_BREAK
-#line 1342 "lex.yy.c"
+#line 1352 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2341,7 +2351,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 266 "lex_file.l"
+#line 276 "lex_file.l"
 
 
 int yywrap(void)

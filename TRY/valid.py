@@ -1,14 +1,23 @@
 f = 0
+import wakawaka
 
 while f < (10):
 	m = 1
 	f = f + 1
 
 # print("m=", m)
+'''
+manasdka
+sdjaknfaskl
+sdjaksdnkasdijla
+dajksbfaksmm;
+djasbdm
+'''
 
 abcdefghijklmnopqrstuvwxyzabcdefghijkl=5
 
 while False:
+	import saminamina
 	pass
 	print("Executed else branch for False condition while loop")
 

@@ -77,6 +77,7 @@
 	{
 		char name[100];
 		int scope;
+		
 	}symtabnode;
 	
 	//will store all the elements and their scopes
@@ -111,7 +112,7 @@
 			printf("%s\t|%d\t\n",symtab[i].name,symtab[i].scope);
 	}  
 
-#line 115 "y.tab.c" /* yacc.c:339  */
+#line 116 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -243,10 +244,10 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 52 "parser_file.y" /* yacc.c:355  */
+#line 53 "parser_file.y" /* yacc.c:355  */
 struct symtabnode* data;
 
-#line 250 "y.tab.c" /* yacc.c:355  */
+#line 251 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -277,7 +278,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 281 "y.tab.c" /* yacc.c:358  */
+#line 282 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -581,15 +582,15 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    67,    68,    71,    74,    75,    76,    79,
-      80,    83,    86,    87,    88,    89,    90,    91,    92,    95,
-      98,   101,   102,   105,   108,   109,   112,   113,   116,   119,
-     122,   123,   124,   127,   128,   129,   130,   131,   132,   133,
-     134,   138,   139,   140,   141,   142,   143,   146,   147,   148,
-     151,   152,   153,   154,   155,   158,   159,   162,   163,   166,
-     167,   168,   169,   170,   171,   174,   175,   178,   179,   180,
-     181,   185,   186,   187,   188,   190,   193,   196,   197,   200,
-     201
+       0,    67,    67,    68,    69,    72,    75,    76,    77,    80,
+      81,    84,    87,    88,    89,    90,    91,    92,    93,    96,
+      99,   102,   103,   106,   109,   110,   113,   114,   117,   120,
+     123,   124,   125,   128,   129,   130,   131,   132,   133,   134,
+     135,   139,   140,   141,   142,   143,   144,   147,   148,   149,
+     152,   153,   154,   155,   156,   159,   160,   163,   164,   167,
+     168,   169,   170,   171,   172,   175,   176,   179,   180,   181,
+     182,   186,   187,   188,   189,   191,   194,   197,   198,   201,
+     202
 };
 #endif
 
@@ -1565,57 +1566,57 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 68 "parser_file.y" /* yacc.c:1646  */
+#line 69 "parser_file.y" /* yacc.c:1646  */
     {printf("\nAccepted Code:Valid\n\n");printTable();exit(0);}
-#line 1571 "y.tab.c" /* yacc.c:1646  */
+#line 1572 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 74 "parser_file.y" /* yacc.c:1646  */
+#line 75 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[0].data->name),(yyvsp[0].data->scope));}
-#line 1577 "y.tab.c" /* yacc.c:1646  */
+#line 1578 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 101 "parser_file.y" /* yacc.c:1646  */
+#line 102 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[0].data->name),(yyvsp[0].data->scope));}
-#line 1583 "y.tab.c" /* yacc.c:1646  */
+#line 1584 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 116 "parser_file.y" /* yacc.c:1646  */
+#line 117 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[-2].data->name),(yyvsp[-2].data->scope));}
-#line 1589 "y.tab.c" /* yacc.c:1646  */
+#line 1590 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 162 "parser_file.y" /* yacc.c:1646  */
+#line 163 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[-4].data->name),(yyvsp[-4].data->scope));}
-#line 1595 "y.tab.c" /* yacc.c:1646  */
+#line 1596 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 163 "parser_file.y" /* yacc.c:1646  */
+#line 164 "parser_file.y" /* yacc.c:1646  */
     {searchele((yyvsp[-4].data->name),(yyvsp[-4].data->scope));}
-#line 1601 "y.tab.c" /* yacc.c:1646  */
+#line 1602 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 181 "parser_file.y" /* yacc.c:1646  */
+#line 182 "parser_file.y" /* yacc.c:1646  */
     {if (searchele((yyvsp[0].data->name),(yyvsp[0].data->scope))==0)
 	printf("\nERROR: %s Not Defined\n",yytext);return 0;}
-#line 1608 "y.tab.c" /* yacc.c:1646  */
+#line 1609 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 188 "parser_file.y" /* yacc.c:1646  */
+#line 189 "parser_file.y" /* yacc.c:1646  */
     {if (searchele((yyvsp[-1].data->name),(yyvsp[-1].data->scope))==0)
 	printf("\nERROR: %s Not Defined\n",yytext);return 0;}
-#line 1615 "y.tab.c" /* yacc.c:1646  */
+#line 1616 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1619 "y.tab.c" /* yacc.c:1646  */
+#line 1620 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1850,6 +1851,6 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 202 "parser_file.y" /* yacc.c:1906  */
+#line 203 "parser_file.y" /* yacc.c:1906  */
 
 

@@ -1577,7 +1577,7 @@ yyreduce:
 
   case 21:
 #line 105 "parser_file.y" /* yacc.c:1646  */
-    {searchele((yyvsp[0].data->name),(yyvsp[0].data->scope));strcpy(symtab[indexy-1].type,"Package");}
+    {searchele((yyvsp[0].data->name),0);strcpy(symtab[indexy-1].type,"Package");}
 #line 1582 "y.tab.c" /* yacc.c:1646  */
     break;
 

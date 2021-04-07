@@ -37,7 +37,7 @@
 
     typedef struct symtabnode
 	  {
-		  char name[100];
+		  char name[100];//has the value
 		  int scope;
     }symtabnode;
 
@@ -164,7 +164,7 @@ digit [0-9]
     if (line_depth>ptr)
     {
       init_scope(line_depth);
-      printf("Indented to %d tabs\n",line_depth);
+      //printf("Indented to %d tabs\n",line_depth);
       return T_IND;
     }
     else
@@ -175,8 +175,8 @@ digit [0-9]
         exit(1);
         return 0;
       }
-      printf("\nDeleting\n");
-      deletescope();
+      //printf("\nDeleting\n");
+      //deletescope();
       yyless(0);
       return T_DED;
     }
