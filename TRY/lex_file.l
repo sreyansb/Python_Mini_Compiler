@@ -9,14 +9,13 @@
     extern YYSTYPE yylval;
 
     int def_mode=1;
-    int eof=1;
 
     static int tabstack[maxscope];
     static int st_ptr=-1;//to keep track of the topmost element in the stack
     
     //stores the details about a symbol.Doesn't store the type because type is run time evaluation in python
     typedef struct sym_node
- {
+ 	{
         char name[100];
         int dec_line;
         int last_line;
@@ -36,13 +35,8 @@
       return tabstack[st_ptr];
     }
 
-    typedef struct symtabnode
-	  {
-		  char name[100];
-		  int scope;
-    }symtabnode;
 
-      //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
+    //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
     static scope scopetable[maxscope];
 
     //when we go into a new scope, we need to initialise the scope and also scopetable of that 
@@ -147,11 +141,11 @@ digit [0-9]
 %%
 "\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
 ["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");yylineno+=countnl(yytext)-1;++yylineno;}
-["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\nMulti Line Comment");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
-["\n"]["]{3}(.|\n)*["]{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\nMulti Line Comment ");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+["\n"]["]{3}(.|\n)*["]{3}["\n"] {printf("\nMulti Line Comment ");yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 ["\n"]+["\t"]* {
   //printf("YYTEXT %s",yytext);
-  if (def_mode)
+ if(def_mode)
  {
     yyless(0);
     def_mode=0;
@@ -167,7 +161,7 @@ digit [0-9]
     if (line_depth>ptr)
     {
       init_scope(line_depth);
-      printf("Indented to %d tabs\n",line_depth);
+      printf("\nIndented to %d tabs ",line_depth);
       //yyless(0);
       def_mode=1;
       return T_IND;
@@ -277,8 +271,8 @@ void yyerror(char* s)
 
 
 int main()
- {
-   yylineno=1;
+{
+  yylineno=1;
   init_scope(0);
   yyparse();
   return 0;

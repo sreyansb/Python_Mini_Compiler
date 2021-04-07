@@ -2,34 +2,34 @@
 import hello
 x=3
 y=2
-lis = [10,20,30,"haha"]#another comment
+lis = [10,20,30,"hello1"]#another comment
 for i in range(10,20):
-	print("ha")
+	print(i)
 	for j in range(10,20):
-		print("he")
-		print("hi")
+		print(j)
+		print("for")
 		while False:
-			print("lol")
-	print("byee")
+			print("oop")
+	print("end")
 '''
 multiline comment
 '''
 while(x<5):
-	print("huhu")
+	print(x)
 	while True:
-		print("truee")
+		print("true")
 	for n in range(3,10):
-		print("heha")
+		print(n)
 		for d in range(3,10):
 			print(d)
 else:
-	print("elsee")
+	print("in else")
 
 
 while True:
-	print("hoohoo")
+	print("True")
 	while False:
-		print("heehhee")
+		print("False")
 		for l in range(3,10):
 			print(l)
 

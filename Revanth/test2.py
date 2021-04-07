@@ -5,9 +5,9 @@ for m in range(10,20):
 	y=100
 	print(y)
 lis = [10,20,30]
-for x in [1,'haha',3]:
+for x in [1,'hello1',3]:
 	print(x)
 	
-'''thisasdfkjbasfdasddf'''
-#hello
-print("haha")
+'''multi lineee'''
+#comment
+print("hello2")
