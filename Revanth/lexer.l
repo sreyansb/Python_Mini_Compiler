@@ -176,7 +176,7 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
 int main()
 {
 	initStack(&indent, 1000);
-   push(&indent, 0);
+   	push(&indent, 0);
 	yyparse();
 	yylex();
 	return 0;
