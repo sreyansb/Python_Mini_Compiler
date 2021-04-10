@@ -10,6 +10,8 @@
 	int yycolumn = 1;
 	int startFlag = 1;
 	
+	FILE *fptr;
+	
 	STACK indent;
 	int def_mode=0;
 	int depth = 1;
@@ -160,12 +162,12 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
 "range" {debug("Range"); return T_Range;}
 "list" {debug("List"); return T_List;}
 
-[-]?[1-9]+{digit}*	{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
-[-]?{digit}*"."{digit}+	{yylval.text = strdup(yytext); debug("Number"); return T_Number;}
+[-]?[1-9]+{digit}*	{strcpy(yylval.text, yytext); debug("Number"); return T_Number;}
+[-]?{digit}*"."{digit}+	{strcpy(yylval.text, yytext); debug("Number"); return T_Number;}
 
-[_a-zA-Z][_a-zA-Z0-9]* {yylval.text = strdup(yytext); debug(yylval.text); return T_ID;}
-\"([^\"\n])*\" {yylval.text = strdup(yytext); debug("String"); return T_String;}
-\'([^\'\n])*\' {yylval.text = strdup(yytext); debug("String"); return T_String;}
+[_a-zA-Z][_a-zA-Z0-9]* {strncpy(yylval.text, yytext, 31); debug(yylval.text); return T_ID;}
+\"([^\"\n])*\" {strcpy(yylval.text, yytext); debug("String"); return T_String;}
+\'([^\'\n])*\' {strcpy(yylval.text, yytext); debug("String"); return T_String;}
 
 {Multiline_comment} {yyless(yyleng-1); yylineno += (count_nl(yytext));debug("Multiline Comment");  }
 {whitespace} ;
@@ -175,8 +177,9 @@ Multiline_comment \'\'\'(.|\n)*\'\'\'\n
   
 int main()
 {
+	fptr = fopen("icg.txt","w");
 	initStack(&indent, 1000);
-   push(&indent, 0);
+	push(&indent, 0);
 	yyparse();
 	yylex();
 	return 0;
