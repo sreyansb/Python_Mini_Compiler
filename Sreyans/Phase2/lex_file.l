@@ -39,7 +39,6 @@
 	  {
 		  char name[100];//has the value
 		  int scope;
-      int value;
     }symtabnode;
 
       //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
@@ -249,9 +248,11 @@ digit [0-9]
                     }
 [1-9]*{digit}+ {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
+  
   yylval.data->scope=-1;printf( "%s", yytext);return T_Integer;}
 [1-9]*{digit}+"."{digit}+ {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
+  
   yylval.data->scope=-1;printf( "%s", yytext);return T_Real;} 
 \"([^\"\n])*\" {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
