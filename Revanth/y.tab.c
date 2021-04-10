@@ -185,7 +185,6 @@
 				}	
 			}
 			printf("\nIdentifier '%s' at line %d Not Declared\n", name, yylineno);
-
 			//Error Recovery
 			insertRecord(type, name, lineNo, scope);
 
@@ -295,7 +294,7 @@
 		}
 	}
 
-#line 299 "y.tab.c"
+#line 298 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -448,7 +447,7 @@ union YYSTYPE
 #line 230 "parser.y"
  char text[100]; int depth; 
 
-#line 452 "y.tab.c"
+#line 451 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -475,7 +474,7 @@ extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
 int yyparse (void);
 
-
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
 
 
 
@@ -851,11 +850,11 @@ static const yytype_int16 yyrline[] =
      289,   290,   291,   292,   293,   294,   295,   296,   297,   298,
      300,   301,   302,   303,   305,   306,   308,   310,   311,   312,
      313,   314,   316,   317,   318,   319,   321,   323,   324,   325,
-     328,   331,   332,   335,   336,   340,   341,   352,   353,   356,
-     356,   357,   357,   359,   359,   362,   364,   365,   366,   369,
-     370,   370,   373,   374,   376,   376,   377,   379,   379,   380,
-     382,   382,   385,   387,   388,   390,   390,   391,   392,   393,
-     395,   395
+     328,   331,   332,   335,   336,   339,   340,   351,   352,   355,
+     355,   356,   356,   358,   358,   361,   363,   364,   365,   368,
+     369,   369,   372,   373,   375,   375,   376,   378,   378,   379,
+     381,   381,   384,   386,   387,   389,   389,   390,   391,   392,
+     394,   394
 };
 #endif
 
@@ -1884,7 +1883,7 @@ yyreduce:
   case 2:
 #line 245 "parser.y"
                 {init();}
-#line 1888 "y.tab.c"
+#line 1887 "y.tab.c"
     break;
 
   case 3:
@@ -1898,214 +1897,144 @@ yyreduce:
 								printSTable();
 								exit(0);
 							}
-#line 1854 "y.tab.c" /* yacc.c:1646  */
+#line 1901 "y.tab.c"
     break;
 
   case 4:
-#line 303 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 1860 "y.tab.c" /* yacc.c:1646  */
+#line 256 "parser.y"
+                    {insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 1907 "y.tab.c"
     break;
 
   case 5:
-#line 304 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 1866 "y.tab.c" /* yacc.c:1646  */
+#line 257 "parser.y"
+                            {insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 1913 "y.tab.c"
     break;
 
   case 6:
-#line 306 "parser.y" /* yacc.c:1646  */
-    {checkList((yyvsp[-3].text), (yylsp[-3]).first_line, currentScope);}
-#line 1872 "y.tab.c" /* yacc.c:1646  */
+#line 259 "parser.y"
+                                     {checkList((yyvsp[-3].text), (yylsp[-3]).first_line, currentScope);}
+#line 1919 "y.tab.c"
     break;
 
   case 7:
-#line 309 "parser.y" /* yacc.c:1646  */
-    {modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 1878 "y.tab.c" /* yacc.c:1646  */
+#line 261 "parser.y"
+            {modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 1925 "y.tab.c"
     break;
 
   case 11:
-#line 314 "parser.y" /* yacc.c:1646  */
-    {/*resetDepth();*/ updateCScope(1);}
-#line 1884 "y.tab.c" /* yacc.c:1646  */
+#line 266 "parser.y"
+                                          {/*resetDepth();*/ updateCScope(1);}
+#line 1931 "y.tab.c"
     break;
 
   case 38:
-#line 345 "parser.y" /* yacc.c:1646  */
-    {checkList((yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 1890 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 42:
-#line 350 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Constant", "True", (yylsp[0]).first_line, currentScope);}
-#line 1896 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 43:
-#line 351 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Constant", "False", (yylsp[0]).first_line, currentScope);}
-#line 1902 "y.tab.c" /* yacc.c:1646  */
+#line 297 "parser.y"
+                               {checkList((yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 1937 "y.tab.c"
     break;
 
   case 46:
-#line 356 "parser.y" /* yacc.c:1646  */
-    {insertRecord("PackageName", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 1908 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 51:
-#line 363 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 1914 "y.tab.c" /* yacc.c:1646  */
+#line 308 "parser.y"
+                            {insertRecord("PackageName", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 1943 "y.tab.c"
     break;
 
   case 52:
-#line 364 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 1920 "y.tab.c" /* yacc.c:1646  */
+#line 316 "parser.y"
+                                   {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
+#line 1949 "y.tab.c"
     break;
 
   case 53:
-#line 365 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 1926 "y.tab.c" /* yacc.c:1646  */
+#line 317 "parser.y"
+                                              {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
+#line 1955 "y.tab.c"
     break;
 
   case 54:
-#line 366 "parser.y" /* yacc.c:1646  */
-    {insertRecord("ListTypeID", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 1932 "y.tab.c" /* yacc.c:1646  */
+#line 318 "parser.y"
+                                                {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
+#line 1961 "y.tab.c"
+    break;
+
+  case 55:
+#line 319 "parser.y"
+                                                {insertRecord("ListTypeID", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
+#line 1967 "y.tab.c"
+    break;
+
+  case 69:
+#line 355 "parser.y"
+                                     {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
+#line 1973 "y.tab.c"
+    break;
+
+  case 71:
+#line 356 "parser.y"
+                               {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
+#line 1979 "y.tab.c"
     break;
 
   case 72:
-#line 403 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 1938 "y.tab.c" /* yacc.c:1646  */
+#line 357 "parser.y"
+                {checkList((yyvsp[-4].text), (yylsp[-4]).first_line, currentScope);}
+#line 1985 "y.tab.c"
     break;
 
-  case 74:
-#line 404 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 1944 "y.tab.c" /* yacc.c:1646  */
+  case 73:
+#line 358 "parser.y"
+                                    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
+#line 1991 "y.tab.c"
     break;
 
-  case 75:
-#line 405 "parser.y" /* yacc.c:1646  */
-    {
-			checkList((yyvsp[-4].text), (yylsp[-4]).first_line, currentScope);
-		}
-#line 1952 "y.tab.c" /* yacc.c:1646  */
+  case 80:
+#line 369 "parser.y"
+                  {initNewTable((yyvsp[0].depth)); updateCScope((yyvsp[0].depth));}
+#line 1997 "y.tab.c"
     break;
 
-  case 76:
-#line 408 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 1958 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 83:
-#line 420 "parser.y" /* yacc.c:1646  */
-    {initNewTable((yyvsp[0].depth)); updateCScope((yyvsp[0].depth));}
-#line 1964 "y.tab.c" /* yacc.c:1646  */
+  case 81:
+#line 369 "parser.y"
+                                                                                                     {updateCScope(currentScope-1); }
+#line 2003 "y.tab.c"
     break;
 
   case 84:
-#line 420 "parser.y" /* yacc.c:1646  */
-    {updateCScope(currentScope-1); }
-#line 1970 "y.tab.c" /* yacc.c:1646  */
+#line 375 "parser.y"
+            {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 2009 "y.tab.c"
     break;
 
   case 87:
-#line 426 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 1);}
-#line 1976 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 89:
-#line 427 "parser.y" /* yacc.c:1646  */
-    {clearArgsList();}
-#line 1982 "y.tab.c" /* yacc.c:1646  */
+#line 378 "parser.y"
+                         {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 2015 "y.tab.c"
     break;
 
   case 90:
-#line 429 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 0);}
-#line 1988 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 92:
-#line 430 "parser.y" /* yacc.c:1646  */
-    {addToList("",0); clearArgsList();}
-#line 1994 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 93:
-#line 432 "parser.y" /* yacc.c:1646  */
-    {insertRecord("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2000 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 94:
-#line 432 "parser.y" /* yacc.c:1646  */
-    {clearArgsList();}
-#line 2006 "y.tab.c" /* yacc.c:1646  */
+#line 381 "parser.y"
+                      {insertRecord("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 2021 "y.tab.c"
     break;
 
   case 95:
-#line 435 "parser.y" /* yacc.c:1646  */
-    {
-		 		/*char* str = (char *)malloc(102*sizeof(char));
-			 	strcpy(str,"[");
-			 	strcat(str, argsList);
-			 	char close[2];
-			 	strcpy(close,"]");
-			 	strcat(str, close);
-			 	clearArgsList(); 
-			 	free(str);*/
-			 }
-#line 2021 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 98:
-#line 449 "parser.y" /* yacc.c:1646  */
-    {modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 1);}
-#line 2027 "y.tab.c" /* yacc.c:1646  */
+#line 389 "parser.y"
+                 {modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 2027 "y.tab.c"
     break;
 
   case 100:
-#line 450 "parser.y" /* yacc.c:1646  */
-    {addToList((yyvsp[0].text), 1);}
-#line 2033 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 101:
-#line 450 "parser.y" /* yacc.c:1646  */
-    {clearArgsList();}
-#line 2039 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 102:
-#line 451 "parser.y" /* yacc.c:1646  */
-    {addToList((yyvsp[0].text), 1);}
-#line 2045 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 103:
-#line 451 "parser.y" /* yacc.c:1646  */
-    {clearArgsList();}
-#line 2051 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 105:
-#line 454 "parser.y" /* yacc.c:1646  */
-    {modifyRecordID("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2057 "y.tab.c" /* yacc.c:1646  */
+#line 394 "parser.y"
+                 {modifyRecordID("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
+#line 2033 "y.tab.c"
     break;
 
 
-#line 2061 "y.tab.c" /* yacc.c:1646  */
+#line 2037 "y.tab.c"
+
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2342,7 +2271,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 397 "parser.y"
+#line 396 "parser.y"
 
 
 void yyerror(const char *msg)
