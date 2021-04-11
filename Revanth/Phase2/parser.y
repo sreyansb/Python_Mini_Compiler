@@ -489,8 +489,8 @@
 	{
 		FILE *fp;
 		char *filename;
-		filename = "TAC.tsv";
-		fp=fopen(filename,"w+");
+		filename = "tac_quadruple.csv";
+		fp = fopen(filename,"w+");
 		printf("\nWriting to file\n");
 		int i = 0;
 		fprintf(fp, "Line No\tOp\tArg1\tArg2\tRes\n");
@@ -503,7 +503,7 @@
 		}
 		fclose(fp);
 
-		printf("\n %sfile created",filename);
+		printf("\n%s file created\n",filename);
 	}
 	
 %}
@@ -536,6 +536,7 @@ StartDebugger : {init();}
 								printf("**************************************************************************\n");
 								printSTable();// freeAll();  
 								printQuads();
+								createCSV();
 								exit(0);
 							} ;
 
@@ -568,7 +569,7 @@ term : T_ID {
      | list_index ;
 
 StartParse : T_NL StartParse {$$ = $2;}
-			| finalStatements {/*resetDepth();*/ updateCScope(1);} StartParse {/*char *temp[200]; 				//sprintf(temp, "%s%s", $<node->code>1, $<node->code>2); $<node->code>$ = strdup(temp); 
+			| finalStatements {/*resetDepth();*/ updateCScope(1);} StartParse {/*char *temp[200]; //sprintf(temp, "%s%s", $<node->code>1, $<node->code>2); $<node->code>$ = strdup(temp); 
 			*/} 
 			| T_EndOfFile {$$ = NULL;};
 
@@ -682,7 +683,7 @@ import_stmt : T_Import T_ID {insertRecord("PackageName", $<text>2, @2.first_line
 
 pass_stmt   : T_Pass {$$ = NULL;};
 break_stmt  : T_Break {fprintf(fptr, "goto L%d\n",lIndex);$$ = NULL;};
-return_stmt : T_Return {$$ = NULL;};
+return_stmt : T_Return {$$ = NULL;}
 			| T_Return term {$$ = NULL;};
 
 assign_stmt : T_ID T_EQL func_call {insertRecord("Identifier", $<text>1, @1.first_line, currentScope);
