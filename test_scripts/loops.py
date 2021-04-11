@@ -10,7 +10,7 @@ abcdefghijklmnopqrstuvwxyzabcdefghijkl=5
 
 while False:
 	pass
-		print("Executed else branch for False condition while loop")
+	print("Executed else branch for False condition while loop")
 
 while True:
 	print("Inside while true loop")

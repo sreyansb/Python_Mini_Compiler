@@ -157,14 +157,14 @@ digit [0-9]
     return T_NL;
   }
   int line_depth=finddepth(yytext);
-  //printf("%d\n",line_depth);
+  printf("LD %d\n",line_depth);
   int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
     if (line_depth>ptr)
     {
       init_scope(line_depth);
-      //printf("Indented to %d tabs\n",line_depth);
+      printf("Indented to %d tabs\n",line_depth);
       return T_IND;
     }
     else
@@ -175,15 +175,15 @@ digit [0-9]
         exit(1);
         return 0;
       }
-      //printf("\nDeleting\n");
-      //deletescope();
+      printf("\nDeleting\n");
+      deletescope();
       yyless(0);
       return T_DED;
     }
   }
   printf("\n");
   def_mode=1;
-  
+
   ++yylineno; 
 }
 <<EOF>> {
