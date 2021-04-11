@@ -92,7 +92,7 @@
 		int step;
 		int leng;
 		char addr[32];
-		char* code;
+		char code[2000];
 	}nodeyacc;
 	
 	//will store all the elements and their scopes
@@ -637,9 +637,9 @@ static const yytype_uint16 yyrline[] =
      256,   264,   270,   275,   282,   288,   294,   299,   304,   309,
      314,   319,   328,   334,   340,   345,   352,   357,   373,   381,
      382,   385,   386,   387,   388,   389,   392,   399,   408,   414,
-     420,   426,   436,   442,   448,   454,   462,   468,   469,   472,
-     504,   529,   554,   558,   566,   573,   582,   587,   600,   610,
-     615,   626,   632,   640
+     420,   426,   436,   442,   448,   454,   462,   468,   473,   476,
+     507,   532,   557,   561,   569,   576,   585,   590,   603,   613,
+     618,   629,   635,   642
 };
 #endif
 
@@ -1626,7 +1626,7 @@ yyreduce:
         case 2:
 #line 115 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
-                        (yyval.node->code) = strdup((yyvsp[-1].node->code));
+                        strcpy((yyval.node->code),(yyvsp[-1].node->code));
                         printf("\nAccepted Code : Valid\n\n");printTable();
                         makequads((yyval.node->code));}
 #line 1633 "y.tab.c" /* yacc.c:1646  */
@@ -1635,7 +1635,7 @@ yyreduce:
   case 3:
 #line 121 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
-                        (yyval.node->code) = strdup((yyvsp[0].node->code));}
+                        strcpy((yyval.node->code),(yyvsp[0].node->code));}
 #line 1640 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1643,7 +1643,7 @@ yyreduce:
 #line 123 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
                        strcat((yyvsp[-1].node->code),(yyvsp[0].node->code));
-					   (yyval.node->code)=strdup((yyvsp[-1].node->code));
+					   strcpy((yyval.node->code),(yyvsp[-1].node->code));
                     	}
 #line 1649 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1651,7 +1651,7 @@ yyreduce:
   case 5:
 #line 127 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
-			  (yyval.node->code)=strdup("");
+			  strcpy((yyval.node->code),"");
               }
 #line 1657 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1661,7 +1661,7 @@ yyreduce:
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
                 temp_gen((yyval.node->addr));
 				snprintf(code_temp,4200,"(%s=%s)\n",(yyval.node->addr),(yyvsp[0].data->name));
-				(yyval.node->code) = strdup(code_temp);
+				strcpy((yyval.node->code),code_temp);
 				//strcpy($<node->code>$,code_temp);
 				(yyval.node->leng)=strlen((yyvsp[0].data->name));
 				(yyval.node->value)=(strcmp((yyvsp[0].data->name),"\"\"") && strcmp((yyvsp[0].data->name),"\'\'"));
@@ -1676,7 +1676,7 @@ yyreduce:
             (yyval.node)=malloc(sizeof(struct nodeyacc));
 			strcpy((yyval.node->addr),(yyvsp[0].data->name));
 			(yyval.node->value)=(yyvsp[0].node->value);
-			(yyval.node->code) = strdup((yyvsp[0].data->name));
+			strcpy((yyval.node->code),(yyvsp[0].data->name));
 			
 			}
 #line 1683 "y.tab.c" /* yacc.c:1646  */
@@ -1688,7 +1688,7 @@ yyreduce:
 			  (yyval.node->value)=atoi((yyvsp[0].data->name));
 			  temp_gen((yyval.node->addr));
 			  snprintf(code_temp,2000,"(%s = %s)\n",(yyval.node->addr),(yyvsp[0].data->name));
-			  (yyval.node->code) = strdup(code_temp);
+			  strcpy((yyval.node->code),code_temp);
 			  
 			  }
 #line 1695 "y.tab.c" /* yacc.c:1646  */
@@ -1701,7 +1701,7 @@ yyreduce:
 			  	(yyval.node->value)=atoi((yyvsp[0].data->name));
 			  	temp_gen((yyval.node->addr));
 			  	snprintf(code_temp,2000,"(%s = %s)\n",(yyval.node->addr),(yyvsp[0].data->name));
-			  	(yyval.node->code) = strdup(code_temp);
+			  	strcpy((yyval.node->code),code_temp);
 			  }
 #line 1707 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1709,14 +1709,14 @@ yyreduce:
   case 10:
 #line 166 "parser_file2.y" /* yacc.c:1646  */
     { (yyval.node)=malloc(sizeof(struct nodeyacc));
-					(yyval.node->code)=strdup((yyvsp[0].node->code));}
+					strcpy((yyval.node->code),(yyvsp[0].node->code));}
 #line 1714 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 168 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
-					(yyval.node->code)=strdup((yyvsp[0].node->code));}
+					strcpy((yyval.node->code),(yyvsp[0].node->code));}
 #line 1721 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1724,7 +1724,7 @@ yyreduce:
 #line 172 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1730 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1733,7 +1733,7 @@ yyreduce:
 #line 178 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1739 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1742,7 +1742,7 @@ yyreduce:
 #line 182 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1748 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1751,7 +1751,7 @@ yyreduce:
 #line 186 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1757 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1760,7 +1760,7 @@ yyreduce:
 #line 190 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1766 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1769,7 +1769,7 @@ yyreduce:
 #line 194 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1775 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1778,7 +1778,7 @@ yyreduce:
 #line 198 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1784 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1787,7 +1787,7 @@ yyreduce:
 #line 202 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				}
 #line 1793 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1796,7 +1796,7 @@ yyreduce:
 #line 208 "parser_file2.y" /* yacc.c:1646  */
     {
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup("PASS\n");
+				strcpy((yyval.node->code),"PASS\n");
 			}
 #line 1802 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1807,7 +1807,7 @@ yyreduce:
 				if (searchele((yyvsp[0].data->name),(yyvsp[0].data->scope))==0)
 					{printf("Invalid Code\n");exit(0);}
 				(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup("DELETE\n");
+				strcpy((yyval.node->code),"DELETE\n");
 			}
 #line 1813 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1817,7 +1817,7 @@ yyreduce:
     {
 					searchele((yyvsp[0].data->name),(yyvsp[0].data->scope));
 					(yyval.node)=malloc(sizeof(struct nodeyacc));
-					(yyval.node->code)=strdup("IMPORT\n");
+					strcpy((yyval.node->code),"IMPORT\n");
 					}
 #line 1823 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1825,7 +1825,7 @@ yyreduce:
   case 27:
 #line 237 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
-				(yyval.node->code)=strdup("BREAK\n");
+				strcpy((yyval.node->code),"BREAK\n");
 			  }
 #line 1831 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1833,7 +1833,7 @@ yyreduce:
   case 28:
 #line 240 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
-				  (yyval.node->code)=strdup("CONTINUE\n");
+				  strcpy((yyval.node->code),"CONTINUE\n");
 			    }
 #line 1839 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1845,7 +1845,7 @@ yyreduce:
 								(yyval.node)=malloc(sizeof(struct nodeyacc));
 								snprintf(temp,3000,"%s=%s\n",(yyvsp[-2].data->name),(yyvsp[0].node->addr));//generate function
 								strcat((yyvsp[0].node->code),temp);
-								(yyval.node->code)=strdup((yyvsp[0].node->code));
+								strcpy((yyval.node->code),(yyvsp[0].node->code));
 								(yyvsp[-2].node->value)=(yyvsp[0].node->value);
 								(yyval.node->value)=(yyvsp[0].node->value);
 								}
@@ -1858,7 +1858,7 @@ yyreduce:
 										snprintf(code_temp,4200,"PRINT %s\n",(yyvsp[-1].node->addr));
 										(yyval.node)=malloc(sizeof(struct nodeyacc));
 										strcat((yyvsp[-1].node->code),code_temp);
-										(yyval.node->code)=(yyvsp[-1].node->code);
+										strcpy((yyval.node->code),(yyvsp[-1].node->code));
 									   }
 #line 1864 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1868,7 +1868,7 @@ yyreduce:
     {
 				  (yyval.node)=malloc(sizeof(struct nodeyacc));
 				  (yyval.node->value)=(yyvsp[0].node->value);
-				  (yyval.node->code)=strdup((yyvsp[0].node->code));
+				  strcpy((yyval.node->code),(yyvsp[0].node->code));
 				  strcpy((yyval.node->addr),(yyvsp[0].node->addr));
 				  }
 #line 1875 "y.tab.c" /* yacc.c:1646  */
@@ -1878,7 +1878,7 @@ yyreduce:
 #line 270 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 				  (yyval.node->value)=(yyvsp[0].node->value);
-				  (yyval.node->code)=strdup((yyvsp[0].node->code));
+				  strcpy((yyval.node->code),(yyvsp[0].node->code));
 				  strcpy((yyval.node->addr),(yyvsp[0].node->addr));
 				  }
 #line 1885 "y.tab.c" /* yacc.c:1646  */
@@ -1888,7 +1888,7 @@ yyreduce:
 #line 275 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 				  (yyval.node->value)=(yyvsp[0].node->value);
-				  (yyval.node->code)=strdup((yyvsp[0].node->code));
+				  strcpy((yyval.node->code),(yyvsp[0].node->code));
 				  strcpy((yyval.node->addr),(yyvsp[0].node->addr));
 				  }
 #line 1895 "y.tab.c" /* yacc.c:1646  */
@@ -1899,7 +1899,7 @@ yyreduce:
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 									temp_gen((yyval.node->addr));//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
 									snprintf(code_temp,4200,"%s=%s+%s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-									(yyval.node->code) = strdup(code_temp);
+									strcpy((yyval.node->code),code_temp);
 									(yyval.node->value)=(yyvsp[-2].node->value)+(yyvsp[0].node->value);
 									}
 #line 1906 "y.tab.c" /* yacc.c:1646  */
@@ -1910,7 +1910,7 @@ yyreduce:
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 									temp_gen((yyval.node->addr));//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope
 									snprintf(code_temp,4200,"%s=%s-%s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-									(yyval.node->code) = strdup(code_temp);
+									strcpy((yyval.node->code),code_temp);
 									(yyval.node->value)=(yyvsp[-2].node->value)-(yyvsp[0].node->value);
 									}
 #line 1917 "y.tab.c" /* yacc.c:1646  */
@@ -1920,7 +1920,7 @@ yyreduce:
 #line 294 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));temp_gen((yyval.node->addr));//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope
 									snprintf(code_temp,4200,"%s=%s*%s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-									(yyval.node->code) = strdup(code_temp);
+									strcpy((yyval.node->code),code_temp);
 									(yyval.node->value)=(yyvsp[-2].node->value)*(yyvsp[0].node->value);
 									}
 #line 1927 "y.tab.c" /* yacc.c:1646  */
@@ -1930,7 +1930,7 @@ yyreduce:
 #line 299 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));temp_gen((yyval.node->addr));//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
 									snprintf(code_temp,4200,"%s=%s/%s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-									(yyval.node->code) = strdup(code_temp);
+									strcpy((yyval.node->code),code_temp);
 									(yyval.node->value)=(yyvsp[-2].node->value)/(yyvsp[0].node->value);
 									}
 #line 1937 "y.tab.c" /* yacc.c:1646  */
@@ -1940,7 +1940,7 @@ yyreduce:
 #line 304 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));temp_gen((yyval.node->addr));//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
 									snprintf(code_temp,4200,"%s=%s//%s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-									(yyval.node->code) = strdup(code_temp);
+									strcpy((yyval.node->code),code_temp);
 									(yyval.node->value)=(yyvsp[-2].node->value)/(yyvsp[0].node->value);
 									}
 #line 1947 "y.tab.c" /* yacc.c:1646  */
@@ -1950,7 +1950,7 @@ yyreduce:
 #line 309 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));temp_gen((yyval.node->addr));//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
 									snprintf(code_temp,4200,"%s=%s%%%s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-									(yyval.node->code) = strdup(code_temp);
+									strcpy((yyval.node->code),code_temp);
 									(yyval.node->value)=(yyvsp[-2].node->value)%(yyvsp[0].node->value);
 									}
 #line 1957 "y.tab.c" /* yacc.c:1646  */
@@ -1960,7 +1960,7 @@ yyreduce:
 #line 314 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 							(yyval.node->value)=(yyvsp[-1].node->value);
-							(yyval.node->code) = strdup((yyvsp[-1].node->code));
+							strcpy((yyval.node->code),(yyvsp[-1].node->code));
 							strcpy((yyval.node->addr),(yyvsp[-1].node->addr));
 							}
 #line 1967 "y.tab.c" /* yacc.c:1646  */
@@ -1972,7 +1972,7 @@ yyreduce:
 				 
 				 (yyval.node)=malloc(sizeof(struct nodeyacc));
 				 (yyval.node->value)=(yyvsp[0].node->value);
-				 (yyval.node->code)=strdup((yyvsp[0].node->code));
+				 strcpy((yyval.node->code),(yyvsp[0].node->code));
 				 strcpy((yyval.node->addr),(yyvsp[0].node->addr));
 				 }
 #line 1979 "y.tab.c" /* yacc.c:1646  */
@@ -1984,7 +1984,7 @@ yyreduce:
 								(yyval.node->value)=(yyvsp[-2].node->value)||(yyvsp[0].node->value);
 								temp_gen((yyval.node->addr));
 								snprintf(code_temp,4200,"%s=%s OR %s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-								(yyval.node->code)=strdup(code_temp);
+								strcpy((yyval.node->code),code_temp);
 								}
 #line 1990 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1995,7 +1995,7 @@ yyreduce:
 								(yyval.node->value)=(yyvsp[-2].node->value)&&(yyvsp[0].node->value);
 								temp_gen((yyval.node->addr));
 								snprintf(code_temp,4200,"%s=%s AND %s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[0].node->addr));
-								(yyval.node->code)=strdup(code_temp);
+								strcpy((yyval.node->code),code_temp);
 								}
 #line 2001 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2004,7 +2004,7 @@ yyreduce:
 #line 340 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 				(yyval.node->value)=(yyvsp[0].node->value);
-				(yyval.node->code) = strdup((yyvsp[0].node->code));
+				strcpy((yyval.node->code),(yyvsp[0].node->code));
 				strcpy((yyval.node->addr),(yyvsp[0].node->addr));
 				}
 #line 2011 "y.tab.c" /* yacc.c:1646  */
@@ -2016,7 +2016,7 @@ yyreduce:
 						(yyval.node->value)=!((yyvsp[0].node->value));
 					   temp_gen((yyval.node->addr));
 					   snprintf(code_temp,4200,"%s=NOT(%s)\n",(yyval.node->addr),(yyvsp[0].node->addr));
-					   (yyval.node->code) = strdup(code_temp);
+					   strcpy((yyval.node->code),code_temp);
 					   //strncpy($<code>$,code_temp,1999);
 						}
 #line 2023 "y.tab.c" /* yacc.c:1646  */
@@ -2026,7 +2026,7 @@ yyreduce:
 #line 352 "parser_file2.y" /* yacc.c:1646  */
     { (yyval.node)=malloc(sizeof(struct nodeyacc));
 							(yyval.node->value)=((yyvsp[-1].node->value));
-							(yyval.node->code)=strdup((yyvsp[-1].node->code));
+							strcpy((yyval.node->code),(yyvsp[-1].node->code));
 							strcpy((yyval.node->addr),(yyvsp[-2].node->addr));
 							}
 #line 2033 "y.tab.c" /* yacc.c:1646  */
@@ -2046,7 +2046,7 @@ yyreduce:
 										case 5:{(yyval.node->value)=((yyvsp[-2].node->value) >= (yyvsp[0].node->value));break;}
 									}
 									snprintf(temp,3000,"%s=%s %s %s\n",(yyval.node->addr),(yyvsp[-2].node->addr),(yyvsp[-1].node->code),(yyvsp[0].node->addr));
-									(yyval.node->code)=strdup(temp);
+									strcpy((yyval.node->code),temp);
 									}
 #line 2052 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2056,7 +2056,7 @@ yyreduce:
     {
 			(yyval.node)=malloc(sizeof(struct nodeyacc));
 			(yyval.node->value)=(yyvsp[0].node->value);
-			(yyval.node->code) = strdup((yyvsp[0].node->code));
+			strcpy((yyval.node->code),(yyvsp[0].node->code));
 			//strcpy($<code>$,$<code>1);
 			strcpy((yyval.node->addr),(yyvsp[0].node->addr));
 			
@@ -2066,43 +2066,43 @@ yyreduce:
 
   case 49:
 #line 381 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->value)=1;(yyval.node->code)=strdup("TRUE\n");}
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->value)=1;strcpy((yyval.node->code),"TRUE\n");}
 #line 2071 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
 #line 382 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->value)=0;(yyval.node->code)=strdup("FALSE\n");}
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->value)=0;strcpy((yyval.node->code),"FALSE\n");}
 #line 2077 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
 #line 385 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup("<");(yyval.node->value)=1;}
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),"<");(yyval.node->value)=1;}
 #line 2083 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
 #line 386 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup(">");(yyval.node->value)=2;}
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),">");(yyval.node->value)=2;}
 #line 2089 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
 #line 387 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup("==");(yyval.node->value)=3;}
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),"==");(yyval.node->value)=3;}
 #line 2095 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
 #line 388 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup("<=");(yyval.node->value)=4;}
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),"<=");(yyval.node->value)=4;}
 #line 2101 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
 #line 389 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup(">=");(yyval.node->value)=5;}
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),">=");(yyval.node->value)=5;}
 #line 2107 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2113,7 +2113,7 @@ yyreduce:
 				 (yyval.node->value)=0;
 				 temp_gen((yyval.node->addr));
 				 snprintf(code_temp,4200,"%s = []\n",(yyval.node->addr));
-				 (yyval.node->code)=strdup(code_temp);
+				 strcpy((yyval.node->code),code_temp);
 				 }
 #line 2119 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2125,7 +2125,7 @@ yyreduce:
 					  temp_gen((yyval.node->addr));
 					  (yyval.node->value)=(yyvsp[-1].node->leng);
 					  snprintf(code_temp,4200,"%s = [%s]\n",(yyval.node->addr),(yyvsp[-1].node->code));
-					  (yyval.node->code)=strdup(code_temp);
+					  strcpy((yyval.node->code),code_temp);
 					  }
 #line 2131 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2136,7 +2136,7 @@ yyreduce:
 						(yyval.node)=malloc(sizeof(struct nodeyacc));
 						(yyval.node->leng)=(yyvsp[0].node->leng)+1;
 						snprintf(code_temp,4200,"%s%s",(yyvsp[-1].node->code),(yyvsp[0].node->code));
-						(yyval.node->code)=strdup(code_temp);
+						strcpy((yyval.node->code),code_temp);
 					 }
 #line 2142 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2147,7 +2147,7 @@ yyreduce:
 						(yyval.node)=malloc(sizeof(struct nodeyacc));
 						(yyval.node->leng)=(yyvsp[0].node->leng)+1;
 						snprintf(code_temp,4200,"%s%s",(yyvsp[-1].data->name),(yyvsp[0].node->code));
-						(yyval.node->code)=strdup(code_temp);
+						strcpy((yyval.node->code),code_temp);
 					 }
 #line 2153 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2158,7 +2158,7 @@ yyreduce:
 						(yyval.node)=malloc(sizeof(struct nodeyacc));
 						(yyval.node->leng)=(yyvsp[0].node->leng)+1;
 						snprintf(code_temp,4200,"%s%s",(yyvsp[-1].data->name),(yyvsp[0].node->code));
-						(yyval.node->code)=strdup(code_temp);
+						strcpy((yyval.node->code),code_temp);
 					 }
 #line 2164 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2171,7 +2171,7 @@ yyreduce:
 				 (yyval.node)=malloc(sizeof(struct nodeyacc));
 				 (yyval.node->leng)=(yyvsp[0].node->leng)+1;
 				 snprintf(code_temp,4200,"%s%s",(yyvsp[-1].data->name),(yyvsp[0].node->code));
-				 (yyval.node->code)=strdup(code_temp);
+				 strcpy((yyval.node->code),code_temp);
 				 }
 #line 2177 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2182,7 +2182,7 @@ yyreduce:
 								(yyval.node)=malloc(sizeof(struct nodeyacc));
 								(yyval.node->leng)=(yyvsp[-1].node->leng)+1;
 								snprintf(code_temp,4200,",%s%s",(yyvsp[-1].data->name),(yyvsp[0].node->code));
-								(yyval.node->code)=strdup(code_temp);
+								strcpy((yyval.node->code),code_temp);
 					 		 }
 #line 2188 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2193,7 +2193,7 @@ yyreduce:
 								(yyval.node)=malloc(sizeof(struct nodeyacc));
 								(yyval.node->leng)=(yyvsp[-1].node->leng)+1;
 								snprintf(code_temp,4200,",%s%s",(yyvsp[-1].data->name),(yyvsp[0].node->code));
-								(yyval.node->code)=strdup(code_temp);
+								strcpy((yyval.node->code),code_temp);
 					 		 }
 #line 2199 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2204,7 +2204,7 @@ yyreduce:
 								(yyval.node)=malloc(sizeof(struct nodeyacc));
 								(yyval.node->leng)=(yyvsp[-1].node->leng)+1;
 								snprintf(code_temp,4200,",%s%s",(yyvsp[-1].data->name),(yyvsp[0].node->code));
-								(yyval.node->code)=strdup(code_temp);
+								strcpy((yyval.node->code),code_temp);
 					 		  }
 #line 2210 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2217,7 +2217,7 @@ yyreduce:
 							(yyval.node)=malloc(sizeof(struct nodeyacc));
 							(yyval.node->leng)=(yyvsp[-1].node->leng)+1;
 							snprintf(code_temp,4200,",%s%s",(yyvsp[-1].data->name),(yyvsp[0].node->code));
-							(yyval.node->code)=strdup(code_temp);
+							strcpy((yyval.node->code),code_temp);
 						 }
 #line 2223 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2227,30 +2227,34 @@ yyreduce:
     {
 			  (yyval.node)=malloc(sizeof(struct nodeyacc));
 			  (yyval.node->leng)=0;
-			  (yyval.node->code)=strdup("");
+			  strcpy((yyval.node->code),"");
 			  }
 #line 2233 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
 #line 468 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup((yyvsp[0].node->code));}
-#line 2239 "y.tab.c" /* yacc.c:1646  */
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),(yyvsp[0].node->code));
+				printf("\n***************\n");
+				printf("%s",(yyvsp[0].node->code));
+				printf("\n***************\n");
+				}
+#line 2243 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 469 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup((yyvsp[0].node->code));}
-#line 2245 "y.tab.c" /* yacc.c:1646  */
+#line 473 "parser_file2.y" /* yacc.c:1646  */
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),(yyvsp[0].node->code));}
+#line 2249 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 472 "parser_file2.y" /* yacc.c:1646  */
+#line 476 "parser_file2.y" /* yacc.c:1646  */
     {
 													searchele((yyvsp[-4].data->name),(yyvsp[-4].data->scope));
 													snprintf(code_temp,4200,"%s = %d\n",(yyvsp[-4].data->name),(yyvsp[-2].node->start));//make the initial value
 													(yyval.node)=malloc(sizeof(struct nodeyacc));
-													(yyval.node->code)=strdup(code_temp);
+													strcpy((yyval.node->code),code_temp);
 
 													char labelif[10];char labelb[10];//labels for if and true block
 													label_gen(labelif);
@@ -2262,7 +2266,6 @@ yyreduce:
 													snprintf(temp,3000,"%s : %s=(%s < %d)\nIF %s GOTO %s\n",labelif,tempcre,(yyvsp[-4].data->name),(yyvsp[-2].node->end),tempcre,labelb);
 													//printf("\nLABEL B : %s",labelb);
 													strcat((yyval.node->code),temp);
-													
 
 													//print the loop block
 													snprintf(temp,3000,"%s : %s",labelb,(yyvsp[0].node->code));
@@ -2274,18 +2277,18 @@ yyreduce:
 													snprintf(temp,3000,"%s=%s+%d\n%s=%s\nGOTO %s\n",tempinc,(yyvsp[-4].data->name),(yyvsp[-2].node->step),(yyvsp[-4].data->name),tempinc,labelif);
 													//printf("\nRANGE\n%s\n",$<node->code>$);
 													strcat((yyval.node->code),temp);
-													printf("\nRANGE : \n %s \nFINISHED\n",(yyval.node->code));
+													//printf("\nRANGE : \n %s \nFINISHED\n",$<node->code>$);
 													//printf("\nDRANGE : \n %s \nDFINISHED\n",$<node->code>$);
 													}
-#line 2281 "y.tab.c" /* yacc.c:1646  */
+#line 2284 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 504 "parser_file2.y" /* yacc.c:1646  */
+#line 507 "parser_file2.y" /* yacc.c:1646  */
     {	searchele((yyvsp[-4].data->name),(yyvsp[-4].data->scope));
 													snprintf(code_temp,4200,"%s\n%s = %s\n",(yyvsp[-2].node->code),(yyvsp[-4].data->name),(yyvsp[-2].node->addr));
 													(yyval.node)=malloc(sizeof(struct nodeyacc));
-													(yyval.node->code)=strdup(code_temp);
+													strcpy((yyval.node->code),code_temp);
 
 													char labelif[10];char labelb[10];//labels for if and true block
 													label_gen(labelif);
@@ -2304,17 +2307,17 @@ yyreduce:
 													temp_gen(tempinc);
 													snprintf(temp,3000,"%s=%s+1\n%s=%s\nGOTO %s\n",tempinc,(yyvsp[-4].data->name),(yyvsp[-4].data->name),tempinc,labelif);
 													strcat((yyval.node->code),temp);
-													printf("\n%s\n",(yyval.node->code));															
+													//printf("\n%s\n",$<node->code>$);															
 													}
-#line 2310 "y.tab.c" /* yacc.c:1646  */
+#line 2313 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 529 "parser_file2.y" /* yacc.c:1646  */
+#line 532 "parser_file2.y" /* yacc.c:1646  */
     {		searchele((yyvsp[-4].data->name),(yyvsp[-4].data->scope));
 													snprintf(code_temp,4200,"%s\n%s = %s\n",(yyvsp[-2].node->code),(yyvsp[-4].data->name),(yyvsp[-2].node->addr));
 													(yyval.node)=malloc(sizeof(struct nodeyacc));
-													(yyval.node->code)=strdup(code_temp);
+													strcpy((yyval.node->code),code_temp);
 
 													char labelif[10];char labelb[10];//labels for if and true block
 													label_gen(labelif);
@@ -2333,20 +2336,20 @@ yyreduce:
 													strcat((yyval.node->code),temp);
 																								
 													}
-#line 2337 "y.tab.c" /* yacc.c:1646  */
+#line 2340 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 554 "parser_file2.y" /* yacc.c:1646  */
+#line 557 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 									(yyval.node->start)=0;
 									(yyval.node->end)=atoi((yyvsp[-1].data->name));
 									(yyval.node->step)=1;}
-#line 2346 "y.tab.c" /* yacc.c:1646  */
+#line 2349 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 558 "parser_file2.y" /* yacc.c:1646  */
+#line 561 "parser_file2.y" /* yacc.c:1646  */
     {		
 									if (searchdo((yyvsp[-1].data->name))==0)
 										{printf("\nIDENTIFIER NOT DEFINED\n");return 0;}
@@ -2355,11 +2358,11 @@ yyreduce:
 									(yyval.node->end)=(yyvsp[-1].node->value);
 									(yyval.node->step)=1;
 							 }
-#line 2359 "y.tab.c" /* yacc.c:1646  */
+#line 2362 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 566 "parser_file2.y" /* yacc.c:1646  */
+#line 569 "parser_file2.y" /* yacc.c:1646  */
     {	
 														(yyval.node)=malloc(sizeof(struct nodeyacc));
 														(yyval.node->start)=atoi((yyvsp[-3].data->name));
@@ -2367,11 +2370,11 @@ yyreduce:
 														(yyval.node->step)=1;
 														//printf("\nRANGE : %d %d %d \n",$<node->start>$,$<node->end>$,$<node->step>$);
 														}
-#line 2371 "y.tab.c" /* yacc.c:1646  */
+#line 2374 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 573 "parser_file2.y" /* yacc.c:1646  */
+#line 576 "parser_file2.y" /* yacc.c:1646  */
     {
 											if (searchdo((yyvsp[-3].data->name))==0)
 												{printf("\nIDENTIFIER NOT DEFINED\n");return 0;}
@@ -2381,21 +2384,21 @@ yyreduce:
 											(yyval.node->start)=(yyvsp[-3].node->value);
 											(yyval.node->end)=(yyvsp[-1].node->value);
 											(yyval.node->step)=1;}
-#line 2385 "y.tab.c" /* yacc.c:1646  */
+#line 2388 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 582 "parser_file2.y" /* yacc.c:1646  */
+#line 585 "parser_file2.y" /* yacc.c:1646  */
     {(yyval.node)=malloc(sizeof(struct nodeyacc));
 																		(yyval.node->start)=atoi((yyvsp[-5].data->name));
 																		(yyval.node->end)=atoi((yyvsp[-3].data->name));
 																		(yyval.node->step)=atoi((yyvsp[-1].data->name));
 																	  }
-#line 2395 "y.tab.c" /* yacc.c:1646  */
+#line 2398 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 587 "parser_file2.y" /* yacc.c:1646  */
+#line 590 "parser_file2.y" /* yacc.c:1646  */
     {
 														if (searchdo((yyvsp[-5].data->name))==0)
 															{printf("\nIDENTIFIER NOT DEFINED\n");return 0;}
@@ -2407,78 +2410,77 @@ yyreduce:
 														(yyval.node->start)=(yyvsp[-5].node->value);
 														(yyval.node->end)=(yyvsp[-3].node->value);
 														(yyval.node->step)=(yyvsp[-1].node->value);}
-#line 2411 "y.tab.c" /* yacc.c:1646  */
+#line 2414 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 600 "parser_file2.y" /* yacc.c:1646  */
+#line 603 "parser_file2.y" /* yacc.c:1646  */
     {
 										  char labelif[10];char labelb[10];//labels for if and true block
 										  label_gen(labelif);
 										  label_gen(labelb);
 										  (yyval.node)=malloc(sizeof(struct nodeyacc));
 										  snprintf(code_temp,4200,"%s : IF (%s) GOTO %s\n%s : %s\nGOTO %s\n",labelif,(yyvsp[-2].node->code),labelb,labelb,(yyvsp[0].node->code),labelif);
-										  (yyval.node->code)=strdup(code_temp);
+										  strcpy((yyval.node->code),code_temp);
 										  }
-#line 2424 "y.tab.c" /* yacc.c:1646  */
+#line 2427 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 610 "parser_file2.y" /* yacc.c:1646  */
+#line 613 "parser_file2.y" /* yacc.c:1646  */
     {
 				 (yyval.node)=malloc(sizeof(struct nodeyacc));
-				 (yyval.node->code)=strdup((yyvsp[0].node->code));
-				 printf("\nBLOCK CODE :%s\n",(yyval.node->code));
+				 strcpy((yyval.node->code),(yyvsp[0].node->code));
+				 //printf("\nBLOCK CODE :%s\n",$<node->code>$);
 				}
-#line 2434 "y.tab.c" /* yacc.c:1646  */
+#line 2437 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 615 "parser_file2.y" /* yacc.c:1646  */
+#line 618 "parser_file2.y" /* yacc.c:1646  */
     {
-										printf("\nIN BLOCK CODDE\n");
-										printf("%s\n",(yyvsp[-2].node->code));
+										// printf("\nIN BLOCK CODDE\n");
+										// printf("%s\n",$<node->code>3);
 										(yyval.node)=malloc(sizeof(struct nodeyacc));
 										snprintf(code_temp,4200,"%s%s\n",(yyvsp[-2].node->code),(yyvsp[-1].node->code));
-										(yyval.node->code)=strdup(code_temp);
-										printf("%s",(yyval.node->code));
-										printf("FINISH\n");
+										strcpy((yyval.node->code),code_temp);
+										// printf("%s",$<node->code>$);
+										// printf("FINISH\n");
 									 }
-#line 2448 "y.tab.c" /* yacc.c:1646  */
+#line 2451 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 626 "parser_file2.y" /* yacc.c:1646  */
+#line 629 "parser_file2.y" /* yacc.c:1646  */
     {
 							(yyval.node)=malloc(sizeof(struct nodeyacc));
 							snprintf(code_temp,4200,"%s%s\n",(yyvsp[-1].node->code),(yyvsp[0].node->code));
-							(yyval.node->code)=strdup(code_temp);
-							printf("\nREPEATER BIG\n%s \nDONE\n %s\nFIN\n",(yyvsp[-1].node->code),(yyvsp[0].node->code));
+							strcpy((yyval.node->code),code_temp);
+							// printf("\nREPEATER BIG\n%s \nDONE\n %s\nFIN\n",$<node->code>2,$<node->code>3);
 							}
-#line 2459 "y.tab.c" /* yacc.c:1646  */
+#line 2462 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 632 "parser_file2.y" /* yacc.c:1646  */
+#line 635 "parser_file2.y" /* yacc.c:1646  */
     {
-						printf("\nHERE\n");
+						//printf("\nHERE\n");
 						(yyval.node)=malloc(sizeof(struct nodeyacc));
 						snprintf(code_temp,4200,"%s%s\n",(yyvsp[-1].node->code),(yyvsp[0].node->code));
-						
-						(yyval.node->code)=strdup(code_temp);
-						printf("\nREPEATER\n%s \nDONE\n %s\nFIN\n",(yyvsp[-1].node->code),(yyvsp[0].node->code));
+						strcpy((yyval.node->code),code_temp);
+						//printf("\nREPEATER\n%s \nDONE\n %s\nFIN\n",$<node->code>1,$<node->code>2);
 						}
-#line 2472 "y.tab.c" /* yacc.c:1646  */
+#line 2474 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 640 "parser_file2.y" /* yacc.c:1646  */
-    {(yyval.node)=malloc(sizeof(struct nodeyacc));(yyval.node->code)=strdup("");}
-#line 2478 "y.tab.c" /* yacc.c:1646  */
+#line 642 "parser_file2.y" /* yacc.c:1646  */
+    {(yyval.node)=malloc(sizeof(struct nodeyacc));strcpy((yyval.node->code),"");}
+#line 2480 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2482 "y.tab.c" /* yacc.c:1646  */
+#line 2484 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2713,4 +2715,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 641 "parser_file2.y" /* yacc.c:1906  */
+#line 643 "parser_file2.y" /* yacc.c:1906  */

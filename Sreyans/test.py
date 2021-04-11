@@ -7,11 +7,9 @@ s="abc"
 
 for i in [10,20]:
 	print("po")
-	#print("ha")
 	for j in range(10,20):
-		print("he")
-		#a = 5
-	#print("po")
+		a=5
+
 for j in range(5):
 	print("hoohoo")
 	while False:

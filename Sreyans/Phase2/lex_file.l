@@ -158,7 +158,7 @@ digit [0-9]
   }
   int line_depth=finddepth(yytext);
   //printf("%d\n",line_depth);
-  int flag=1;int ptr;
+  int ptr;
   while(line_depth!=(ptr=peek()))
  {
     if (line_depth>ptr)
