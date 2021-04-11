@@ -89,7 +89,7 @@
 
 	void makequads(char* s)
 	{
-		printf("\n****************************\n");
+		printf("\n**********QUADS******************\n");
 		printf("%s",s);
 		printf("\n****************************\n");
 	}
@@ -112,15 +112,18 @@
 
 %%
 start_maro
-	: start_karo T_EOF {$<node>$=malloc(sizeof(struct nodeyacc));
+	: start_karo {printf("\nBIG HERE\n");
+						$<node>$=malloc(sizeof(struct nodeyacc));
                         strcpy($<node->code>$,$<node->code>1);
                         printf("\nAccepted Code : Valid\n\n");printTable();
-                        makequads($<node->code>$);}
+                        makequads($<node->code>$);exit(0);} T_EOF 
 
 start_karo
 	: T_NL start_karo {$<node>$=malloc(sizeof(struct nodeyacc));
-                        strcpy($<node->code>$,$<node->code>2);}
-	| stmt start_karo {$<node>$=malloc(sizeof(struct nodeyacc));
+                        strcpy($<node->code>$,$<node->code>2);;}
+	| stmt start_karo {
+					   
+					   $<node>$=malloc(sizeof(struct nodeyacc));
                        strcat($<node->code>1,$<node->code>2);
 					   strcpy($<node->code>$,$<node->code>1);
                     	}
@@ -131,7 +134,7 @@ start_karo
 term
 	: T_String {$<node>$=malloc(sizeof(struct nodeyacc));
                 temp_gen($<node->addr>$);
-				snprintf(code_temp,4200,"(%s=%s)\n",$<node->addr>$,$<data->name>1);
+				snprintf(code_temp,4200,"%s=%s\n",$<node->addr>$,$<data->name>1);
 				strcpy($<node->code>$,code_temp);
 				//strcpy($<node->code>$,code_temp);
 				$<node->leng>$=strlen($<data->name>1);
@@ -150,23 +153,26 @@ math_term
 	| T_Real {$<node>$=malloc(sizeof(struct nodeyacc));
 			  $<node->value>$=atoi($<data->name>1);
 			  temp_gen($<node->addr>$);
-			  snprintf(code_temp,2000,"(%s = %s)\n",$<node->addr>$,$<data->name>1);
+			  snprintf(code_temp,2000,"%s=%s\n",$<node->addr>$,$<data->name>1);
 			  strcpy($<node->code>$,code_temp);
-			  
+			  //printf("\nT_REAL\n %s\n",$<node->code>$);
 			  }
 	| T_Integer {
 				$<node>$=malloc(sizeof(struct nodeyacc));
 			  	$<node->value>$=atoi($<data->name>1);
 			  	temp_gen($<node->addr>$);
-			  	snprintf(code_temp,2000,"(%s = %s)\n",$<node->addr>$,$<data->name>1);
+			  	snprintf(code_temp,2000,"%s=%s\n",$<node->addr>$,$<data->name>1);
 			  	strcpy($<node->code>$,code_temp);
+				//printf("\nT_INT\n %s\n",$<node->code>$);
 			  }
 
 stmt
 	: simple_stmt { $<node>$=malloc(sizeof(struct nodeyacc));
 					strcpy($<node->code>$,$<node->code>1);}
 	| compound_stmt {$<node>$=malloc(sizeof(struct nodeyacc));
-					strcpy($<node->code>$,$<node->code>1);}
+					strcpy($<node->code>$,$<node->code>1);
+					//printf("\nIN HERE\n%s\nFINISH COMPD\n",$<node->code>$);
+					}
 
 simple_stmt
 	: base_stmt {
@@ -215,14 +221,15 @@ delete_stmt
 				if (searchele($<data->name>2,$<data->scope>2)==0)
 					{printf("Invalid Code\n");exit(0);}
 				$<node>$=malloc(sizeof(struct nodeyacc));
-				strcpy($<node->code>$,"DELETE\n");
+				strcpy($<node->code>$,"DELETE\n\0");
 			}
 
 import_stmt
 	: T_Import T_ID {
 					searchele($<data->name>2,$<data->scope>2);
 					$<node>$=malloc(sizeof(struct nodeyacc));
-					strcpy($<node->code>$,"IMPORT\n");
+					snprintf(code_temp,120,"IMPORT %s\n\0",$<data->name>2);
+					strcpy($<node->code>$,code_temp);
 					}
 	| import_from
 
@@ -235,10 +242,10 @@ end_import_from
 
 cobr_stmt
 	: T_Break {$<node>$=malloc(sizeof(struct nodeyacc));
-				strcpy($<node->code>$,"BREAK\n");
+				strcpy($<node->code>$,"BREAK\n\0");
 			  }
 	| T_Continue {$<node>$=malloc(sizeof(struct nodeyacc));
-				  strcpy($<node->code>$,"CONTINUE\n");
+				  strcpy($<node->code>$,"CONTINUE\n\0");
 			    }
 
 assign_stmt
@@ -254,7 +261,7 @@ assign_stmt
 
 print_stmt
 	: T_Print T_LP printable_stmt T_RP {
-										snprintf(code_temp,4200,"PRINT %s\n",$<node->addr>3);
+										snprintf(code_temp,4200,"\nPRINT %s\n",$<node->addr>3);
 										$<node>$=malloc(sizeof(struct nodeyacc));
 										strcat($<node->code>3,code_temp);
 										strcpy($<node->code>$,$<node->code>3);
@@ -281,33 +288,33 @@ printable_stmt
 arith_stmt
 	: arith_stmt T_Plus arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));
 									temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
-									snprintf(code_temp,4200,"%s=%s+%s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
+									snprintf(code_temp,4200,"%s\n%s\n%s=%s+%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1+$<node->value>3;
 									}
 	| arith_stmt T_Minus arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));
 									temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope
-									snprintf(code_temp,4200,"%s=%s-%s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
+									snprintf(code_temp,4200,"%s\n%s\n%s=%s-%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1-$<node->value>3;
 									}
 	| arith_stmt T_Star arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope
-									snprintf(code_temp,4200,"%s=%s*%s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
+									snprintf(code_temp,4200,"%s\n%s\n%s=%s*%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1*$<node->value>3;
 									}
 	| arith_stmt T_Divide arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
-									snprintf(code_temp,4200,"%s=%s/%s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
+									snprintf(code_temp,4200,"%s\n%s\n%s=%s/%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1/$<node->value>3;
 									}
 	| arith_stmt T_DDiv arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
-									snprintf(code_temp,4200,"%s=%s//%s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
+									snprintf(code_temp,4200,"%s\n%s\n%s=%s//%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1/$<node->value>3;
 									}
 	| arith_stmt T_Mod arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
-									snprintf(code_temp,4200,"%s=%s%%%s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
+									snprintf(code_temp,4200,"%s\n%s\n%s=%s%%%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1%$<node->value>3;
 									}
@@ -365,7 +372,7 @@ bool_stmt
 										case 4:{$<node->value>$=($<node->value>1 <= $<node->value>3);break;}
 										case 5:{$<node->value>$=($<node->value>1 >= $<node->value>3);break;}
 									}
-									snprintf(temp,3000,"%s=%s %s %s\n",$<node->addr>$,$<node->addr>1,$<node->code>2,$<node->addr>3);
+									snprintf(temp,3000,"%s=%s %s %s",$<node->addr>$,$<node->addr>1,$<node->code>2,$<node->addr>3);
 									strcpy($<node->code>$,temp);
 									}
 
@@ -378,15 +385,15 @@ bool_term
 			strcpy($<node->addr>$,$<node->addr>1);
 			
 			}
-	| T_True {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=1;strcpy($<node->code>$,"TRUE\n");}
-	| T_False {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=0;strcpy($<node->code>$,"FALSE\n");}
+	| T_True {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=1;strcpy($<node->code>$,"TRUE\0");}
+	| T_False {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=0;strcpy($<node->code>$,"FALSE\0");}
 
 comp_op
-	: T_Lt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"<");$<node->value>$=1;}
-	| T_Gt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,">");$<node->value>$=2;}
-	| T_Deq {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"==");$<node->value>$=3;}
-	| T_Lte {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"<=");$<node->value>$=4;}
-	| T_Gte {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,">=");$<node->value>$=5;}
+	: T_Lt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"<\0");$<node->value>$=1;}
+	| T_Gt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,">\0");$<node->value>$=2;}
+	| T_Deq {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"==\0");$<node->value>$=3;}
+	| T_Lte {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"<=\0");$<node->value>$=4;}
+	| T_Gte {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,">=\0");$<node->value>$=5;}
 
 list_stmt
 	: T_Ls T_Rs {$<node>$=malloc(sizeof(struct nodeyacc));
@@ -462,15 +469,19 @@ items
 	| %empty {
 			  $<node>$=malloc(sizeof(struct nodeyacc));
 			  $<node->leng>$=0;
-			  strcpy($<node->code>$,"");
+			  strcpy($<node->code>$,"\0");
 			  }
 compound_stmt
 	: for_stmt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,$<node->code>1);
-				printf("\n***************\n");
-				printf("%s",$<node->code>1);
-				printf("\n***************\n");
+				printf("\n******FOR*********\n");
+				printf("%s",$<node->code>$);
+				printf("\n*******END FOR********\n");
 				}
-	| while_stmt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,$<node->code>1);}
+	| while_stmt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,$<node->code>1);
+					printf("\n******WHILE*********\n");
+					printf("%s",$<node->code>$);
+					printf("\n*******END WHILE********\n");
+					}
 
 for_stmt
 	: T_For T_ID T_In range_stmt T_Cln block_code {
@@ -479,25 +490,26 @@ for_stmt
 													$<node>$=malloc(sizeof(struct nodeyacc));
 													strcpy($<node->code>$,code_temp);
 
-													char labelif[10];char labelb[10];//labels for if and true block
+													char labelif[10];char labelb[10];char labeln[10];//labels for if and true block
 													label_gen(labelif);
 													label_gen(labelb);
+													label_gen(labeln);
 													char tempcre[10];temp_gen(tempcre);
 
 													//print the loop condition
 													//printf("\nRANGE STMT : %s\n",labelb);
-													snprintf(temp,3000,"%s : %s=(%s < %d)\nIF %s GOTO %s\n",labelif,tempcre,$<data->name>2,$<node->end>4,tempcre,labelb);
+													snprintf(temp,3000,"%s :\n %s=%s<%d\nIF %s GOTO %s\nGOTO %s\n",labelif,tempcre,$<data->name>2,$<node->end>4,tempcre,labelb,labeln);
 													//printf("\nLABEL B : %s",labelb);
 													strcat($<node->code>$,temp);
 
 													//print the loop block
-													snprintf(temp,3000,"%s : %s",labelb,$<node->code>6);
+													snprintf(temp,3000,"%s :\n %s",labelb,$<node->code>6);
 													strcat($<node->code>$,temp);
 
 													//make the increment function													
 													char tempinc[10];
 													temp_gen(tempinc);
-													snprintf(temp,3000,"%s=%s+%d\n%s=%s\nGOTO %s\n",tempinc,$<data->name>2,$<node->step>4,$<data->name>2,tempinc,labelif);
+													snprintf(temp,3000,"%s=%s+%d\n%s=%s\nGOTO %s\n%s :\n",tempinc,$<data->name>2,$<node->step>4,$<data->name>2,tempinc,labelif,labeln);
 													//printf("\nRANGE\n%s\n",$<node->code>$);
 													strcat($<node->code>$,temp);
 													//printf("\nRANGE : \n %s \nFINISHED\n",$<node->code>$);
@@ -509,22 +521,24 @@ for_stmt
 													$<node>$=malloc(sizeof(struct nodeyacc));
 													strcpy($<node->code>$,code_temp);
 
-													char labelif[10];char labelb[10];//labels for if and true block
+													char labelif[10];char labelb[10];char labeln[10];//labels for if and true block
 													label_gen(labelif);
 													label_gen(labelb);
+													label_gen(labeln);
+													char tempx[10];temp_gen(tempx);
 													char tempcre[10];temp_gen(tempcre);
-
-													snprintf(temp,3000,"%s : %s=(%s < %s+%d)\nIF %s GOTO %s\n",labelif,tempcre,$<data->name>2,$<node->addr>4,$<node->leng>4,tempcre,labelb);
+													snprintf(temp,3000,"%s :\n%s=%s+%d\n%s=%s<%s\nIF %s GOTO %s\nGOTO %s\n",labelif,tempx,$<node->addr>4,$<node->leng>4,tempcre,$<data->name>2,tempx,tempcre,labelb,labeln);
+													//snprintf(temp,3000,"%s : %s=%s<%s+%d\nIF %s GOTO %s\nGOTO %s\n\0",labelif,tempcre,$<data->name>2,$<node->addr>4,$<node->leng>4,tempcre,labelb,labeln);
 													strcat($<node->code>$,temp);
 
 													//print the loop block
 													
-													snprintf(temp,3000,"%s : %s\n",labelb,$<node->code>6);
+													snprintf(temp,3000,"%s :\n %s\n",labelb,$<node->code>6);
 													strcat($<node->code>$,temp);
 
 													char tempinc[10];
 													temp_gen(tempinc);
-													snprintf(temp,3000,"%s=%s+1\n%s=%s\nGOTO %s\n",tempinc,$<data->name>2,$<data->name>2,tempinc,labelif);
+													snprintf(temp,3000,"%s=%s+1\n%s=%s\nGOTO %s\n%s :\n",tempinc,$<data->name>2,$<data->name>2,tempinc,labelif,labeln);
 													strcat($<node->code>$,temp);
 													//printf("\n%s\n",$<node->code>$);															
 													}
@@ -534,20 +548,21 @@ for_stmt
 													$<node>$=malloc(sizeof(struct nodeyacc));
 													strcpy($<node->code>$,code_temp);
 
-													char labelif[10];char labelb[10];//labels for if and true block
+													char labelif[10];char labelb[10];char labeln[10];//labels for if and true block
 													label_gen(labelif);
 													label_gen(labelb);
+													label_gen(labeln);
 													char tempcre[10];temp_gen(tempcre);
-													snprintf(temp,3000,"%s : %s=(%s < %d)\nIF %s GOTO %s\n",labelif,tempcre,$<data->name>2,$<node->leng>4,tempcre,labelb);
+													snprintf(temp,3000,"%s :\n %s=%s<%d\nIF %s GOTO %s\nGOTO %s\n",labelif,tempcre,$<data->name>2,$<node->leng>4,tempcre,labelb,labeln);
 													strcat($<node->code>$,temp);
 
 													//print the loop block
-													snprintf(temp,3000,"%s : %s\n",labelb,$<node->code>6);
+													snprintf(temp,3000,"%s :\n%s\n",labelb,$<node->code>6);
 													strcat($<node->code>$,temp);
 
 													char tempinc[10];
 													temp_gen(tempinc);
-													snprintf(temp,3000,"%s=%s+1\n%s=%s\nGOTO %s\n",tempinc,$<data->name>2,$<data->name>2,tempinc,labelif);
+													snprintf(temp,3000,"%s=%s+1\n%s=%s\nGOTO %s\n%s :\n",tempinc,$<data->name>2,$<data->name>2,tempinc,labelif,labeln);
 													strcat($<node->code>$,temp);
 																								
 													}
@@ -601,11 +616,18 @@ range_stmt
 
 while_stmt
 	: T_While bool_stmt T_Cln block_code {
-										  char labelif[10];char labelb[10];//labels for if and true block
+										  char labelif[10];char labelb[10];char labeln[10];//labels for if and true block
 										  label_gen(labelif);
 										  label_gen(labelb);
+										  label_gen(labeln);
 										  $<node>$=malloc(sizeof(struct nodeyacc));
-										  snprintf(code_temp,4200,"%s : IF (%s) GOTO %s\n%s : %s\nGOTO %s\n",labelif,$<node->code>2,labelb,labelb,$<node->code>4,labelif);
+										  char tempkar[10];int i=0;
+										  
+										  while($<node->code>2[i]!='=')
+										  	{tempkar[i]=$<node->code>2[i];++i;}
+											tempkar[i]='\0';
+										
+										  snprintf(code_temp,4200,"%s :\n%s\nIF (%s) GOTO %s\nGOTO %s\n%s :\n%s\nGOTO %s\n%s :\n",labelif,$<node->code>2,tempkar,labelb,labeln,labelb,$<node->code>4,labelif,labeln);
 										  strcpy($<node->code>$,code_temp);
 										  }
 
@@ -616,28 +638,29 @@ block_code
 				 //printf("\nBLOCK CODE :%s\n",$<node->code>$);
 				}
 	| T_NL T_IND stmt repeater T_DED {
-										// printf("\nIN BLOCK CODDE\n");
+										//printf("\nIN BLOCK CODDE\n");
 										// printf("%s\n",$<node->code>3);
 										$<node>$=malloc(sizeof(struct nodeyacc));
 										snprintf(code_temp,4200,"%s%s\n",$<node->code>3,$<node->code>4);
 										strcpy($<node->code>$,code_temp);
-										// printf("%s",$<node->code>$);
-										// printf("FINISH\n");
+										//printf("%s",$<node->code>$);
+										//printf("FINISH\n");
 									 }
 
 repeater
-	: T_NL stmt repeater 	{
-							$<node>$=malloc(sizeof(struct nodeyacc));
-							snprintf(code_temp,4200,"%s%s\n",$<node->code>2,$<node->code>3);
-							strcpy($<node->code>$,code_temp);
-							// printf("\nREPEATER BIG\n%s \nDONE\n %s\nFIN\n",$<node->code>2,$<node->code>3);
-							}
-	| stmt repeater 	{
+	: stmt repeater 	{
 						//printf("\nHERE\n");
 						$<node>$=malloc(sizeof(struct nodeyacc));
 						snprintf(code_temp,4200,"%s%s\n",$<node->code>1,$<node->code>2);
 						strcpy($<node->code>$,code_temp);
 						//printf("\nREPEATER\n%s \nDONE\n %s\nFIN\n",$<node->code>1,$<node->code>2);
 						}
-	| %empty {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"");}
+	| T_NL stmt repeater {
+						//printf("\nHERE\n");
+						$<node>$=malloc(sizeof(struct nodeyacc));
+						snprintf(code_temp,4200,"%s%s\n",$<node->code>2,$<node->code>3);
+						strcpy($<node->code>$,code_temp);
+						//printf("\nREPEATER NL\n%s \nDONE\n %s\nFIN\n",$<node->code>1,$<node->code>2);
+						}
+	| %empty {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"\0");}
 %%

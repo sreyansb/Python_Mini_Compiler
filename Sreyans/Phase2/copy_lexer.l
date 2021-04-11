@@ -1,16 +1,14 @@
-%option yylineno
 %{
     #include<stdio.h>
     #include<stdlib.h>
     #include<string.h>
     #include "y.tab.h"
-    
     #define maxscope 100
     #define vinscope 100
 
     extern YYSTYPE yylval;
+
     int def_mode=1;
-    int end=1;
 
     static int tabstack[maxscope];
     static int st_ptr=-1;//to keep track of the topmost element in the stack
@@ -39,7 +37,7 @@
 
     typedef struct symtabnode
 	  {
-		  char name[100];//has the value
+		  char name[100];
 		  int scope;
     }symtabnode;
 
@@ -145,29 +143,28 @@
 letter [a-zA-Z]
 digit [0-9]
 %%
-"\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);}
-["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");}
-["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno+1);yyless(yyleng-1);}
-["\n"]["]{3}(.|\n)*["]{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno+1);yyless(yyleng-1);}
+"\n"["\t"|" "]*"\n" {printf("\nEmpty Line ");yyless(yyleng-1);++yylineno;}
+["\n"]*["\t"]*"#"(.)* {printf("\nSingle Line Comment ");yylineno+=countbegnl(yytext)-1;++yylineno;}
+["\n"][']{3}(.|\n)*[']{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
+["\n"]["]{3}(.|\n)*["]{3}["\n"] {printf("\n\n%d)Multi Line Comment",yylineno);yylineno+=countnl(yytext)-1;yyless(yyleng-1);}
 ["\n"]+["\t"]* {
   if (def_mode)
  {
     yyless(0);
     def_mode=0;
-    printf("NL\n%d)",yylineno+1);
-    
+    printf("NL\n%d)",yylineno);
+    yylineno+=countbegnl(yytext);
     return T_NL;
   }
   int line_depth=finddepth(yytext);
-  int flag=1;
-  //printf("LD %d\n",line_depth);
-  int ptr;
+  //printf("%d\n",line_depth);
+  int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
     if (line_depth>ptr)
     {
       init_scope(line_depth);
-      //printf("Indented to %d tabs\n",line_depth);
+      printf("Indented to %d tabs\n",line_depth);
       return T_IND;
     }
     else
@@ -178,8 +175,8 @@ digit [0-9]
         exit(1);
         return 0;
       }
-      //printf("\nDeleting\n");
-      //deletescope();
+      printf("\nDeleting\n");
+      deletescope();
       yyless(0);
       return T_DED;
     }
@@ -187,23 +184,21 @@ digit [0-9]
   printf("\n");
   def_mode=1;
   
-  //++yylineno; 
+  ++yylineno; 
 }
 <<EOF>> {
   if (peek()!=0)
  {
     deletescope();
     printf("Dedenting\n");
-    return T_DED;
-  }
+    return T_DED;}
   else
  {
-   if (end)
-    {printf("\nEOF-all at scope 0 tab 0\n");
+    printf("EOF-all at scope 0 tab 0\n");
     printscope(0);
-    end=0;
     return T_EOF;
-    yyterminate();}
+    yyterminate();
+    
   }
 }
 
@@ -272,8 +267,7 @@ int yywrap(void)
 
 void yyerror(char* s)
 {
-  //if ((strcmp(yytext,""))!=0)
-    printf("\nLine no: %d %s %s\n",yylineno+1,s,yytext);
+  printf("\nLine no: %d %s %s\n",yylineno,s,yytext);
 }
 
 
