@@ -1,88 +1,39 @@
-t1 = hello
-import t1
-t2 = 3
-x = t2
-t3 = 2
-y = t3
-t4 = [10, 10, 20, 30]
-lis = t4
-i = 10
-L0: t5 = i < 20
-If False t5 goto L1
-t6 = i
-Print t6
-j = 10
-L2: t7 = j < 20
-If False t7 goto L3
-t8 = j
-Print t8
-t9 = "in for"
-Print t9
-L4:
-t10 = False
-If False t10 goto L5
-t11 = "oop"
-Print t11
-goto L4
-L5:t7 = j + 1
-j = t7
-goto L4
-L5: t12 = "end"
+t1 = 10
+a = t1
+t2 = 20
+b = t2
+t3 = 30
+c = t3
+t4 = 40
+d = t4
+t5 = 50
+e = t5
+t6 = 60
+f = t6
+t7 = 70
+g = t7
+t8 = 80
+h = t8
+L0:
+t9 = True
+If False t9 goto L1
+t10 = "hello"
+Print t10
+goto L0
+L1:i = 1
+L2: t11 = i < 10
+If False t11 goto L3
+t12 = "hi"
 Print t12
-t7 = j + 1
-j = t7
+j = 1
+L4: t13 = j < 10
+If False t13 goto L5
+t14 = "bye"
+Print t14
+t13 = j + 1
+j = t13
+goto L4
+L5: t13 = j + 1
+j = t13
 goto L6
-L7: L10:
-t13 = x
-t14 = 5
-t15 = t13 < t14
-If False t15 goto L11
-t16 = x
-Print t16
-L10:
-t17 = True
-If False t17 goto L11
-t18 = "true"
-Print t18
-goto L10
-L11:n = 3
-L12: t19 = n < 10
-If False t19 goto L13
-t20 = n
-Print t20
-d = 3
-L14: t21 = d < 10
-If False t21 goto L15
-t22 = d
-Print t22
-t21 = d + 1
-d = t21
-goto L14
-L15: t21 = d + 1
-d = t21
-goto L16
-L17: goto L20
-L21:t23 = "in else"
-Print t23
-L22:
-t24 = True
-If False t24 goto L23
-t25 = "True"
-Print t25
-L22:
-t26 = False
-If False t26 goto L23
-t27 = "False"
-Print t27
-l = 3
-L22: t28 = l < 10
-If False t28 goto L23
-t29 = l
-Print t29
-t28 = l + 1
-l = t28
-goto L22
-L23: goto L26
-L27:goto L28
-L29:t30 = c
-Print t30
+L7: 
