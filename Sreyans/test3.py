@@ -1,9 +1,12 @@
 a=1
 b=2
 c=3
+P=8
 print(a)
-import d
+import a
 a=a+1
+a==5
+a<=5
 c=b//5
 
 for i in [10, 20]:
@@ -11,8 +14,5 @@ for i in [10, 20]:
 	j=0
 	while(True):
 		print("hello")
-
-for i in range(20,30):
-	j=0
-	while(j):
-		print(j)
+		while(False):
+			print("fellow")

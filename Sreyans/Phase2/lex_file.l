@@ -155,7 +155,6 @@ digit [0-9]
     yyless(0);
     def_mode=0;
     printf("NL\n%d)",yylineno+1);
-    
     return T_NL;
   }
   int line_depth=finddepth(yytext);
@@ -273,7 +272,7 @@ int yywrap(void)
 void yyerror(char* s)
 {
   //if ((strcmp(yytext,""))!=0)
-    printf("\nLine no: %d %s %s\n",yylineno+1,s,yytext);
+    printf("\nLine no: %d %s %s\n",yylineno,s,yytext);
 }
 
 
