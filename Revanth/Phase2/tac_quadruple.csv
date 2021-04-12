@@ -1,44 +1,71 @@
 Line No	Op	Arg1	Arg2	Res
-0	=	10	-	t1
-1	=	t1	-	a
-2	=	20	-	t2
-3	=	t2	-	b
-4	=	30	-	t3
-5	=	t3	-	c
-6	=	40	-	t4
-7	=	t4	-	d
-8	=	50	-	t5
-9	=	t5	-	e
-10	=	60	-	t6
-11	=	t6	-	f
-12	=	70	-	t7
-13	=	t7	-	g
-14	=	80	-	t8
-15	=	t8	-	h
-16	Label	-	-	L0
-17	=	True	-	t9
-18	If False	t9	-	L1
-19	=	"hello"	-	t10
-20	Print	t10	-	-
-21	goto	-	-	L0
-22	Label	-	-	L1
-23	=	1	-	i
-24	Label	-	-	L2
-25	<	i	 10	t11
-26	If False	t11	-	L3
-27	=	"hi"	-	t12
-28	Print	t12	-	-
-29	=	1	-	j
-30	Label	-	-	L4
-31	<	j	 10	t13
-32	If False	t13	-	L5
-33	=	"bye"	-	t14
-34	Print	t14	-	-
-35	+	j	1	t13
-36	=	t13	-	j
-37	goto	-	-	L4
-38	Label	-	-	L5
-39	+	j	1	t13
-40	=	t13	-	j
+0	=	0	-	i
+1	Label	-	-	L0
+2	<	i	 10	t1
+3	If False	t1	-	L1
+4	=	"hi"	-	t2
+5	Print	t2	-	-
+6	=	0	-	j
+7	Label	-	-	L2
+8	<	j	 20	t3
+9	If False	t3	-	L3
+10	=	"hello"	-	t4
+11	Print	t4	-	-
+12	+	j	1	t3
+13	=	t3	-	j
+14	goto	-	-	L0
+15	Label	-	-	L1
+16	+	j	1	t3
+17	=	t3	-	j
+18	goto	-	-	L0
+19	Label	-	-	L1
+20	Label	-	-	L4
+21	=	True	-	t5
+22	If False	t5	-	L5
+23	=	x	-	t6
+24	=	1	-	t7
+25	=	t8	-	x
+26	=	"start"	-	t9
+27	Print	t9	-	-
+28	goto	-	-	L4
+29	Label	-	-	L5
+30	=	10	-	t10
+31	=	t10	-	a
+32	=	20	-	t11
+33	=	t11	-	b
+34	=	[1, 1, 2]	-	t12
+35	=	t12	-	l
+36	Label	-	-	L6
+37	=	True	-	t13
+38	If False	t13	-	L7
+39	=	"hello"	-	t14
+40	Print	t14	-	-
 41	goto	-	-	L6
 42	Label	-	-	L7
+43	=	1	-	i
+44	Label	-	-	L8
+45	<	i	 10	t15
+46	If False	t15	-	L9
+47	=	"hi"	-	t16
+48	Print	t16	-	-
+49	=	1	-	j
+50	Label	-	-	L10
+51	<	j	 10	t17
+52	If False	t17	-	L11
+53	=	"bye"	-	t18
+54	Print	t18	-	-
+55	+	j	1	t17
+56	=	t17	-	j
+57	goto	-	-	L8
+58	Label	-	-	L9
+59	+	j	1	t17
+60	=	t17	-	j
+61	goto	-	-	L8
+62	Label	-	-	L9
+63	Label	-	-	L12
+64	=	True	-	t19
+65	If False	t19	-	L13
+66	=	"byee"	-	t20
+67	Print	t20	-	-
+68	goto	-	-	L12
+69	Label	-	-	L13
