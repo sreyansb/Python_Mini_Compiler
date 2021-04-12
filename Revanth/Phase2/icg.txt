@@ -1,39 +1,20 @@
-t1 = 10
-a = t1
-t2 = 20
-b = t2
-t3 = 30
-c = t3
-t4 = 40
-d = t4
-t5 = 50
-e = t5
-t6 = 60
-f = t6
-t7 = 70
-g = t7
-t8 = 80
-h = t8
+i = 0
 L0:
-t9 = True
-If False t9 goto L1
-t10 = "hello"
-Print t10
+t1 = i < 10
+If False t1 goto L1
+t2 = "hi"
+Print t2
+j = 0
+L2:
+t3 = j < 20
+If False t3 goto L3
+t4 = "hello"
+Print t4
+t3 = j + 1
+j = t3
+goto L2
+L3:
+t3 = j + 1
+j = t3
 goto L0
-L1:i = 1
-L2: t11 = i < 10
-If False t11 goto L3
-t12 = "hi"
-Print t12
-j = 1
-L4: t13 = j < 10
-If False t13 goto L5
-t14 = "bye"
-Print t14
-t13 = j + 1
-j = t13
-goto L4
-L5: t13 = j + 1
-j = t13
-goto L6
-L7: 
+L1:

@@ -3,7 +3,11 @@
 	#include <stdlib.h>
 	#include <string.h>
 	#include <stdarg.h>
-
+	
+	
+	//#define MAXQUADS 1000
+	
+	
 	void yyerror(const char *msg);
 	int yylex();
 	
@@ -18,18 +22,18 @@
 	extern int depth;
 
 	int currentScope = 1;
-	
 	int check_error = 0;
 	
 	int *arrayScope = NULL;
 	
 	int tempNo = 1;
-	
 	int temp2;
+	
+	int templ;
+	
 	char *loop_var;	
 	
 	
-	#define MAXQUADS 1000
 	typedef struct quad
 	{
 		char *R;
@@ -48,6 +52,7 @@
 	void createCSV();
 
 	//-------------------------------------STRUCTURE DEFINITIONS----------------------------------------------
+	//typedef struct STable STable; //
 	
 	typedef struct record
 	{
@@ -56,8 +61,7 @@
 		int decLineNo;
 		int lastUseLine;
 		
-		int value; //
-		
+		int value; //		
 	} record;
 
 	typedef struct STable
@@ -66,10 +70,9 @@
 		int noOfElems;
 		int scope;
 		record *Elements;
-		int Parent;
-		
+		int Parent;	
 	} STable;
-
+	
 	typedef struct mynode{
 		char *addr;
 		char *code;
@@ -84,11 +87,13 @@
 	STable *symbolTables = NULL;
 	int sIndex = -1;
 	char *argsList = NULL;
+	
+	
 	//--------------------------------------------------------------------------------------------------------
 	
 	//------------------------------------SYMBOL TABLE FUNCTIONS----------------------------------------------
-	void insertRecord(const char* type, const char *name, int lineNo, int scope);
-
+	//#include "symboltable.h"
+	
 	int power(int base, int exp)
 	{
 		int res = 1;
@@ -103,8 +108,6 @@
 	{
 		currentScope = scope;
 	}
-	
-
 	
 	int scopeBasedTableSearch(int scope)
 	{
@@ -153,6 +156,29 @@
 		return -1;
 	}
 		
+	void insertRecord(const char* type, const char *name, int lineNo, int scope)
+	{ 
+		int FScope = power(scope, arrayScope[scope]);
+		int index = scopeBasedTableSearch(FScope);
+		int recordIndex = searchRecordInScope(type, name, index);
+
+		if(recordIndex==-1) //record doesnt exist in the scope
+		{
+			symbolTables[index].Elements[symbolTables[index].noOfElems].type = (char*)calloc(30, sizeof(char));
+			symbolTables[index].Elements[symbolTables[index].noOfElems].name = (char*)calloc(20, sizeof(char));
+		
+			strcpy(symbolTables[index].Elements[symbolTables[index].noOfElems].type, type);	
+			strcpy(symbolTables[index].Elements[symbolTables[index].noOfElems].name, name);
+			symbolTables[index].Elements[symbolTables[index].noOfElems].decLineNo = lineNo;
+			symbolTables[index].Elements[symbolTables[index].noOfElems].lastUseLine = lineNo;
+			symbolTables[index].noOfElems++;
+		}
+		else
+		{
+			symbolTables[index].Elements[recordIndex].lastUseLine = lineNo;
+		}
+	}
+	
 	void modifyRecordID(const char *type, const char *name, int lineNo, int scope)
 	{		
 		int FScope = power(scope, arrayScope[scope]);
@@ -190,28 +216,6 @@
 		return modifyRecordID(type, name, lineNo, symbolTables[symbolTables[index].Parent].scope);
 	}
 	
-	void insertRecord(const char* type, const char *name, int lineNo, int scope)
-	{ 
-		int FScope = power(scope, arrayScope[scope]);
-		int index = scopeBasedTableSearch(FScope);
-		int recordIndex = searchRecordInScope(type, name, index);
-
-		if(recordIndex==-1) //record doesnt exist in the scope
-		{
-			symbolTables[index].Elements[symbolTables[index].noOfElems].type = (char*)calloc(30, sizeof(char));
-			symbolTables[index].Elements[symbolTables[index].noOfElems].name = (char*)calloc(20, sizeof(char));
-		
-			strcpy(symbolTables[index].Elements[symbolTables[index].noOfElems].type, type);	
-			strcpy(symbolTables[index].Elements[symbolTables[index].noOfElems].name, name);
-			symbolTables[index].Elements[symbolTables[index].noOfElems].decLineNo = lineNo;
-			symbolTables[index].Elements[symbolTables[index].noOfElems].lastUseLine = lineNo;
-			symbolTables[index].noOfElems++;
-		}
-		else
-		{
-			symbolTables[index].Elements[recordIndex].lastUseLine = lineNo;
-		}
-	}
 	
 	void checkList(const char *name, int lineNo, int scope)
 	{
@@ -274,13 +278,13 @@
 		{
 			strcat(argsList, newVal);
 		}
-	    //printf("\n\t%s\n", newVal);
 	}
 	  
 	void clearArgsList()
 	{
 	    strcpy(argsList, "");
 	}
+	
 	
 	void printSTable()
 	{
@@ -365,7 +369,8 @@
 	char *makeStr(int no, int flag)
 	{
 		char A[10];
-		Xitoa(no, A);
+		//Xitoa(no, A);
+		sprintf(A, "%d", no);
 		
 		if(flag==1) //if it's a variable
 		{
@@ -747,14 +752,14 @@ for_stmt
 			char rangeNodeText[20] ="";
 			strcat(rangeNodeText, $<text>2);
 			strcat(rangeNodeText, " in range");
-			//printf("%\n%s", rangeNodeText);
-			//$$ =make_node("FOR", "FOR", make_leaf(rangeNodeText, argsList), $6);  
 			for_code_before_suite(rangeNodeText, argsList);
 			clearArgsList(); 
-		} 
+		}
 	T_Cln suite	optional_else {for_code_after_suite();}//
+	
 	| T_For T_ID T_IN T_ID {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else 
 		{checkList($<text>4, @4.first_line, currentScope);}
+	
 	| T_For T_ID T_IN list_stmt {insertRecord("Identifier", $<text>2, @2.first_line, currentScope);} T_Cln suite optional_else {$$ = NULL;};
 
 
@@ -769,13 +774,13 @@ while_stmt
 		T_Cln suite {
 			fprintf(fptr,"goto L%d\n",lIndex);
 			make_quad("goto", "-", "-", makeStr(lIndex, 0));
-			fprintf(fptr,"L%d:",lIndex+1);
+			fprintf(fptr,"L%d:\n",lIndex+1);
 			make_quad("Label", "-", "-", makeStr(lIndex+1, 0)); 
 		} optional_else {lIndex += 2;};
 
 range_stmt: T_Range T_OP T_Number T_CP {addToList("0", 1); addToList($<text>3, 0); }//
 			| T_Range T_OP T_Number T_Comma T_Number T_CP {addToList($<text>3, 1); addToList($<text>5, 0);}//
-			| T_Range T_OP T_Number T_Comma T_Number T_Comma T_Number T_CP  {addToList($<text>3, 1); addToList($<text>5, 1); addToList($<text>7, 1); };//
+			| T_Range T_OP T_Number T_Comma T_Number T_Comma T_Number T_CP  {addToList($<text>3, 1); addToList($<text>5, 0); addToList($<text>7, 0); };//
 
 
 suite
@@ -833,8 +838,6 @@ void for_code_before_suite(char *rtext, char *list)
 {
 	temp2 = tempNo;
 	int temp = lIndex;
-
-	//printf("%s\n",node->child[0]->nodeType); argsList
 	char* token = strtok(list, ","); 
 	char rangeStart[10];
 	char rangeEnd[10];
@@ -850,31 +853,27 @@ void for_code_before_suite(char *rtext, char *list)
         if(token!=NULL)
         	strcpy(rangeEnd,token);
     } 
-    //printf("\nrangeStart =%s rangeEnd =%s",rangeStart,rangeEnd);
-
-    //char *loop_var = strtok(rtext, " ");
+ 
     loop_var = strtok(rtext, " ");
     
 	make_quad("=", rangeStart, "-",  loop_var); //initializing i=0
 	fprintf(fptr, "%s = %s\n", loop_var, rangeStart);
 
 	make_quad( "Label", "-", "-",makeStr(lIndex, 0));	//everything in the current loop is under a label
-	fprintf(fptr, "L%d: ", lIndex);
+	fprintf(fptr, "L%d:\n", lIndex);
 
 	make_quad("<", loop_var, rangeEnd, makeStr(tempNo,1)); //t=i<n
 	fprintf(fptr, "t%d = %s <%s\n", tempNo, loop_var, rangeEnd);
 	
-	make_quad("If False", makeStr(tempNo, 1), "-",makeStr(lIndex+1, 0));
-	//if condition is false, goto exit label				
+	make_quad("If False", makeStr(tempNo, 1), "-",makeStr(lIndex+1, 0));			
 	fprintf(fptr, "If False t%d goto L%d\n", tempNo++, lIndex+1);
-
-	lIndex+=2;		
+	templ = lIndex;
+	lIndex+=2;
 }
-//ICG_main(node->child[1]);
 
 void for_code_after_suite()
 {	
-	int temp = lIndex - 2;
+	int temp = templ;// - 2;//lIndex - 2;
 	//increment loop variable
 	fprintf(fptr, "t%d = %s + 1\n", temp2, loop_var);
 	make_quad("+", loop_var, "1", makeStr(temp2,1));
@@ -885,12 +884,10 @@ void for_code_after_suite()
 	fprintf(fptr, "goto L%d\n", temp); //end of loop
 	make_quad("goto", "-", "-", makeStr(temp, 0));
 
-	fprintf(fptr, "L%d: ", temp+1);
+	fprintf(fptr, "L%d:\n", temp+1);
 	make_quad("Label", "-", "-", makeStr(temp+1, 0)); 
-
-	lIndex = lIndex+2;
+	
+	templ = templ - 2;
+	//lIndex = lIndex+2;
 	return;
 }
-
-
-
