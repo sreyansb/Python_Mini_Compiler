@@ -398,7 +398,7 @@ assign_stmt
 	: T_ID T_EQ printable_stmt {
 								searchele($<data->name>1,$<data->scope>1);
 								$<node>$=malloc(sizeof(struct nodeyacc));
-								snprintf(temp,3000,"%s=%s\n",$<data->name>1,$<node->addr>3);//generate function
+								snprintf(temp,3000,"\n%s=%s\n",$<data->name>1,$<node->addr>3);//generate function
 								strcat($<node->code>3,temp);
 								strcpy($<node->code>$,$<node->code>3);
 								$<node->value>1=$<node->value>3;
@@ -531,8 +531,8 @@ bool_term
 			strcpy($<node->addr>$,$<node->addr>1);
 			
 			}
-	| T_True {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=1;strcpy($<node->code>$,"TRUE\0");}
-	| T_False {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=0;strcpy($<node->code>$,"FALSE\0");}
+	| T_True {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=1;strcpy($<node->code>$,"TRUE\0");strcpy($<node->addr>$,"TRUE\0");}
+	| T_False {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=0;strcpy($<node->code>$,"FALSE\0");strcpy($<node->addr>$,"FALSE\0");}
 
 comp_op
 	: T_Lt {$<node>$=malloc(sizeof(struct nodeyacc));strcpy($<node->code>$,"<\0");$<node->value>$=1;}
@@ -553,7 +553,7 @@ list_stmt
 					  $<node->leng>$=$<node->leng>2;
 					  temp_gen($<node->addr>$);
 					  $<node->value>$=$<node->leng>2;
-					  snprintf(code_temp,4200,"%s=[%s]\n",$<node->addr>$,$<node->code>2);
+					  snprintf(code_temp,4200,"%s=addr([%s])\n",$<node->addr>$,$<node->code>2);
 					  strcpy($<node->code>$,code_temp);
 					  }
 
@@ -649,6 +649,7 @@ for_stmt
 													strcat($<node->code>$,temp);
 
 													//print the loop block
+													
 													snprintf(temp,3000,"%s :\n %s",labelb,$<node->code>6);
 													strcat($<node->code>$,temp);
 
@@ -678,8 +679,8 @@ for_stmt
 													strcat($<node->code>$,temp);
 
 													//print the loop block
-													
-													snprintf(temp,3000,"%s :\n %s\n",labelb,$<node->code>6);
+													char tempg[10];temp_gen(tempg);
+													snprintf(temp,3000,"%s :\n%s=%s[%s]\n%s\n",labelb,tempg,$<node->addr>4,$<data->name>2,$<node->code>6);
 													strcat($<node->code>$,temp);
 
 													char tempinc[10];
