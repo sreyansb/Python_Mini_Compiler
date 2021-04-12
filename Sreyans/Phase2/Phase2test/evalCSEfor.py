@@ -1,21 +1,14 @@
-a=1
-b=2
-c=3
-P=8+5*8-9
-print(a)
-import a
-a=a+1
-a==5
-a<=5
-c=b//5
-k=True
-h=[1,2,3,4,5]
-
+a=5
+c=a*5+10
+d=a*5+10
+a=46
+e=a*5+10
+f=a*5+10
 for i in [10,20]:
 	print("ha")
-	j=0
+	j=1+2+5*5
 	while(True):
-		h=2
+		h=2+5*5
 		print("hello")
 		while(False):
 			print("fellow")

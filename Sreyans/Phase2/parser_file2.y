@@ -105,10 +105,10 @@
 
 	void makequads(char* s)//based off many assumptions
 	{
-		FILE* fp=fopen("a.txt","w");
+		FILE* fp=fopen("outputs/evalCSEfor.txt","w");
 		fprintf(fp,"%s",s);
 		fclose(fp);
-		FILE* fptr=fopen("quads.tsv","w");
+		FILE* fptr=fopen("outputs/evalCSEfor.tsv","w");
 		fprintf(fptr,"#\top\tA1\tA2\tRes\n");
 		int linenoq=1;
 		int index=0;
@@ -126,7 +126,7 @@
 					while(s[endindex]!=' ')
 						++endindex;
 					slicestr(s,temp,index,endindex);
-					fprintf(fptr,"%d\tLabel\t-\t-\t%s\n",linenoq,temp);
+					fprintf(fptr,"%d\tLABEL\t-\t-\t%s\n",linenoq,temp);
 					++linenoq;
 					index=endindex+2;
 				}

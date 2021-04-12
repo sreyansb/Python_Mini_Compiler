@@ -1,0 +1,119 @@
+t1=5
+
+a=t1
+a
+t2=5
+
+t3=a*t2
+
+t4=10
+
+t5=t3+t4
+
+c=t5
+a
+t6=5
+
+t7=a*t6
+
+t8=10
+
+t9=t7+t8
+
+d=t9
+t10=46
+
+a=t10
+a
+t11=5
+
+t12=a*t11
+
+t13=10
+
+t14=t12+t13
+
+e=t14
+a
+t15=5
+
+t16=a*t15
+
+t17=10
+
+t18=t16+t17
+
+f=t18
+t19=addr([10,20])
+
+i=t19
+L7 :
+t35=t19+2
+t36=i<t35
+IF (t36) GOTO L8
+GOTO L9
+L8 :
+t37=t19[i]
+t20="ha"
+
+PRINT t20
+t21=1
+
+t22=2
+
+t23=t21+t22
+
+t24=5
+
+t25=5
+
+t26=t24*t25
+
+t27=t23+t26
+
+j=t27
+L4 :
+TRUE
+IF (TRUE) GOTO L5
+GOTO L6
+L5 :
+t28=2
+
+t29=5
+
+t30=5
+
+t31=t29*t30
+
+t32=t28+t31
+
+h=t32
+t33="hello"
+
+PRINT t33
+L1 :
+FALSE
+IF (FALSE) GOTO L2
+GOTO L3
+L2 :
+t34="fellow"
+
+PRINT t34
+
+
+GOTO L1
+L3 :
+
+
+
+
+GOTO L4
+L6 :
+
+
+
+
+t38=i+1
+i=t38
+GOTO L7
+L9 :
