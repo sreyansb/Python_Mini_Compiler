@@ -1,8 +1,8 @@
 import csv
 import copy
 
-PATH_TO_CSV = r"./test1.csv"
-PATH_TO_OUTPUT_1 = r"./test_output_1.csv"
+PATH_TO_CSV = r"./test1.tsv"
+PATH_TO_OUTPUT_1 = r"./test_output_1.tsv"
 
 file_input = open(PATH_TO_CSV)
 quads = list(csv.reader(file_input, delimiter='\t'))
@@ -32,3 +32,4 @@ csv_writer = csv.writer(file_output, delimiter='\t', lineterminator = "\n")
 csv_writer.writerows(quads_output_1)
 file_output.flush()
 file_output.close()
+file_input.close()
