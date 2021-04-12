@@ -2669,7 +2669,7 @@ yyreduce:
                             {
 			fprintf(fptr,"goto L%d\n",lIndex);
 			make_quad("goto", "-", "-", makeStr(lIndex, 0));
-			fprintf(fptr,"L%d:",lIndex+1);
+			fprintf(fptr,"L%d:\n",lIndex+1);
 			make_quad("Label", "-", "-", makeStr(lIndex+1, 0)); 
 		}
 #line 2676 "y.tab.c"
@@ -3101,7 +3101,7 @@ void for_code_before_suite(char *rtext, char *list)
 	fprintf(fptr, "%s = %s\n", loop_var, rangeStart);
 
 	make_quad( "Label", "-", "-",makeStr(lIndex, 0));	//everything in the current loop is under a label
-	fprintf(fptr, "L%d: ", lIndex);
+	fprintf(fptr, "L%d:\n", lIndex);
 
 	make_quad("<", loop_var, rangeEnd, makeStr(tempNo,1)); //t=i<n
 	fprintf(fptr, "t%d = %s <%s\n", tempNo, loop_var, rangeEnd);
@@ -3114,7 +3114,7 @@ void for_code_before_suite(char *rtext, char *list)
 
 void for_code_after_suite()
 {	
-	int temp = templ - 2;//lIndex - 2;
+	int temp = templ;// - 2;//lIndex - 2;
 	//increment loop variable
 	fprintf(fptr, "t%d = %s + 1\n", temp2, loop_var);
 	make_quad("+", loop_var, "1", makeStr(temp2,1));
@@ -3125,9 +3125,10 @@ void for_code_after_suite()
 	fprintf(fptr, "goto L%d\n", temp); //end of loop
 	make_quad("goto", "-", "-", makeStr(temp, 0));
 
-	fprintf(fptr, "L%d: ", temp+1);
+	fprintf(fptr, "L%d:\n", temp+1);
 	make_quad("Label", "-", "-", makeStr(temp+1, 0)); 
-
+	
+	templ = templ - 2;
 	//lIndex = lIndex+2;
 	return;
 }

@@ -2,7 +2,7 @@ for i in range(10):
 	print("hi")
 	for j in range(20):
 		print("hello")
-
+'''
 while True:
 	x = x + 1
 	print("start")
@@ -21,3 +21,4 @@ for i in range(1,10):
 
 while True:
 	print("byee")
+'''
