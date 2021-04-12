@@ -1,0 +1,76 @@
+t1=1
+a=t1
+t2=2
+b=t2
+t3=3
+c=t3
+t4=8
+P=t4
+a
+PRINT a
+IMPORT a
+a
+t5=1
+
+t6=a+t5
+a=t6
+a
+t7=5
+
+t8=a==t7
+a
+t9=5
+
+t10=a<=t9
+b
+t11=5
+
+t12=b//t11
+c=t12
+t13=[10,20]
+
+i=t13
+L7 :
+t18=t13+2
+t19=i<t18
+IF (t19) GOTO L8
+GOTO L9
+L8 :
+ t14="ha"
+
+PRINT t14
+t15=0
+j=t15
+L4 :
+TRUE
+IF (TRUE) GOTO L5
+GOTO L6
+L5 :
+t16="hello"
+
+PRINT t16
+L1 :
+FALSE
+IF (FALSE) GOTO L2
+GOTO L3
+L2 :
+t17="fellow"
+
+PRINT t17
+
+
+GOTO L1
+L3 :
+
+
+
+GOTO L4
+L6 :
+
+
+
+
+t20=i+1
+i=t20
+GOTO L7
+L9 :

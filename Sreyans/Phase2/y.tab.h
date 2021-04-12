@@ -142,7 +142,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 101 "parser_file2.y" /* yacc.c:1909  */
+#line 243 "parser_file2.y" /* yacc.c:1909  */
 struct symtabnode* data;struct nodeyacc* node;
 		
 

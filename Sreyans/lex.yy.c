@@ -643,7 +643,7 @@ char *yytext;
 
     typedef struct symtabnode
 	  {
-		  char name[100];
+		  char name[100];//has the value
 		  int scope;
     }symtabnode;
 
@@ -1060,7 +1060,7 @@ YY_RULE_SETUP
     return T_NL;
   }
   int line_depth=finddepth(yytext);
-  //printf("%d\n",line_depth);
+  printf("LD %d\n",line_depth);
   int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
@@ -1086,7 +1086,7 @@ YY_RULE_SETUP
   }
   printf("\n");
   def_mode=1;
-  
+
   ++yylineno; 
 }
 	YY_BREAK

@@ -37,7 +37,7 @@
 
     typedef struct symtabnode
 	  {
-		  char name[100];//has the value
+		  char name[100];
 		  int scope;
     }symtabnode;
 
@@ -157,7 +157,7 @@ digit [0-9]
     return T_NL;
   }
   int line_depth=finddepth(yytext);
-  printf("LD %d\n",line_depth);
+  //printf("%d\n",line_depth);
   int flag=1;int ptr;
   while(line_depth!=(ptr=peek()))
  {
@@ -183,7 +183,7 @@ digit [0-9]
   }
   printf("\n");
   def_mode=1;
-
+  
   ++yylineno; 
 }
 <<EOF>> {
