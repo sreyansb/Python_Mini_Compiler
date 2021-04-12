@@ -96,12 +96,14 @@
 	int *arrayScope = NULL;
 	
 	int tempNo = 1;
-	int temp2;
+	//int temp2;
 	
 	int templ;
 	
-	char *loop_var;	
-	
+	//char *loop_var;	
+	// levels of for loop nesting
+	char *loop_var[10];
+	int li = 0;
 	
 	typedef struct quad
 	{
@@ -581,7 +583,7 @@
 	}
 	
 
-#line 585 "y.tab.c"
+#line 587 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -731,10 +733,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 517 "parser.y"
+#line 519 "parser.y"
  char text[100]; int depth; char *addr; char * code; struct mynode* node;
 
-#line 738 "y.tab.c"
+#line 740 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -1131,17 +1133,17 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   535,   535,   535,   548,   555,   563,   566,   573,   574,
-     576,   577,   577,   579,   581,   582,   583,   584,   585,   586,
-     587,   588,   589,   592,   593,   597,   601,   605,   610,   613,
-     617,   621,   625,   629,   633,   639,   643,   647,   651,   653,
-     654,   659,   665,   672,   678,   680,   689,   690,   691,   692,
-     694,   698,   702,   706,   711,   716,   717,   718,   721,   724,
-     725,   728,   729,   733,   734,   745,   746,   749,   749,   760,
-     760,   763,   763,   767,   770,   774,   767,   781,   782,   783,
-     787,   788,   788,   791,   792,   794,   794,   795,   797,   797,
-     798,   800,   800,   802,   817,   817,   818,   818,   819,   821,
-     821,   822,   822,   823,   823,   824,   826,   826
+       0,   537,   537,   537,   550,   557,   565,   575,   582,   583,
+     585,   586,   586,   588,   590,   591,   592,   593,   594,   595,
+     596,   597,   598,   601,   602,   606,   610,   614,   619,   622,
+     626,   630,   634,   638,   642,   648,   652,   656,   660,   662,
+     663,   668,   674,   681,   687,   689,   698,   699,   700,   701,
+     703,   707,   711,   715,   720,   725,   726,   727,   730,   733,
+     734,   737,   738,   742,   743,   754,   755,   758,   758,   769,
+     769,   772,   772,   776,   779,   783,   776,   790,   791,   792,
+     796,   797,   797,   800,   801,   803,   803,   804,   806,   806,
+     807,   809,   809,   811,   826,   826,   827,   827,   828,   830,
+     830,   831,   831,   832,   832,   833,   835,   835
 };
 #endif
 
@@ -2169,13 +2171,13 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 535 "parser.y"
+#line 537 "parser.y"
                 {init();}
-#line 2175 "y.tab.c"
+#line 2177 "y.tab.c"
     break;
 
   case 3:
-#line 536 "parser.y"
+#line 538 "parser.y"
                                             {
 								if(check_error == 0)
 									printf("\nValid Python Syntax\n"); 
@@ -2187,11 +2189,11 @@ yyreduce:
 								createCSV();
 								exit(0);
 							}
-#line 2191 "y.tab.c"
+#line 2193 "y.tab.c"
     break;
 
   case 4:
-#line 548 "parser.y"
+#line 550 "parser.y"
                     {
 						insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);
 						fprintf(fptr,"t%d = %s\n", tempNo, (yyvsp[0].text));
@@ -2199,11 +2201,11 @@ yyreduce:
 						(yyval.node) = get_node();
 						(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
 					}
-#line 2203 "y.tab.c"
+#line 2205 "y.tab.c"
     break;
 
   case 5:
-#line 555 "parser.y"
+#line 557 "parser.y"
                             {
 			 			insertRecord("Constant", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);
 			 			fprintf(fptr,"t%d = %s\n", tempNo,(yyvsp[0].text));
@@ -2211,17 +2213,24 @@ yyreduce:
 						(yyval.node) = get_node();
 						(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
 					}
-#line 2215 "y.tab.c"
+#line 2217 "y.tab.c"
     break;
 
   case 6:
-#line 563 "parser.y"
-                                     {checkList((yyvsp[-3].text), (yylsp[-3]).first_line, currentScope);}
-#line 2221 "y.tab.c"
+#line 565 "parser.y"
+                                     {checkList((yyvsp[-3].text), (yylsp[-3]).first_line, currentScope);
+				fprintf(fptr,"t%d = %s\n", tempNo, (yyvsp[-1].text));
+				make_quad("=", (yyvsp[-1].text), "-", makeStr(tempNo++, 1));
+				fprintf(fptr,"t%d = %s[t%d]\n", tempNo, (yyvsp[-3].text), tempNo-1);
+				make_quad("=[]", (yyvsp[-3].text), makeStr(tempNo-1, 1), makeStr(tempNo, 1));
+				(yyval.node) = get_node();
+				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
+			}
+#line 2230 "y.tab.c"
     break;
 
   case 7:
-#line 566 "parser.y"
+#line 575 "parser.y"
             {
 				modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);
 				fprintf(fptr,"t%d = %s\n", tempNo,(yyvsp[0].text));
@@ -2229,288 +2238,294 @@ yyreduce:
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
 			}
-#line 2233 "y.tab.c"
+#line 2242 "y.tab.c"
     break;
 
   case 8:
-#line 573 "parser.y"
+#line 582 "parser.y"
                 {(yyval.node) = (yyvsp[0].node);}
-#line 2239 "y.tab.c"
+#line 2248 "y.tab.c"
+    break;
+
+  case 9:
+#line 583 "parser.y"
+                  {(yyval.node) = (yyvsp[0].node);}
+#line 2254 "y.tab.c"
     break;
 
   case 10:
-#line 576 "parser.y"
+#line 585 "parser.y"
                              {(yyval.node) = (yyvsp[0].node);}
-#line 2245 "y.tab.c"
+#line 2260 "y.tab.c"
     break;
 
   case 11:
-#line 577 "parser.y"
+#line 586 "parser.y"
                                           {/*resetDepth();*/ updateCScope(1);}
-#line 2251 "y.tab.c"
+#line 2266 "y.tab.c"
     break;
 
   case 12:
-#line 577 "parser.y"
+#line 586 "parser.y"
                                                                                           {/*char *temp[200]; //sprintf(temp, "%s%s", $<node->code>1, $<node->code>2); $<node->code>$ = strdup(temp); 
 			*/}
-#line 2258 "y.tab.c"
+#line 2273 "y.tab.c"
     break;
 
   case 13:
-#line 579 "parser.y"
+#line 588 "parser.y"
                                       {(yyval.node) = NULL;}
-#line 2264 "y.tab.c"
+#line 2279 "y.tab.c"
     break;
 
   case 14:
-#line 581 "parser.y"
+#line 590 "parser.y"
                        {(yyval.node)=(yyvsp[0].node);}
-#line 2270 "y.tab.c"
+#line 2285 "y.tab.c"
     break;
 
   case 15:
-#line 582 "parser.y"
+#line 591 "parser.y"
                                      {(yyval.node)=(yyvsp[0].node);}
-#line 2276 "y.tab.c"
+#line 2291 "y.tab.c"
     break;
 
   case 16:
-#line 583 "parser.y"
+#line 592 "parser.y"
                                       {(yyval.node)=(yyvsp[0].node);}
-#line 2282 "y.tab.c"
+#line 2297 "y.tab.c"
     break;
 
   case 17:
-#line 584 "parser.y"
+#line 593 "parser.y"
                                       {(yyval.node)=(yyvsp[0].node);}
-#line 2288 "y.tab.c"
+#line 2303 "y.tab.c"
     break;
 
   case 18:
-#line 585 "parser.y"
+#line 594 "parser.y"
                                     {(yyval.node)=(yyvsp[0].node);}
-#line 2294 "y.tab.c"
+#line 2309 "y.tab.c"
     break;
 
   case 19:
-#line 586 "parser.y"
+#line 595 "parser.y"
                                          {(yyval.node)=(yyvsp[0].node);}
-#line 2300 "y.tab.c"
+#line 2315 "y.tab.c"
     break;
 
   case 20:
-#line 587 "parser.y"
+#line 596 "parser.y"
                                    {(yyval.node)=(yyvsp[0].node);}
-#line 2306 "y.tab.c"
+#line 2321 "y.tab.c"
     break;
 
   case 21:
-#line 588 "parser.y"
+#line 597 "parser.y"
                                      {(yyval.node)=(yyvsp[0].node);}
-#line 2312 "y.tab.c"
+#line 2327 "y.tab.c"
     break;
 
   case 22:
-#line 589 "parser.y"
+#line 598 "parser.y"
                                       {(yyval.node)=(yyvsp[0].node);}
-#line 2318 "y.tab.c"
+#line 2333 "y.tab.c"
     break;
 
   case 23:
-#line 592 "parser.y"
+#line 601 "parser.y"
                   {(yyval.node)=(yyvsp[0].node);}
-#line 2324 "y.tab.c"
+#line 2339 "y.tab.c"
     break;
 
   case 24:
-#line 593 "parser.y"
+#line 602 "parser.y"
                                                      {
 				fprintf(fptr, "t%d = %s + %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++,1));}
-#line 2333 "y.tab.c"
+#line 2348 "y.tab.c"
     break;
 
   case 25:
-#line 597 "parser.y"
+#line 606 "parser.y"
                                                     {
 				fprintf(fptr, "t%d = %s - %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++,1));}
-#line 2342 "y.tab.c"
+#line 2357 "y.tab.c"
     break;
 
   case 26:
-#line 601 "parser.y"
+#line 610 "parser.y"
                                                     {
 				fprintf(fptr, "t%d = %s * %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++,1));}
-#line 2351 "y.tab.c"
+#line 2366 "y.tab.c"
     break;
 
   case 27:
-#line 605 "parser.y"
+#line 614 "parser.y"
                                                      {
 				fprintf(fptr, "t%d = %s mod %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++,1));}
-#line 2360 "y.tab.c"
+#line 2375 "y.tab.c"
     break;
 
   case 28:
-#line 610 "parser.y"
+#line 619 "parser.y"
                                               {(yyval.node) = (yyvsp[-1].node);}
-#line 2366 "y.tab.c"
+#line 2381 "y.tab.c"
     break;
 
   case 29:
-#line 613 "parser.y"
+#line 622 "parser.y"
                                     {
 				fprintf(fptr, "t%d = %s or %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2375 "y.tab.c"
+#line 2390 "y.tab.c"
     break;
 
   case 30:
-#line 617 "parser.y"
+#line 626 "parser.y"
                                             {
 				fprintf(fptr, "t%d = %s or %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2384 "y.tab.c"
+#line 2399 "y.tab.c"
     break;
 
   case 31:
-#line 621 "parser.y"
+#line 630 "parser.y"
                                     {
 				fprintf(fptr, "t%d = %s < %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2393 "y.tab.c"
+#line 2408 "y.tab.c"
     break;
 
   case 32:
-#line 625 "parser.y"
+#line 634 "parser.y"
                                      {
 				fprintf(fptr, "t%d = %s and %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2402 "y.tab.c"
+#line 2417 "y.tab.c"
     break;
 
   case 33:
-#line 629 "parser.y"
+#line 638 "parser.y"
                                      {
 				fprintf(fptr, "t%d = %s and %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2411 "y.tab.c"
+#line 2426 "y.tab.c"
     break;
 
   case 34:
-#line 633 "parser.y"
+#line 642 "parser.y"
                                     {
 				fprintf(fptr, "t%d = %s > %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
 				(yyval.node->code) = strdup("code");
 				}
-#line 2422 "y.tab.c"
+#line 2437 "y.tab.c"
     break;
 
   case 35:
-#line 639 "parser.y"
+#line 648 "parser.y"
                                      {
 				fprintf(fptr, "t%d = %s <= %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2431 "y.tab.c"
+#line 2446 "y.tab.c"
     break;
 
   case 36:
-#line 643 "parser.y"
+#line 652 "parser.y"
                                      {
 				fprintf(fptr, "t%d = %s >= %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2440 "y.tab.c"
+#line 2455 "y.tab.c"
     break;
 
   case 37:
-#line 647 "parser.y"
+#line 656 "parser.y"
                                {checkList((yyvsp[0].text), (yylsp[0]).first_line, currentScope);
 				fprintf(fptr, "t%d = %s in %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));}
-#line 2449 "y.tab.c"
+#line 2464 "y.tab.c"
     break;
 
   case 38:
-#line 651 "parser.y"
+#line 660 "parser.y"
                      {(yyval.node) = (yyvsp[0].node);}
-#line 2455 "y.tab.c"
+#line 2470 "y.tab.c"
     break;
 
   case 39:
-#line 653 "parser.y"
+#line 662 "parser.y"
                         {(yyval.node) = (yyvsp[0].node);}
-#line 2461 "y.tab.c"
+#line 2476 "y.tab.c"
     break;
 
   case 40:
-#line 654 "parser.y"
+#line 663 "parser.y"
                                      {
   				fprintf(fptr, "t%d = %s == %s\n", tempNo, (yyvsp[-2].node->addr), (yyvsp[0].node->addr));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
 			}
-#line 2471 "y.tab.c"
+#line 2486 "y.tab.c"
     break;
 
   case 41:
-#line 659 "parser.y"
+#line 668 "parser.y"
                    {//insertRecord("Constant", "True", @1.first_line, currentScope);
 				fprintf(fptr,"t%d = True\n", tempNo);
 				make_quad("=", "True",  "-", makeStr(tempNo, 1));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
           }
-#line 2482 "y.tab.c"
+#line 2497 "y.tab.c"
     break;
 
   case 42:
-#line 665 "parser.y"
+#line 674 "parser.y"
                     {//insertRecord("Constant", "False", @1.first_line, currentScope);
 				fprintf(fptr,"t%d = False\n", tempNo);
 				make_quad("=", "False",  "-", makeStr(tempNo, 1));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
           }
-#line 2493 "y.tab.c"
+#line 2508 "y.tab.c"
     break;
 
   case 43:
-#line 672 "parser.y"
+#line 681 "parser.y"
                                 {
 				fprintf(fptr,"t%d = ! %s\n", tempNo, (yyvsp[-1].node->addr));
 				make_quad("!", (yyvsp[-1].node->addr),  "-", makeStr(tempNo, 1));
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
 			}
-#line 2504 "y.tab.c"
+#line 2519 "y.tab.c"
     break;
 
   case 44:
-#line 678 "parser.y"
+#line 687 "parser.y"
                                  {(yyval.node) = (yyvsp[-1].node);}
-#line 2510 "y.tab.c"
+#line 2525 "y.tab.c"
     break;
 
   case 45:
-#line 680 "parser.y"
+#line 689 "parser.y"
                             {insertRecord("PackageName", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);
 				fprintf(fptr,"t%d = %s\n", tempNo, (yyvsp[0].text));
 				make_quad("=", (yyvsp[0].text),  "-", makeStr(tempNo, 1));
@@ -2519,92 +2534,92 @@ yyreduce:
 				(yyval.node) = get_node();
 				(yyval.node->addr) = strdup(makeStr(tempNo++, 1));
 			}
-#line 2523 "y.tab.c"
+#line 2538 "y.tab.c"
     break;
 
   case 46:
-#line 689 "parser.y"
+#line 698 "parser.y"
                      {(yyval.node) = NULL;}
-#line 2529 "y.tab.c"
+#line 2544 "y.tab.c"
     break;
 
   case 47:
-#line 690 "parser.y"
+#line 699 "parser.y"
                       {fprintf(fptr, "goto L%d\n",lIndex);(yyval.node) = NULL;}
-#line 2535 "y.tab.c"
+#line 2550 "y.tab.c"
     break;
 
   case 48:
-#line 691 "parser.y"
+#line 700 "parser.y"
                        {(yyval.node) = NULL;}
-#line 2541 "y.tab.c"
+#line 2556 "y.tab.c"
     break;
 
   case 49:
-#line 692 "parser.y"
+#line 701 "parser.y"
                                         {(yyval.node) = NULL;}
-#line 2547 "y.tab.c"
+#line 2562 "y.tab.c"
     break;
 
   case 50:
-#line 694 "parser.y"
+#line 703 "parser.y"
                                    {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);
 				fprintf(fptr,"%s = %s\n", (yyvsp[-2].text), (yyvsp[0].node->addr));
 				make_quad("=", (yyvsp[0].node->addr), "-", (yyvsp[-2].text));
 			}
-#line 2556 "y.tab.c"
+#line 2571 "y.tab.c"
     break;
 
   case 51:
-#line 698 "parser.y"
+#line 707 "parser.y"
                                               {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);
 				fprintf(fptr,"%s = %s\n", (yyvsp[-2].text), (yyvsp[0].node->addr));
 				make_quad("=", (yyvsp[0].node->addr), "-", (yyvsp[-2].text));
 			 }
-#line 2565 "y.tab.c"
+#line 2580 "y.tab.c"
     break;
 
   case 52:
-#line 702 "parser.y"
+#line 711 "parser.y"
                                                 {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);
 				fprintf(fptr,"%s = %s\n", (yyvsp[-2].text), (yyvsp[0].node->addr));
 				make_quad("=", (yyvsp[0].node->addr), "-", (yyvsp[-2].text));
 			 }
-#line 2574 "y.tab.c"
+#line 2589 "y.tab.c"
     break;
 
   case 53:
-#line 706 "parser.y"
+#line 715 "parser.y"
                                                 {insertRecord("ListTypeID", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);
 				fprintf(fptr,"%s = %s\n", (yyvsp[-2].text), (yyvsp[0].node->addr));
 				make_quad("=", (yyvsp[0].node->addr), "-", (yyvsp[-2].text));
 			 }
-#line 2583 "y.tab.c"
+#line 2598 "y.tab.c"
     break;
 
   case 54:
-#line 711 "parser.y"
+#line 720 "parser.y"
                                     {
 				fprintf(fptr,"Print %s\n", (yyvsp[-1].node->addr));
 				make_quad("Print", (yyvsp[-1].node->addr), "-", "-");
 			}
-#line 2592 "y.tab.c"
+#line 2607 "y.tab.c"
     break;
 
   case 63:
-#line 733 "parser.y"
+#line 742 "parser.y"
                                     {(yyval.node) = (yyvsp[0].node);}
-#line 2598 "y.tab.c"
+#line 2613 "y.tab.c"
     break;
 
   case 64:
-#line 734 "parser.y"
+#line 743 "parser.y"
                                    {(yyval.node) = (yyvsp[0].node);}
-#line 2604 "y.tab.c"
+#line 2619 "y.tab.c"
     break;
 
   case 67:
-#line 749 "parser.y"
+#line 758 "parser.y"
                                      {
 		insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);
 			insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope); 
@@ -2614,147 +2629,147 @@ yyreduce:
 			for_code_before_suite(rangeNodeText, argsList);
 			clearArgsList(); 
 		}
-#line 2618 "y.tab.c"
+#line 2633 "y.tab.c"
     break;
 
   case 68:
-#line 758 "parser.y"
+#line 767 "parser.y"
                                       {for_code_after_suite();}
-#line 2624 "y.tab.c"
+#line 2639 "y.tab.c"
     break;
 
   case 69:
-#line 760 "parser.y"
+#line 769 "parser.y"
                                {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2630 "y.tab.c"
+#line 2645 "y.tab.c"
     break;
 
   case 70:
-#line 761 "parser.y"
+#line 770 "parser.y"
                 {checkList((yyvsp[-4].text), (yylsp[-4]).first_line, currentScope);}
-#line 2636 "y.tab.c"
+#line 2651 "y.tab.c"
     break;
 
   case 71:
-#line 763 "parser.y"
+#line 772 "parser.y"
                                     {insertRecord("Identifier", (yyvsp[-2].text), (yylsp[-2]).first_line, currentScope);}
-#line 2642 "y.tab.c"
+#line 2657 "y.tab.c"
     break;
 
   case 72:
-#line 763 "parser.y"
+#line 772 "parser.y"
                                                                                                                                    {(yyval.node) = NULL;}
-#line 2648 "y.tab.c"
+#line 2663 "y.tab.c"
     break;
 
   case 73:
-#line 767 "parser.y"
+#line 776 "parser.y"
                   {fprintf(fptr, "L%d:\n",lIndex); 
 			make_quad("Label", "-", "-", makeStr(lIndex, 0)); 
 		}
-#line 2656 "y.tab.c"
+#line 2671 "y.tab.c"
     break;
 
   case 74:
-#line 770 "parser.y"
+#line 779 "parser.y"
                          { 	
 			fprintf(fptr,"If False %s goto L%d\n", (yyvsp[0].node->addr), lIndex+1); 
 			make_quad("If False", (yyvsp[0].node->addr), "-", makeStr(lIndex+1, 0)); 
 		}
-#line 2665 "y.tab.c"
+#line 2680 "y.tab.c"
     break;
 
   case 75:
-#line 774 "parser.y"
+#line 783 "parser.y"
                             {
 			fprintf(fptr,"goto L%d\n",lIndex);
 			make_quad("goto", "-", "-", makeStr(lIndex, 0));
 			fprintf(fptr,"L%d:\n",lIndex+1);
 			make_quad("Label", "-", "-", makeStr(lIndex+1, 0)); 
 		}
-#line 2676 "y.tab.c"
+#line 2691 "y.tab.c"
     break;
 
   case 76:
-#line 779 "parser.y"
+#line 788 "parser.y"
                                 {lIndex += 2;}
-#line 2682 "y.tab.c"
+#line 2697 "y.tab.c"
     break;
 
   case 77:
-#line 781 "parser.y"
+#line 790 "parser.y"
                                        {addToList("0", 1); addToList((yyvsp[-1].text), 0); }
-#line 2688 "y.tab.c"
+#line 2703 "y.tab.c"
     break;
 
   case 78:
-#line 782 "parser.y"
+#line 791 "parser.y"
                                                                       {addToList((yyvsp[-3].text), 1); addToList((yyvsp[-1].text), 0);}
-#line 2694 "y.tab.c"
+#line 2709 "y.tab.c"
     break;
 
   case 79:
-#line 783 "parser.y"
+#line 792 "parser.y"
                                                                                         {addToList((yyvsp[-5].text), 1); addToList((yyvsp[-3].text), 0); addToList((yyvsp[-1].text), 0); }
-#line 2700 "y.tab.c"
+#line 2715 "y.tab.c"
     break;
 
   case 81:
-#line 788 "parser.y"
+#line 797 "parser.y"
                   {initNewTable((yyvsp[0].depth)); updateCScope((yyvsp[0].depth));}
-#line 2706 "y.tab.c"
+#line 2721 "y.tab.c"
     break;
 
   case 82:
-#line 788 "parser.y"
+#line 797 "parser.y"
                                                                                                      {updateCScope(currentScope-1); }
-#line 2712 "y.tab.c"
+#line 2727 "y.tab.c"
     break;
 
   case 85:
-#line 794 "parser.y"
+#line 803 "parser.y"
             {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 1);}
-#line 2718 "y.tab.c"
+#line 2733 "y.tab.c"
     break;
 
   case 86:
-#line 794 "parser.y"
+#line 803 "parser.y"
                                                                                                                    {(yyval.node) = NULL;}
-#line 2724 "y.tab.c"
+#line 2739 "y.tab.c"
     break;
 
   case 87:
-#line 795 "parser.y"
+#line 804 "parser.y"
                   {clearArgsList();}
-#line 2730 "y.tab.c"
+#line 2745 "y.tab.c"
     break;
 
   case 88:
-#line 797 "parser.y"
+#line 806 "parser.y"
                          {insertRecord("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 0);}
-#line 2736 "y.tab.c"
+#line 2751 "y.tab.c"
     break;
 
   case 90:
-#line 798 "parser.y"
+#line 807 "parser.y"
                           {addToList("",0); clearArgsList();}
-#line 2742 "y.tab.c"
+#line 2757 "y.tab.c"
     break;
 
   case 91:
-#line 800 "parser.y"
+#line 809 "parser.y"
                       {insertRecord("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2748 "y.tab.c"
+#line 2763 "y.tab.c"
     break;
 
   case 92:
-#line 800 "parser.y"
+#line 809 "parser.y"
                                                                                                                      {clearArgsList();}
-#line 2754 "y.tab.c"
+#line 2769 "y.tab.c"
     break;
 
   case 93:
-#line 802 "parser.y"
+#line 811 "parser.y"
                                {
 		 		char* str = (char *)malloc(102*sizeof(char));
 			 	strcpy(str,"[");
@@ -2769,65 +2784,65 @@ yyreduce:
 			 	clearArgsList(); 
 			 	free(str);
 			 }
-#line 2773 "y.tab.c"
+#line 2788 "y.tab.c"
     break;
 
   case 94:
-#line 817 "parser.y"
-                             {addToList((yyvsp[-1].text), 0);}
-#line 2779 "y.tab.c"
+#line 826 "parser.y"
+                             {addToList((yyvsp[0].text), 0);}
+#line 2794 "y.tab.c"
     break;
 
   case 96:
-#line 818 "parser.y"
-                                           {addToList((yyvsp[-1].text), 0);}
-#line 2785 "y.tab.c"
+#line 827 "parser.y"
+                                           {addToList((yyvsp[0].text), 0);}
+#line 2800 "y.tab.c"
     break;
 
   case 99:
-#line 821 "parser.y"
+#line 830 "parser.y"
                  {modifyRecordID("Identifier", (yyvsp[0].text), (yylsp[0]).first_line, currentScope); addToList((yyvsp[0].text), 1);}
-#line 2791 "y.tab.c"
+#line 2806 "y.tab.c"
     break;
 
   case 101:
-#line 822 "parser.y"
+#line 831 "parser.y"
                                                    {addToList((yyvsp[0].text), 1);}
-#line 2797 "y.tab.c"
+#line 2812 "y.tab.c"
     break;
 
   case 102:
-#line 822 "parser.y"
+#line 831 "parser.y"
                                                                                        {/*clearArgsList();*/}
-#line 2803 "y.tab.c"
+#line 2818 "y.tab.c"
     break;
 
   case 103:
-#line 823 "parser.y"
+#line 832 "parser.y"
                                                    {addToList((yyvsp[0].text), 1);}
-#line 2809 "y.tab.c"
+#line 2824 "y.tab.c"
     break;
 
   case 104:
-#line 823 "parser.y"
+#line 832 "parser.y"
                                                                                        {/*clearArgsList();*/}
-#line 2815 "y.tab.c"
+#line 2830 "y.tab.c"
     break;
 
   case 105:
-#line 824 "parser.y"
+#line 833 "parser.y"
                                           {}
-#line 2821 "y.tab.c"
+#line 2836 "y.tab.c"
     break;
 
   case 106:
-#line 826 "parser.y"
+#line 835 "parser.y"
                  {modifyRecordID("Func_Name", (yyvsp[0].text), (yylsp[0]).first_line, currentScope);}
-#line 2827 "y.tab.c"
+#line 2842 "y.tab.c"
     break;
 
 
-#line 2831 "y.tab.c"
+#line 2846 "y.tab.c"
 
       default: break;
     }
@@ -3065,7 +3080,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 828 "parser.y"
+#line 837 "parser.y"
 
 void yyerror(const char *msg)
 {
@@ -3077,7 +3092,7 @@ void yyerror(const char *msg)
 
 void for_code_before_suite(char *rtext, char *list)
 {
-	temp2 = tempNo;
+	//temp2 = tempNo;
 	int temp = lIndex;
 	char* token = strtok(list, ","); 
 	char rangeStart[10];
@@ -3095,16 +3110,17 @@ void for_code_before_suite(char *rtext, char *list)
         	strcpy(rangeEnd,token);
     } 
  
-    loop_var = strtok(rtext, " ");
+    //loop_var = strtok(rtext, " ");
+    loop_var[li] = strdup(strtok(rtext, " "));
     
-	make_quad("=", rangeStart, "-",  loop_var); //initializing i=0
-	fprintf(fptr, "%s = %s\n", loop_var, rangeStart);
+	make_quad("=", rangeStart, "-",  loop_var[li]); //initializing i=0
+	fprintf(fptr, "%s = %s\n", loop_var[li], rangeStart);
 
 	make_quad( "Label", "-", "-",makeStr(lIndex, 0));	//everything in the current loop is under a label
 	fprintf(fptr, "L%d:\n", lIndex);
 
-	make_quad("<", loop_var, rangeEnd, makeStr(tempNo,1)); //t=i<n
-	fprintf(fptr, "t%d = %s <%s\n", tempNo, loop_var, rangeEnd);
+	make_quad("<", loop_var[li], rangeEnd, makeStr(tempNo,1)); //t=i<n
+	fprintf(fptr, "t%d = %s <%s\n", tempNo, loop_var[li++], rangeEnd);
 	
 	make_quad("If False", makeStr(tempNo, 1), "-",makeStr(lIndex+1, 0));			
 	fprintf(fptr, "If False t%d goto L%d\n", tempNo++, lIndex+1);
@@ -3114,12 +3130,15 @@ void for_code_before_suite(char *rtext, char *list)
 
 void for_code_after_suite()
 {	
+	--li;
 	int temp = templ;// - 2;//lIndex - 2;
-	//increment loop variable
-	fprintf(fptr, "t%d = %s + 1\n", temp2, loop_var);
-	make_quad("+", loop_var, "1", makeStr(temp2,1));
-	fprintf(fptr, "%s = t%d\n", loop_var, temp2);
-	make_quad("=", makeStr(temp2,1), "-",  loop_var);
+	
+	//changed temp2 to tempNo
+	fprintf(fptr, "t%d = %s + 1\n", tempNo, loop_var[li]);
+	make_quad("+", loop_var[li], "1", makeStr(tempNo,1));
+	
+	fprintf(fptr, "%s = t%d\n", loop_var[li], tempNo);
+	make_quad("=", makeStr(tempNo++,1), "-",  loop_var[li]);
 	//make_quad("=", makeStr(tempNo++,1), "-",  loop_var);
 	
 	fprintf(fptr, "goto L%d\n", temp); //end of loop

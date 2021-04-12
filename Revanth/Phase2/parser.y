@@ -27,12 +27,14 @@
 	int *arrayScope = NULL;
 	
 	int tempNo = 1;
-	int temp2;
+	//int temp2;
 	
 	int templ;
 	
-	char *loop_var;	
-	
+	//char *loop_var;	
+	// levels of for loop nesting
+	char *loop_var[10];
+	int li = 0;
 	
 	typedef struct quad
 	{
@@ -560,7 +562,14 @@ constant : T_Number {
 						$<node->addr>$ = strdup(makeStr(tempNo++, 1));
 					};
 
-list_index : T_ID T_OB T_Number T_CB {checkList($<text>1, @1.first_line, currentScope);};
+list_index : T_ID T_OB T_Number T_CB {checkList($<text>1, @1.first_line, currentScope);
+				fprintf(fptr,"t%d = %s\n", tempNo, $<text>3);
+				make_quad("=", $<text>3, "-", makeStr(tempNo++, 1));
+				fprintf(fptr,"t%d = %s[t%d]\n", tempNo, $<text>1, tempNo-1);
+				make_quad("=[]", $<text>1, makeStr(tempNo-1, 1), makeStr(tempNo, 1));
+				$$ = get_node();
+				$<node->addr>$ = strdup(makeStr(tempNo++, 1));
+			};
 
 
 term : T_ID {
@@ -571,7 +580,7 @@ term : T_ID {
 				$<node->addr>$ = strdup(makeStr(tempNo++, 1));
 			}
      | constant {$$ = $1;}
-     | list_index ;
+     | list_index {$$ = $1;};
 
 StartParse : T_NL StartParse {$$ = $2;}
 			| finalStatements {/*resetDepth();*/ updateCScope(1);} StartParse {/*char *temp[200]; //sprintf(temp, "%s%s", $<node->code>1, $<node->code>2); $<node->code>$ = strdup(temp); 
@@ -814,8 +823,8 @@ list_stmt: T_OB call_args T_CB {
 			 	free(str);
 			 };
 
-call_list : T_Comma T_Number {addToList($<text>1, 0);} call_list 
-			| T_Comma T_String {addToList($<text>1, 0);} call_list 
+call_list : T_Comma T_Number {addToList($<text>2, 0);} call_list 
+			| T_Comma T_String {addToList($<text>2, 0);} call_list 
 			| ;
 
 call_args : T_ID {modifyRecordID("Identifier", $<text>1, @1.first_line, currentScope); addToList($<text>1, 1);} call_list
@@ -836,7 +845,7 @@ void yyerror(const char *msg)
 
 void for_code_before_suite(char *rtext, char *list)
 {
-	temp2 = tempNo;
+	//temp2 = tempNo;
 	int temp = lIndex;
 	char* token = strtok(list, ","); 
 	char rangeStart[10];
@@ -854,16 +863,17 @@ void for_code_before_suite(char *rtext, char *list)
         	strcpy(rangeEnd,token);
     } 
  
-    loop_var = strtok(rtext, " ");
+    //loop_var = strtok(rtext, " ");
+    loop_var[li] = strdup(strtok(rtext, " "));
     
-	make_quad("=", rangeStart, "-",  loop_var); //initializing i=0
-	fprintf(fptr, "%s = %s\n", loop_var, rangeStart);
+	make_quad("=", rangeStart, "-",  loop_var[li]); //initializing i=0
+	fprintf(fptr, "%s = %s\n", loop_var[li], rangeStart);
 
 	make_quad( "Label", "-", "-",makeStr(lIndex, 0));	//everything in the current loop is under a label
 	fprintf(fptr, "L%d:\n", lIndex);
 
-	make_quad("<", loop_var, rangeEnd, makeStr(tempNo,1)); //t=i<n
-	fprintf(fptr, "t%d = %s <%s\n", tempNo, loop_var, rangeEnd);
+	make_quad("<", loop_var[li], rangeEnd, makeStr(tempNo,1)); //t=i<n
+	fprintf(fptr, "t%d = %s <%s\n", tempNo, loop_var[li++], rangeEnd);
 	
 	make_quad("If False", makeStr(tempNo, 1), "-",makeStr(lIndex+1, 0));			
 	fprintf(fptr, "If False t%d goto L%d\n", tempNo++, lIndex+1);
@@ -873,12 +883,15 @@ void for_code_before_suite(char *rtext, char *list)
 
 void for_code_after_suite()
 {	
+	--li;
 	int temp = templ;// - 2;//lIndex - 2;
-	//increment loop variable
-	fprintf(fptr, "t%d = %s + 1\n", temp2, loop_var);
-	make_quad("+", loop_var, "1", makeStr(temp2,1));
-	fprintf(fptr, "%s = t%d\n", loop_var, temp2);
-	make_quad("=", makeStr(temp2,1), "-",  loop_var);
+	
+	//changed temp2 to tempNo
+	fprintf(fptr, "t%d = %s + 1\n", tempNo, loop_var[li]);
+	make_quad("+", loop_var[li], "1", makeStr(tempNo,1));
+	
+	fprintf(fptr, "%s = t%d\n", loop_var[li], tempNo);
+	make_quad("=", makeStr(tempNo++,1), "-",  loop_var[li]);
 	//make_quad("=", makeStr(tempNo++,1), "-",  loop_var);
 	
 	fprintf(fptr, "goto L%d\n", temp); //end of loop

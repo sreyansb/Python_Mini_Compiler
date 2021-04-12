@@ -1,21 +1,6 @@
 Line No	Op	Arg1	Arg2	Res
-0	=	0	-	i
-1	Label	-	-	L0
-2	<	i	 10	t1
-3	If False	t1	-	L1
-4	=	"hi"	-	t2
-5	Print	t2	-	-
-6	=	0	-	j
-7	Label	-	-	L2
-8	<	j	 20	t3
-9	If False	t3	-	L3
-10	=	"hello"	-	t4
-11	Print	t4	-	-
-12	+	j	1	t3
-13	=	t3	-	j
-14	goto	-	-	L2
-15	Label	-	-	L3
-16	+	j	1	t3
-17	=	t3	-	j
-18	goto	-	-	L0
-19	Label	-	-	L1
+0	=	[2, 3]	-	t1
+1	=	t1	-	a
+2	=	1	-	t2
+3	=[]	a	t2	t3
+4	=	t3	-	b
