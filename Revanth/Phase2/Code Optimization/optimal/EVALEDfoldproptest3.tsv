@@ -12,7 +12,7 @@
 11	=	9	-	t9
 12	=	39	-	t10
 13	=	39	-	P
-14	PRINT	a	-	-
+14	PRINT	1	-	-
 15	IMPORT	a	-	-
 16	=	2	-	t12
 17	=	2	-	a
@@ -33,7 +33,7 @@
 32	Label	-	-	L8
 33	=	t20[i]	-	t28
 34	=	"ha"	-	t21
-35	PRINT	t21	-	-
+35	PRINT	"ha"	-	-
 36	=	0	-	t22
 37	=	0	-	j
 38	Label	-	-	L4
@@ -42,13 +42,13 @@
 41	Label	-	-	L5
 42	=	2	-	h
 43	=	"hello"	-	t24
-44	PRINT	t24	-	-
+44	PRINT	"hello"	-	-
 45	Label	-	-	L1
 46	IF	FALSE	-	L2
 47	GOTO	-	-	L3
 48	Label	-	-	L2
 49	=	"fellow"	-	t25
-50	PRINT	t25	-	-
+50	PRINT	"fellow"	-	-
 51	GOTO	-	-	L1
 52	Label	-	-	L3
 53	GOTO	-	-	L4

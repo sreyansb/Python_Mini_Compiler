@@ -6,7 +6,7 @@ all_quads = [(x[:-1].split("\t"))[1:] for x in all_quads]
 di={'-':'-'}
 for i in range(len(all_quads)):
 	op,arg1,arg2,res=all_quads[i]
-	if op=="PRINT" or op=="LABEL" or op=="GOTO" or op=="IF" or '[' in arg1:
+	if op=="LABEL" or op=="GOTO" or op=="IF" or '[' in arg1:
 		continue
 	if "addr" in arg1:
 		continue
@@ -19,6 +19,9 @@ for i in range(len(all_quads)):
 				di[res]=int(arg1)
 			except:
 				di[res]=arg1
+	elif op=="PRINT":
+		if arg1 in di:
+			all_quads[i][1]=str(di[arg1])
 	else:
 		if arg1 in di and arg2 in di:
 			try:
