@@ -61,7 +61,7 @@
 			if (strcmp(name,symtab[i].name)==0)
 				{
 					symtab[i].value=valueof;
-					printf("\nVALUE CHANGE HERE %s %d\n",name,valueof);
+					//printf("\nVALUE CHANGE HERE %s %d\n",name,valueof);
 					break;
 				}
 		}
@@ -132,10 +132,10 @@
 
 	void makequads(char* s)//based off many assumptions
 	{
-		FILE* fp=fopen("outputs/evalCSEfor.txt","w");
+		FILE* fp=fopen("Code_Optimization/non_optimized/invariance.txt","w");
 		fprintf(fp,"%s",s);
 		fclose(fp);
-		FILE* fptr=fopen("outputs/evalCSEfor.tsv","w");
+		FILE* fptr=fopen("Code_Optimization/non_optimized/invariance.tsv","w");
 		fprintf(fptr,"#\top\tA1\tA2\tRes\n");
 		int linenoq=1;
 		int index=0;
@@ -281,7 +281,7 @@
 
 %%
 start_maro
-	: start_karo {printf("\nBIG HERE\n");
+	: start_karo {//printf("\nBIG HERE\n");
 						$<node>$=malloc(sizeof(struct nodeyacc));
                         strcpy($<node->code>$,$<node->code>1);
                         printf("\nAccepted Code : Valid\n\n");printTable();
@@ -312,17 +312,21 @@ term
 				//strcpy($<node->code>$,code_temp);
 				$<node->leng>$=strlen($<data->name>1);
 				$<node->value>$=(strcmp($<data->name>1,"\"\"") && strcmp($<data->name>1,"\'\'"));
-				changevalueintable($<node->addr>$,$<node->value>$);
+				char* s=strdup($<node->addr>$);
+				changevalueintable(s,$<node->value>$);
 				}
 
 math_term
 	: T_ID { 
-			if (searchele($<data->name>1,$<data->scope>1))
-				$<node->value>1=valueintable($<data->name>1);
+			char* s=strdup($<data->name>1);
+			//printf("\n1 T_ID %s\n",s);
+			if (searchele(s,$<data->scope>1))
+				$<node->value>1=valueintable(s);
+			//printf("\n2 T_ID %s\n",s);
             $<node>$=malloc(sizeof(struct nodeyacc));
-			strcpy($<node->addr>$,$<data->name>1);
+			strcpy($<node->addr>$,s);
 			$<node->value>$=$<node->value>1;
-			strcpy($<node->code>$,$<data->name>1);
+			strcpy($<node->code>$,s);
 			
 			}
 	| T_Real {$<node>$=malloc(sizeof(struct nodeyacc));
@@ -330,7 +334,8 @@ math_term
 			  temp_gen($<node->addr>$);
 			  snprintf(code_temp,2000,"%s=%s\n",$<node->addr>$,$<data->name>1);
 			  strcpy($<node->code>$,code_temp);
-			  changevalueintable($<node->addr>$,$<node->value>$);
+			  char* s=strdup($<node->addr>$);
+			  changevalueintable(s,$<node->value>$);
 			  //printf("\nT_REAL\n %s\n",$<node->code>$);
 			  }
 	| T_Integer {
@@ -339,7 +344,8 @@ math_term
 			  	temp_gen($<node->addr>$);
 			  	snprintf(code_temp,2000,"%s=%s\n",$<node->addr>$,$<data->name>1);
 			  	strcpy($<node->code>$,code_temp);
-				changevalueintable($<node->addr>$,$<node->value>$);
+				char* s=strdup($<node->addr>$);
+				changevalueintable(s,$<node->value>$);
 				//printf("\nT_INT\n %s\n",$<node->code>$);
 			  }
 
@@ -428,15 +434,17 @@ cobr_stmt
 assign_stmt
 	: T_ID T_EQ printable_stmt {
 								searchele($<data->name>1,$<data->scope>1);
+								//printf("\nASSIGN ADDR %s\n",$<node->addr>3);
 								char* s=strdup($<data->name>1);
 								$<node>$=malloc(sizeof(struct nodeyacc));
+								//printf("\nASSIGN %s\n",$<node->addr>3);
 								snprintf(temp,3000,"\n%s=%s\n",$<data->name>1,$<node->addr>3);//generate function
 								strcat($<node->code>3,temp);
 								strcpy($<node->code>$,$<node->code>3);
 								$<node->value>1=$<node->value>3;
 								$<node->value>$=$<node->value>3;
 								$<data->value>1=$<node->value>1;
-								printf("\nCHANGE HERE %s %d\n",s,$<data->value>1);
+								//printf("\nCHANGE HERE %s %d\n",s,$<data->value>1);
 								changevalueintable(s,$<data->value>1);
 								}
 
@@ -472,7 +480,8 @@ arith_stmt
 									snprintf(code_temp,4200,"%s\n%s\n%s=%s+%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1+$<node->value>3;
-									changevalueintable($<node->addr>$,$<node->value>$);
+									char* s=strdup($<node->addr>$);
+									changevalueintable(s,$<node->value>$);
 									//printf("\nADD VALUE %d %d %d\n",$<node->value>$,$<node->value>1,$<node->value>3);
 									}
 	| arith_stmt T_Minus arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));
@@ -480,31 +489,36 @@ arith_stmt
 									snprintf(code_temp,4200,"%s\n%s\n%s=%s-%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1-$<node->value>3;
-									changevalueintable($<node->addr>$,$<node->value>$);
+									char* s=strdup($<node->addr>$);
+									changevalueintable(s,$<node->value>$);
 									}
 	| arith_stmt T_Star arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope
 									snprintf(code_temp,4200,"%s\n%s\n%s=%s*%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1*$<node->value>3;
-									changevalueintable($<node->addr>$,$<node->value>$);
+									char* s=strdup($<node->addr>$);
+									changevalueintable(s,$<node->value>$);
 									}
 	| arith_stmt T_Divide arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
 									snprintf(code_temp,4200,"%s\n%s\n%s=%s/%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1/$<node->value>3;
-									changevalueintable($<node->addr>$,$<node->value>$);
+									char* s=strdup($<node->addr>$);
+									changevalueintable(s,$<node->value>$);
 									}
 	| arith_stmt T_DDiv arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
 									snprintf(code_temp,4200,"%s\n%s\n%s=%s//%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1/$<node->value>3;
-									changevalueintable($<node->addr>$,$<node->value>$);
+									char* s=strdup($<node->addr>$);
+									changevalueintable(s,$<node->value>$);
 									}
 	| arith_stmt T_Mod arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));temp_gen($<node->addr>$);//generates a temporary and also adds to symbol table with scope = -1, cant keep track of scope 
 									snprintf(code_temp,4200,"%s\n%s\n%s=%s%%%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->addr>3);
 									strcpy($<node->code>$,code_temp);
 									$<node->value>$=$<node->value>1%$<node->value>3;
-									changevalueintable($<node->addr>$,$<node->value>$);
+									char* s=strdup($<node->addr>$);
+									changevalueintable(s,$<node->value>$);
 									}
 	| T_LP arith_stmt T_RP {$<node>$=malloc(sizeof(struct nodeyacc));
 							$<node->value>$=$<node->value>2;
@@ -512,12 +526,12 @@ arith_stmt
 							strcpy($<node->addr>$,$<node->addr>2);
 							}
 	| math_term {
-				 
 				 $<node>$=malloc(sizeof(struct nodeyacc));
+				 //printf("\nSTART %s\n",$<node->addr>1);
 				 $<node->value>$=$<node->value>1;
 				 strcpy($<node->code>$,$<node->code>1);
 				 strcpy($<node->addr>$,$<node->addr>1);
-				 printf("\nMATH TERM %d %d\n",$<node->value>1,$<node->value>$);
+				 //printf("\nMATH TERM %s %d\n",$<node->addr>$,$<node->value>$);
 				 }
 
 bool_stmt
@@ -526,14 +540,16 @@ bool_stmt
 								temp_gen($<node->addr>$);
 								snprintf(code_temp,4200,"%s=%s OR %s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
 								strcpy($<node->code>$,code_temp);
-								changevalueintable($<node->addr>$,$<node->value>$);
+								char* s=strdup($<node->addr>$);
+								changevalueintable(s,$<node->value>$);
 								}
 	| bool_term T_And bool_term {$<node>$=malloc(sizeof(struct nodeyacc));
 								$<node->value>$=$<node->value>1&&$<node->value>3;
 								temp_gen($<node->addr>$);
 								snprintf(code_temp,4200,"%s=%s AND %s\n",$<node->addr>$,$<node->addr>1,$<node->addr>3);
 								strcpy($<node->code>$,code_temp);
-								changevalueintable($<node->addr>$,$<node->value>$);
+								char* s=strdup($<node->addr>$);
+								changevalueintable(s,$<node->value>$);
 								}
 	| bool_term {$<node>$=malloc(sizeof(struct nodeyacc));
 				$<node->value>$=$<node->value>1;
@@ -545,7 +561,8 @@ bool_stmt
 					   temp_gen($<node->addr>$);
 					   snprintf(code_temp,4200,"%s=NOT(%s)\n",$<node->addr>$,$<node->addr>2);
 					   strcpy($<node->code>$,code_temp);
-					   changevalueintable($<node->addr>$,$<node->value>$);
+					   char* s=strdup($<node->addr>$);
+					   changevalueintable(s,$<node->value>$);
 					   //strncpy($<code>$,code_temp,1999);
 						}
 	| T_LP bool_stmt T_RP { $<node>$=malloc(sizeof(struct nodeyacc));
@@ -566,7 +583,8 @@ bool_stmt
 									}
 									snprintf(temp,3000,"%s\n%s\n%s=%s%s%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->code>2,$<node->addr>3);
 									strcpy($<node->code>$,temp);
-									changevalueintable($<node->addr>$,$<node->value>$);
+									char* s=strdup($<node->addr>$);
+									changevalueintable(s,$<node->value>$);
 									}
 
 bool_term
@@ -575,8 +593,7 @@ bool_term
 			$<node->value>$=$<node->value>1;
 			strcpy($<node->code>$,$<node->code>1);
 			//strcpy($<code>$,$<code>1);
-			strcpy($<node->addr>$,$<node->addr>1);
-			
+			strcpy($<node->addr>$,$<node->addr>1);			
 			}
 	| T_True {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=1;strcpy($<node->code>$,"TRUE\0");strcpy($<node->addr>$,"TRUE\0");}
 	| T_False {$<node>$=malloc(sizeof(struct nodeyacc));$<node->value>$=0;strcpy($<node->code>$,"FALSE\0");strcpy($<node->addr>$,"FALSE\0");}
