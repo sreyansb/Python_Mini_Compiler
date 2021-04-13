@@ -1,0 +1,7 @@
+Line No	Op	Arg1	Arg2	Res
+0	=	[2, 3]	-	t1
+1	=	t1	-	a
+2	=	1	-	t2
+3	=[]	a	t2	t3
+4	=	t3	-	b
+5	Print	t1	-	-

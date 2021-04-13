@@ -1,0 +1,14 @@
+t1=2
+
+b=t1
+L1 :
+TRUE
+IF (TRUE) GOTO L2
+GOTO L3
+L2 :
+b
+a=b
+
+
+GOTO L1
+L3 :

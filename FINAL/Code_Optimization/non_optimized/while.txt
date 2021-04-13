@@ -1,0 +1,47 @@
+t1=1
+
+a=t1
+t2=2
+
+b=t2
+t3=3
+
+c=t3
+t4=8
+
+P=t4
+a
+PRINT a
+IMPORT d
+a
+t5=1
+
+t6=a+t5
+
+a=t6
+a
+t7=5
+
+t8=a==t7
+a
+t9=5
+
+t10=a<=t9
+b
+t11=5
+
+t12=b//t11
+
+c=t12
+L1 :
+TRUE
+IF (TRUE) GOTO L2
+GOTO L3
+L2 :
+t13="hello"
+
+PRINT t13
+
+
+GOTO L1
+L3 :

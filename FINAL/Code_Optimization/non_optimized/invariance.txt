@@ -1,0 +1,46 @@
+t1="hello"
+
+a=t1
+t2=6
+
+d=t2
+a
+c=a
+L7 :
+TRUE
+IF (TRUE) GOTO L8
+GOTO L9
+L8 :
+a
+e=a
+i=0
+L4 :
+ t4=i<10
+IF (t4) GOTO L5
+GOTO L6
+L5 :
+ d
+b=d
+L1 :
+FALSE
+IF (FALSE) GOTO L2
+GOTO L3
+L2 :
+t3=5
+
+f=t3
+
+
+GOTO L1
+L3 :
+
+
+t5=i+1
+i=t5
+GOTO L4
+L6 :
+
+
+
+GOTO L7
+L9 :
