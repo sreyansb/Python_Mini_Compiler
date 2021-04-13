@@ -1,5 +1,5 @@
 #fptr=open("outputs/test3.tsv","r")
-fptr=open("optimized/EVALEDCSEtest3.tsv","r")
+fptr=open("non_optimized/quadsloopinvariant.tsv","r")
 all_quads=fptr.readlines()[1:]
 fptr.close()
 all_quads = [(x[:-1].split("\t"))[1:] for x in all_quads]
@@ -138,7 +138,7 @@ all_quads=["\t".join(i)+"\n" for i in all_quads]
 all_quads=[str(i+1)+"\t"+all_quads[i] for i in range(len(all_quads))]
 print(len(all_quads))
 all_quads="".join(all_quads)
-f=open("optimized/EVALEDfoldproptest3.tsv","w")
+f=open("optimized/EVALEDfoldproploopinvariant.tsv","w")
 f.write("#\top\tA1\tA2\tRes\n")
 f.write(all_quads)
 f.close()

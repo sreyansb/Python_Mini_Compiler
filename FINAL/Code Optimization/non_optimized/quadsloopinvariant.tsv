@@ -1,0 +1,10 @@
+#	op	A1	A2	Res
+1	=	2	-	t1
+2	=	t1	-	b
+3	LABEL	-	-	L1
+4	IF	TRUE	-	L2
+5	GOTO	-	-	L3
+6	LABEL	-	-	L2
+7	=	b	-	a
+8	GOTO	-	-	L1
+9	LABEL	-	-	L3
