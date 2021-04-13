@@ -1,4 +1,5 @@
 #we assume we get quads on which constant propagation and folding is already done
+#we only bring those records out which are assignment and have assignment to constants
 fptr=open("optimized/EVALEDfoldproploopinvariant.tsv","r")
 all_quads=fptr.readlines()[1:]
 fptr.close()
