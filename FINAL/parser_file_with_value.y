@@ -61,7 +61,7 @@
 			if (strcmp(name,symtab[i].name)==0)
 				{
 					symtab[i].value=valueof;
-					//printf("\nVALUE CHANGE HERE %s %d\n",name,valueof);
+					printf("\nVALUE CHANGE HERE %s %d\n",name,valueof);
 					break;
 				}
 		}
@@ -132,10 +132,10 @@
 
 	void makequads(char* s)//based off many assumptions
 	{
-		FILE* fp=fopen("outputs/ICGloopinvariant.txt","w");
+		FILE* fp=fopen("outputs/evalCSEfor.txt","w");
 		fprintf(fp,"%s",s);
 		fclose(fp);
-		FILE* fptr=fopen("outputs/quadsloopinvariant.tsv","w");
+		FILE* fptr=fopen("outputs/evalCSEfor.tsv","w");
 		fprintf(fptr,"#\top\tA1\tA2\tRes\n");
 		int linenoq=1;
 		int index=0;
@@ -281,7 +281,7 @@
 
 %%
 start_maro
-	: start_karo {//printf("\nBIG HERE\n");
+	: start_karo {printf("\nBIG HERE\n");
 						$<node>$=malloc(sizeof(struct nodeyacc));
                         strcpy($<node->code>$,$<node->code>1);
                         printf("\nAccepted Code : Valid\n\n");printTable();
@@ -301,7 +301,7 @@ start_karo
                     	}
 	| %empty {$<node>$=malloc(sizeof(struct nodeyacc));
 			  strcpy($<node->code>$,"");
-			  //printf("\nEND\n");
+			  printf("\nEND\n");
               }
 
 term
@@ -317,16 +317,13 @@ term
 
 math_term
 	: T_ID { 
-			char*s = strdup($<data->name>1);
-			//printf("\nMATH TERM %s\n",$<data->name>1);
 			if (searchele($<data->name>1,$<data->scope>1))
-				{$<node->value>1=valueintable($<data->name>1);}
-			
+				$<node->value>1=valueintable($<data->name>1);
             $<node>$=malloc(sizeof(struct nodeyacc));
-			strcpy($<node->addr>$,s);
-			//printf("\nADDR %s\n",$<node->addr>$);
+			strcpy($<node->addr>$,$<data->name>1);
 			$<node->value>$=$<node->value>1;
-			strcpy($<node->code>$,s);
+			strcpy($<node->code>$,$<data->name>1);
+			
 			}
 	| T_Real {$<node>$=malloc(sizeof(struct nodeyacc));
 			  $<node->value>$=atoi($<data->name>1);
@@ -432,7 +429,6 @@ assign_stmt
 	: T_ID T_EQ printable_stmt {
 								searchele($<data->name>1,$<data->scope>1);
 								char* s=strdup($<data->name>1);
-								//char* t=strdup($<node->addr>3);
 								$<node>$=malloc(sizeof(struct nodeyacc));
 								snprintf(temp,3000,"\n%s=%s\n",$<data->name>1,$<node->addr>3);//generate function
 								strcat($<node->code>3,temp);
@@ -440,7 +436,7 @@ assign_stmt
 								$<node->value>1=$<node->value>3;
 								$<node->value>$=$<node->value>3;
 								$<data->value>1=$<node->value>1;
-								//printf("\nCHANGE HERE %s %s %d\n",s,$<node->addr>3,$<data->value>1);
+								printf("\nCHANGE HERE %s %d\n",s,$<data->value>1);
 								changevalueintable(s,$<data->value>1);
 								}
 
@@ -458,7 +454,6 @@ printable_stmt
 				  $<node->value>$=$<node->value>1;
 				  strcpy($<node->code>$,$<node->code>1);
 				  strcpy($<node->addr>$,$<node->addr>1);
-				  //printf("\nARITH STMT %s\n",$<node->addr>$);
 				  }
 	| bool_stmt {$<node>$=malloc(sizeof(struct nodeyacc));
 				  $<node->value>$=$<node->value>1;
@@ -522,8 +517,7 @@ arith_stmt
 				 $<node->value>$=$<node->value>1;
 				 strcpy($<node->code>$,$<node->code>1);
 				 strcpy($<node->addr>$,$<node->addr>1);
-				 //printf("\nMATH TERM %d %d\n",$<node->value>1,$<node->value>$);
-				 //printf("\nMATH STMT %s\n",$<node->addr>$);
+				 printf("\nMATH TERM %d %d\n",$<node->value>1,$<node->value>$);
 				 }
 
 bool_stmt

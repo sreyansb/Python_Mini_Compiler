@@ -629,8 +629,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "lex_file.l"
-#line 3 "lex_file.l"
+#line 1 "copy_lexer.l"
+#line 3 "copy_lexer.l"
     #include<stdio.h>
     #include<stdlib.h>
     #include<string.h>
@@ -672,6 +672,7 @@ char *yytext;
 	  {
 		  char name[100];//has the value
 		  int scope;
+      int value;
     }symtabnode;
 
       //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
@@ -772,8 +773,8 @@ char *yytext;
         }
       return count;
     }
-#line 776 "lex.yy.c"
 #line 777 "lex.yy.c"
+#line 778 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -990,9 +991,9 @@ YY_DECL
 		}
 
 	{
-#line 147 "lex_file.l"
+#line 148 "copy_lexer.l"
 
-#line 996 "lex.yy.c"
+#line 997 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1062,31 +1063,31 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 148 "lex_file.l"
+#line 149 "copy_lexer.l"
 {printf("\nEmpty Line ");yyless(yyleng-1);}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 149 "lex_file.l"
+#line 150 "copy_lexer.l"
 {printf("\nSingle Line Comment ");}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 150 "lex_file.l"
+#line 151 "copy_lexer.l"
 {printf("\n\n%d)Multi Line Comment",yylineno+1);yyless(yyleng-1);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 151 "lex_file.l"
+#line 152 "copy_lexer.l"
 {printf("\n\n%d)Multi Line Comment",yylineno+1);yyless(yyleng-1);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 152 "lex_file.l"
+#line 153 "copy_lexer.l"
 {
   if (def_mode)
  {
@@ -1128,7 +1129,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 191 "lex_file.l"
+#line 192 "copy_lexer.l"
 {
   if (peek()!=0)
  {
@@ -1149,187 +1150,187 @@ case YY_STATE_EOF(INITIAL):
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 209 "lex_file.l"
+#line 210 "copy_lexer.l"
 {printf( "%s ", yytext);return T_EQ;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 210 "lex_file.l"
+#line 211 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Comma;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 211 "lex_file.l"
+#line 212 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Del;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 212 "lex_file.l"
+#line 213 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Pass;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 213 "lex_file.l"
+#line 214 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Break;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 214 "lex_file.l"
+#line 215 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Continue;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 215 "lex_file.l"
+#line 216 "copy_lexer.l"
 {printf("%s ",yytext);return T_Print;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 216 "lex_file.l"
+#line 217 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Import;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 217 "lex_file.l"
+#line 218 "copy_lexer.l"
 {printf( "%s ", yytext);return T_From;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 218 "lex_file.l"
+#line 219 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Range;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 219 "lex_file.l"
+#line 220 "copy_lexer.l"
 {printf("%s ",yytext);return T_In;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 220 "lex_file.l"
+#line 221 "copy_lexer.l"
 {printf( "%s", yytext);return T_LP;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 221 "lex_file.l"
+#line 222 "copy_lexer.l"
 {printf( "%s", yytext);return T_RP;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 222 "lex_file.l"
+#line 223 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Cln;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 223 "lex_file.l"
+#line 224 "copy_lexer.l"
 {printf( "%s ", yytext);return T_For;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 224 "lex_file.l"
+#line 225 "copy_lexer.l"
 {printf( "%s ", yytext);return T_While;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 225 "lex_file.l"
+#line 226 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Or;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 226 "lex_file.l"
+#line 227 "copy_lexer.l"
 {printf( "%s ", yytext);return T_And;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 227 "lex_file.l"
+#line 228 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Not;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 228 "lex_file.l"
+#line 229 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Lt;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 229 "lex_file.l"
+#line 230 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Gte;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 230 "lex_file.l"
+#line 231 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Lte;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 231 "lex_file.l"
+#line 232 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Gt;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 232 "lex_file.l"
+#line 233 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Deq;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 233 "lex_file.l"
+#line 234 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Plus;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 234 "lex_file.l"
+#line 235 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Minus;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 235 "lex_file.l"
+#line 236 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Star;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 236 "lex_file.l"
+#line 237 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Divide;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 237 "lex_file.l"
+#line 238 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Mod;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 238 "lex_file.l"
+#line 239 "copy_lexer.l"
 {printf( "%s ", yytext);return T_DDiv;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 239 "lex_file.l"
+#line 240 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Power;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 240 "lex_file.l"
+#line 241 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Ls;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 241 "lex_file.l"
+#line 242 "copy_lexer.l"
 {printf( "%s ", yytext);return T_Rs;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 242 "lex_file.l"
+#line 243 "copy_lexer.l"
 {printf( "%s ", yytext);return T_True;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 243 "lex_file.l"
+#line 244 "copy_lexer.l"
 {printf( "%s ", yytext);return T_False;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 244 "lex_file.l"
+#line 245 "copy_lexer.l"
 {;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 245 "lex_file.l"
+#line 246 "copy_lexer.l"
 {
                     printf("Matched : %s ", yytext);
                     yylval.data=(symtabnode*)malloc(sizeof(symtabnode));
@@ -1341,38 +1342,38 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 253 "lex_file.l"
+#line 254 "copy_lexer.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Integer;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 256 "lex_file.l"
+#line 257 "copy_lexer.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_Real;} 
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 259 "lex_file.l"
+#line 260 "copy_lexer.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 262 "lex_file.l"
+#line 263 "copy_lexer.l"
 {
   yylval.data=(symtabnode*)malloc(sizeof(symtabnode));strcpy(yylval.data->name,yytext);
   yylval.data->scope=-1;printf( "%s", yytext);return T_String;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 265 "lex_file.l"
+#line 266 "copy_lexer.l"
 ECHO;
 	YY_BREAK
-#line 1376 "lex.yy.c"
+#line 1377 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2387,7 +2388,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 265 "lex_file.l"
+#line 266 "copy_lexer.l"
 
 
 int yywrap(void)

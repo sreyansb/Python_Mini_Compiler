@@ -1,4 +1,4 @@
-lex lex_file.l
-yacc -d parser_file2.y
+lex copy_lexer.l
+yacc -d copy_parser_file2.y
 gcc lex.yy.c y.tab.c -ll
-cat Phase2test/evalCSEfor.py | ./a.out
+cat ../test4.py | ./a.out

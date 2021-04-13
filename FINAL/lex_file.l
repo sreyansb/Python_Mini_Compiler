@@ -41,7 +41,6 @@
 	  {
 		  char name[100];//has the value
 		  int scope;
-      int value;
     }symtabnode;
 
       //scopetable stores multiple scopes and hence the length of scopetable==length of tabstack
