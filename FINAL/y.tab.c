@@ -197,10 +197,10 @@
 
 	void makequads(char* s)//based off many assumptions
 	{
-		FILE* fp=fopen("Code_Optimization/non_optimized/invariance.txt","w");
+		FILE* fp=fopen("Code_Optimization/non_optimized/show.txt","w");
 		fprintf(fp,"%s",s);
 		fclose(fp);
-		FILE* fptr=fopen("Code_Optimization/non_optimized/invariance.tsv","w");
+		FILE* fptr=fopen("Code_Optimization/non_optimized/show.tsv","w");
 		fprintf(fptr,"#\top\tA1\tA2\tRes\n");
 		int linenoq=1;
 		int index=0;
