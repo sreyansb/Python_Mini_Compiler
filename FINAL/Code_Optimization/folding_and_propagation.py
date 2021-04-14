@@ -1,4 +1,11 @@
-#fptr=open("outputs/test3.tsv","r")
+'''
+CODE LOGIC:
+O(n) code
+We loop through the quads,line by line, and see if the args are constants or can be reduced to 
+constants (if already seen before i.e. in the dictionary) and replace them if the conditions
+hold. We then push the result into a dictionary to store its value for further use in other
+lines.
+'''
 fptr=open("non_optimized/invariance.tsv","r")
 all_quads=fptr.readlines()[1:]
 fptr.close()

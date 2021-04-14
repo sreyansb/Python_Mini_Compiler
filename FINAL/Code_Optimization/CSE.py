@@ -1,3 +1,14 @@
+'''
+CODE LOGIC:
+O(n^2) code
+We loop between lines in quads and check if same line exists with different results
+----------->Would work better with constant folded and propagated quads.
+----------->Break the inner loop as soon as one of the args in the inner quad line is 
+            the result of another line in quads(Import and Print are exempted).
+----------->If the found line has same operator and arguments as outer loop quad and the result
+            is a temporary, delete the line and replace all occurences of that temporary with
+            the result of the quad on which the search is being done.
+'''
 import re
 fptr=open("non_optimized/evalCSE.tsv","r")
 all_quads=fptr.readlines()[1:]

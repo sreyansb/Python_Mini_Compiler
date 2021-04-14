@@ -10,6 +10,7 @@ It is a recursive code
 	wherein we identify loops, mark the invariant code of the loop 
 	We first call the recurse function for nested loops
 	Then remake the quads array by shifting and moving invariant code just outside the current loop.
+In this optimization we iterate again and bring all of invariant code outside the main loop even in times of nested loops.
 '''
 
 fptr=open("optimized/foprInvariance.tsv","r")
@@ -44,10 +45,25 @@ def recurse(i,n=n):#i is the index of the record
 			except:
 				pass
 			j=flag
-		
 		after=[all_quads[k] for k in range(label_index,j) if all_quads[k] not in invariants]
 		all_quads=all_quads[:label_index]+invariants+after+all_quads[j:n]
+
+		j=i+2
+		while(j<n):
+			opj,arg1j,arg2j,resj=all_quads[j]
+			flag=j+1
+			if opj.upper()=="LABEL" and resj==final_label:
+				break
+			try:
+				if opj=="=" and (arg1j.startswith('"') or int(arg1j)):
+					invariants.append(all_quads[j])
+			except:
+				pass
+			j=flag
+		after=[all_quads[k] for k in range(label_index,j) if all_quads[k] not in invariants]#rejoining/redesigning quads array
+		all_quads=all_quads[:label_index]+invariants+after+all_quads[j:n]
 		return j+1
+		
 	return i+1
 
 while i<n:
@@ -57,7 +73,7 @@ all_quads=["\t".join(i)+"\n" for i in all_quads]
 all_quads=[str(i+1)+"\t"+all_quads[i] for i in range(len(all_quads))]
 print(len(all_quads))
 all_quads="".join(all_quads)
-f=open("optimized/invarianted.tsv","w")
+f=open("optimized/totalinvarianted.tsv","w")
 f.write("#\top\tA1\tA2\tRes\n")
 f.write(all_quads)
 f.close()	

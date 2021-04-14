@@ -1,3 +1,9 @@
+'''
+Code logic:
+Loop through all the lines in the quads (i.e. while flag is True) at every iteration and for
+every such line-see if there is no line where the result of the first line is used. 
+'''
+
 import csv
 import copy
 
@@ -15,7 +21,7 @@ def dead_code_elimination(quads):
         for i in range(len(quads)):
             remove = True
             if(not (quads[i][4] == "-" or quads[i][1].lower() in ["label", "goto", "if false","if"])):
-                for j in range(len(quads)):
+                for j in range(i+1,len(quads)):
                     if((quads[i][4] == quads[j][2] and quads[j][0] != "-1") or (quads[i][4] == quads[j][3] and quads[j][0] != "-1")):
                         remove = False
                 if((remove == True) and (quads[i][0] != "-1")):
@@ -24,6 +30,7 @@ def dead_code_elimination(quads):
     return quads
 
 quads_copy = copy.deepcopy(quads)
+quads_copy=[i for i in quads_copy if i[0]!=-1]
 quads_output_1 = dead_code_elimination(quads_copy[1:])
 quads_output_1.insert(0, quads[0])
 
