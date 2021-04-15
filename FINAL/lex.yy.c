@@ -1115,8 +1115,8 @@ YY_RULE_SETUP
         exit(1);
         return 0;
       }
-      //printf("\nDeleting\n");
-      //deletescope();
+      printf("\nDeleting\n");
+      deletescope();
       yyless(0);
       return T_DED;
     }

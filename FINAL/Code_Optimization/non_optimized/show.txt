@@ -9,49 +9,64 @@ t3=3
 c=t3
 t4=8
 
-P=t4
+t5=5
+
+t6=t4*t5
+
+t7=6
+
+t8=t6+t7
+
+P=t8
+t9=8
+
+t10=5
+
+t11=t9*t10
+
+t12=6
+
+t13=t11+t12
+
+e=t13
 a
 PRINT a
 IMPORT d
 a
-t5=1
+t14=1
 
-t6=a+t5
+t15=a+t14
 
-a=t6
+a=t15
 a
-t7=5
+t16=5
 
-t8=a==t7
-a
-t9=5
-
-t10=a<=t9
+t17=a<=t16
 b
-t11=5
+t18=5
 
-t12=b//t11
+t19=b//t18
 
-c=t12
+c=t19
 L4 :
 TRUE
 IF (TRUE) GOTO L5
 GOTO L6
 L5 :
-t13="hello"
+t20="hello"
 
-PRINT t13
+PRINT t20
 i=0
 L1 :
- t14=i<10
-IF (t14) GOTO L2
+ t21=i<10
+IF (t21) GOTO L2
 GOTO L3
 L2 :
  i
 PRINT i
 
-t15=i+1
-i=t15
+t22=i+1
+i=t22
 GOTO L1
 L3 :
 

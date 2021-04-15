@@ -10,7 +10,7 @@ We loop between lines in quads and check if same line exists with different resu
             the result of the quad on which the search is being done.
 '''
 import re
-fptr=open("non_optimized/evalCSE.tsv","r")
+fptr=open("non_optimized/show.tsv","r")
 all_quads=fptr.readlines()[1:]
 fptr.close()
 all_quads = [(x[:-1].split("\t"))[1:] for x in all_quads]
@@ -40,7 +40,7 @@ all_quads=["\t".join(i)+"\n" for i in all_quads]
 all_quads=[str(i+1)+"\t"+all_quads[i] for i in range(len(all_quads))]
 print(len(all_quads))
 all_quads="".join(all_quads)
-f=open("optimized/EVALEDCSE.tsv","w")
+f=open("optimized/showCSE.tsv","w")
 f.write("#\top\tA1\tA2\tRes\n")
 f.write(all_quads)
 f.close()

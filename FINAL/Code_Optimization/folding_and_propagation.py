@@ -6,7 +6,7 @@ constants (if already seen before i.e. in the dictionary) and replace them if th
 hold. We then push the result into a dictionary to store its value for further use in other
 lines.
 '''
-fptr=open("non_optimized/invariance.tsv","r")
+fptr=open("non_optimized/show.tsv","r")
 all_quads=fptr.readlines()[1:]
 fptr.close()
 all_quads = [(x[:-1].split("\t"))[1:] for x in all_quads]
@@ -145,12 +145,7 @@ all_quads=["\t".join(i)+"\n" for i in all_quads]
 all_quads=[str(i+1)+"\t"+all_quads[i] for i in range(len(all_quads))]
 print(len(all_quads))
 all_quads="".join(all_quads)
-f=open("optimized/Invariance.tsv","w")
+f=open("optimized/showfopr.tsv","w")
 f.write("#\top\tA1\tA2\tRes\n")
 f.write(all_quads)
 f.close()
-
-
-
-				
-

@@ -177,8 +177,8 @@ digit [0-9]
         exit(1);
         return 0;
       }
-      //printf("\nDeleting\n");
-      //deletescope();
+      printf("\nDeleting\n");
+      deletescope();
       yyless(0);
       return T_DED;
     }
