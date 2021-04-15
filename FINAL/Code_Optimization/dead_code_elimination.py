@@ -7,8 +7,8 @@ every such line-see if there is no line where the result of the first line is us
 import csv
 import copy
 
-PATH_TO_CSV = r"./non_optimized/test1.tsv"
-PATH_TO_OUTPUT_1 = r"./optimized/test_output_1.tsv"
+PATH_TO_CSV = r"./non_optimized/show.tsv"
+PATH_TO_OUTPUT_1 = r"./optimized/EVALED_DCE_show.tsv"
 
 file_input = open(PATH_TO_CSV)
 quads = list(csv.reader(file_input, delimiter='\t'))
@@ -20,8 +20,8 @@ def dead_code_elimination(quads):
         flag = False
         for i in range(len(quads)):
             remove = True
-            if(quads[i][4] != "-" and quads[i][1].lower() not in ["label", "goto", "if false","if"]):
-                for j in range(i + 1, len(quads)):
+            if(quads[i][4] != "-" and quads[i][1].lower() not in ["label", "goto", "if false", "if"]):
+                for j in range(len(quads)):
                     if((quads[i][4] == quads[j][2] and quads[j][0] != "-1") or (quads[i][4] == quads[j][3] and quads[j][0] != "-1")):
                         remove = False
                 if((remove == True) and (quads[i][0] != "-1")):
