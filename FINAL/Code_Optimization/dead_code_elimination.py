@@ -21,7 +21,7 @@ def dead_code_elimination(quads):
         flag = False
         for i in range(len(quads)):
             remove = True
-            if(not (quads[i][4] == "-" or quads[i][1].lower() in ["label", "goto", "if false","if"])):
+            if(quads[i][4] != "-" and quads[i][1].lower() not in ["label", "goto", "if false", "if"]):
                 for j in range(len(quads)):
                     if((quads[i][4] == quads[j][2] and quads[j][0] != "-1") or (quads[i][4] == quads[j][3] and quads[j][0] != "-1")):
                         remove = False
