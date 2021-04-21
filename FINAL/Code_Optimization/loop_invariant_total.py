@@ -49,6 +49,7 @@ def recurse(i,n=n):#i is the index of the record
 		all_quads=all_quads[:label_index]+invariants+after+all_quads[j:n]
 
 		j=i+2
+		invariants=[]
 		while(j<n):
 			opj,arg1j,arg2j,resj=all_quads[j]
 			flag=j+1
