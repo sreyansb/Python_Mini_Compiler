@@ -26,7 +26,7 @@
 		int value;
 		int start;
 		int end;
-		int step;
+		int step;//start,end and step is for range part
 		int leng;
 		char addr[32];
 		char code[2000];
@@ -132,10 +132,10 @@
 
 	void makequads(char* s)//based off many assumptions
 	{
-		FILE* fp=fopen("Code_Optimization/non_optimized/show.txt","w");
+		FILE* fp=fopen("Code_Optimization/non_optimized/icg.txt","w");
 		fprintf(fp,"%s",s);
 		fclose(fp);
-		FILE* fptr=fopen("Code_Optimization/non_optimized/show.tsv","w");
+		FILE* fptr=fopen("Code_Optimization/non_optimized/quads.tsv","w");
 		fprintf(fptr,"#\top\tA1\tA2\tRes\n");
 		int linenoq=1;
 		int index=0;
@@ -568,11 +568,18 @@ bool_stmt
 	| T_LP bool_stmt T_RP { $<node>$=malloc(sizeof(struct nodeyacc));
 							$<node->value>$=($<node->value>2);
 							strcpy($<node->code>$,$<node->code>2);
-							strcpy($<node->addr>$,$<node->addr>1);
+							strcpy($<node->addr>$,$<node->addr>2);
 							}
 	| arith_stmt comp_op arith_stmt {$<node>$=malloc(sizeof(struct nodeyacc));
 									$<node->value>$=0;
 									temp_gen($<node->addr>$);
+									char s[10];
+									int indexi=0;
+									while($<node->addr>$[indexi])
+										{s[indexi]=$<node->addr>$[indexi];++indexi;}
+									s[indexi]='\0';
+									//char* s=strdup($<node->addr>$);
+									
 									switch($<node->value>2)
 									{
 										case 1:{$<node->value>$=($<node->value>1 < $<node->value>3);break;}
@@ -581,10 +588,12 @@ bool_stmt
 										case 4:{$<node->value>$=($<node->value>1 <= $<node->value>3);break;}
 										case 5:{$<node->value>$=($<node->value>1 >= $<node->value>3);break;}
 									}
-									snprintf(temp,3000,"%s\n%s\n%s=%s%s%s\n",$<node->code>1,$<node->code>3,$<node->addr>$,$<node->addr>1,$<node->code>2,$<node->addr>3);
+									snprintf(temp,3000,"%s\n%s\n%s=%s%s%s\n",$<node->code>1,$<node->code>3,s,$<node->addr>1,$<node->code>2,$<node->addr>3);
 									strcpy($<node->code>$,temp);
-									char* s=strdup($<node->addr>$);
+									
+									// char* s=strdup($<node->addr>$);
 									changevalueintable(s,$<node->value>$);
+																	
 									}
 
 bool_term
@@ -834,13 +843,8 @@ while_stmt
 										  label_gen(labelb);
 										  label_gen(labeln);
 										  $<node>$=malloc(sizeof(struct nodeyacc));
-										  char tempkar[10];int i=0;
 										  
-										  while($<node->code>2[i]!='=')
-										  	{tempkar[i]=$<node->code>2[i];++i;}
-											tempkar[i]='\0';
-										
-										  snprintf(code_temp,4200,"%s :\n%s\nIF (%s) GOTO %s\nGOTO %s\n%s :\n%s\nGOTO %s\n%s :\n",labelif,$<node->code>2,tempkar,labelb,labeln,labelb,$<node->code>4,labelif,labeln);
+										  snprintf(code_temp,4200,"%s :\n%s\nIF (%s) GOTO %s\nGOTO %s\n%s :\n%s\nGOTO %s\n%s :\n",labelif,$<node->code>2,$<node->addr>2,labelb,labeln,labelb,$<node->code>4,labelif,labeln);
 										  strcpy($<node->code>$,code_temp);
 										  }
 
