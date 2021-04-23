@@ -21,9 +21,9 @@ The tests file are in [`Code_Optimization/tests`](https://github.com/sreyansb/Py
   * Loop Invariant Code Movement
 
 ## Acknowledgement
-* https://github.com/anagha1999/CD-Project : Actions and Code Optimization part
 * https://github.com/sharanyavenkat25/CD-Project : The Grammar for the language
 * https://github.com/craterkamath/Python_Mini_Compiler : Amazing way to get the indentation!
+* https://github.com/anagha1999/CD-Project : Actions and Code Optimization part
 
 ## Issues
 * The grammar is somewhat not right because it cannot handle multiple loops (but it can handle nested loops!).
