@@ -29,7 +29,7 @@ The tests file are in [`Code_Optimization/tests`](https://github.com/sreyansb/Py
 * The grammar is somewhat not right because it cannot handle multiple loops (but it can handle nested loops!).
 * All pathways haven't been tested, some issues might crop up: would love to hear them!
 
-Feel free to use the code (as long as you are not caught by your teachers!)
+Feel free to use the code (as long as you are not caught by your teachers!). I don't think I can stop you from using it either ways!
 
 <div align="center">
 
