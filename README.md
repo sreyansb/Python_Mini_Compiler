@@ -32,7 +32,7 @@ The tests file are in [`Code_Optimization/tests`](https://github.com/sreyansb/Py
 Feel free to use the code (as long as you are not caught by your teachers!)
 
 <div align="center">
- <p>
- Made as a part of Compiler Design Subject for 6th semester by [Revanth](https://github.com/RevanthBabuPN), [Sahith](https://github.com/Sahith02) and [me](https://github.com/sreyansb).
- </p>
+
+Made as a part of Compiler Design Subject for 6th semester by [Revanth](https://github.com/RevanthBabuPN), [Sahith](https://github.com/Sahith02) and [me](https://github.com/sreyansb).
+
  </div>
