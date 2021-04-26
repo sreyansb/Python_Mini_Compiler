@@ -33,6 +33,6 @@ Feel free to use the code (as long as you are not caught by your teachers!). I d
 
 <div align="center">
 
-Made as a part of Compiler Design Subject for 6th semester by [Revanth](https://github.com/RevanthBabuPN), [Sahith](https://github.com/Sahith02) and [me](https://github.com/sreyansb).
+Made as a part of Compiler Design Subject for 6th semester by [Revanth](https://github.com/RevanthBabuPN), [Sahith](https://github.com/Sahith02) and [Sreyans](https://github.com/sreyansb).
 
  </div>
