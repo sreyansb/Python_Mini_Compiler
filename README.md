@@ -8,6 +8,7 @@ We know that there are too many folders in the repo. Go to [FINAL](https://githu
 
 The parser file is [`parser_file_with_values.y`](https://github.com/sreyansb/Python_Mini_Compiler/blob/master/FINAL/parser_file_with_value.y) and the lexer file is [`lex_file.l`](https://github.com/sreyansb/Python_Mini_Compiler/blob/master/FINAL/lex_file.l)
 The tests file are in [`Code_Optimization/tests`](https://github.com/sreyansb/Python_Mini_Compiler/tree/master/FINAL/Code_Optimization/tests) folder of the [`FINAL`](https://github.com/sreyansb/Compiler_Design/tree/master/FINAL) folder.
+On the quads (`quads.tsv`) generated in the [`Code_Optimization/non_optimized`](https://github.com/sreyansb/Python_Mini_Compiler/tree/master/FINAL/Code_Optimization/non_optimized) folder, you can run the python optimization scripts. Just go through the code of each of the optimization scipts, you will understand!
 
 ## Phases handled:
 * Lexical Phase
