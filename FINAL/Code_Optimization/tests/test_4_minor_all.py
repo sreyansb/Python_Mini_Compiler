@@ -11,6 +11,7 @@ a<=5
 c=b//5
 
 while True:
+	a=7
 	print("hello")
 	for i in range(10):
 		print(i)
