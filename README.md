@@ -1,6 +1,7 @@
 # Compiler Design
 
 Mini Compiler for Python 3.x with support for **FOR,WHILE constructs and other basic syntax**.
+Pictures present in the report.
 
 ## Running the code
 
